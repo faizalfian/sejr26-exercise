@@ -1,0 +1,518 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Pemrograman C++: Variabel & Tipe Data</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-color: #f3f4f6;
+            --card-bg: #ffffff;
+            --text-main: #1f2937;
+            --text-muted: #6b7280;
+            --border-color: #e5e7eb;
+            --success: #10b981;
+            --danger: #ef4444;
+            --code-bg: #1e1e1e;
+            --code-text: #d4d4d4;
+        }
+        
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body {
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        header h1 {
+            color: var(--primary);
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        
+        .card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            padding: 30px;
+            margin-bottom: 20px;
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        .card.active { display: block; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .progress-container {
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 14px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+        
+        .progress-bar {
+            flex-grow: 1;
+            height: 8px;
+            background-color: var(--border-color);
+            border-radius: 4px;
+            margin: 0 15px;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background-color: var(--primary);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .question-text {
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+        
+        pre {
+            background-color: var(--code-bg);
+            color: var(--code-text);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            line-height: 1.4;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 30px;
+        }
+        
+        .option {
+            padding: 15px 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+        }
+        
+        .option:hover {
+            border-color: var(--primary);
+            background-color: #f5f3ff;
+        }
+        
+        .option.selected {
+            border-color: var(--primary);
+            background-color: #ede9fe;
+            color: var(--primary-hover);
+        }
+        
+        .nav-buttons {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        button {
+            padding: 10px 24px;
+            border-radius: 6px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s, color 0.2s;
+            border: none;
+        }
+        
+        .btn-outline {
+            background-color: transparent;
+            border: 2px solid var(--border-color);
+            color: var(--text-main);
+        }
+        
+        .btn-outline:hover:not(:disabled) {
+            border-color: var(--text-muted);
+            background-color: var(--bg-color);
+        }
+        
+        .btn-outline:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-primary:hover { background-color: var(--primary-hover); }
+        
+        .btn-success { background-color: var(--success); color: white; }
+        .btn-success:hover { background-color: #059669; }
+        
+        .btn-danger { background-color: var(--danger); color: white; }
+        .btn-danger:hover { background-color: #dc2626; }
+        
+        /* Modal Styles */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        
+        .modal-overlay.active { display: flex; }
+        
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+        
+        .modal-content h3 { margin-bottom: 15px; font-size: 20px; }
+        .modal-content p { margin-bottom: 25px; color: var(--text-muted); }
+        
+        .modal-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        /* Results Styles */
+        .result-header {
+            text-align: center;
+            padding: 20px 0 40px;
+        }
+        
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background-color: var(--primary);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: bold;
+            margin: 0 auto 20px;
+            box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
+        }
+        
+        .result-item {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .result-item:last-child { border-bottom: none; }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            color: white;
+            margin-bottom: 10px;
+        }
+        
+        .badge.correct { background-color: var(--success); }
+        .badge.incorrect { background-color: var(--danger); }
+        .badge.unanswered { background-color: var(--text-muted); }
+        
+        .rationale-box {
+            background-color: #f8fafc;
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 0 8px 8px 0;
+            font-size: 14px;
+        }
+
+        .rationale-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: var(--primary);
+        }
+        
+        .user-choice {
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        
+        .text-green { color: var(--success); font-weight: 600; }
+        .text-red { color: var(--danger); font-weight: 600; }
+        
+        .controls-top {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 600px) {
+            .nav-buttons { flex-direction: column-reverse; gap: 15px; }
+            .nav-buttons button { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Latihan Analisis Variabel C++</h1>
+        <p style="color: var(--text-muted); font-size: 15px;">Pelacakan alur data, cout, cin, & assignment.</p>
+    </header>
+
+    <!-- Quiz Section -->
+    <div id="quiz-container" class="card active">
+        <div class="progress-container">
+            <span id="progress-text">Soal 1 dari 20</span>
+            <div class="progress-bar">
+                <div id="progress-fill" class="progress-fill"></div>
+            </div>
+        </div>
+
+        <div id="question-content"></div>
+
+        <div class="nav-buttons">
+            <button id="btn-prev" class="btn-outline" onclick="prevQuestion()">Sebelumnya</button>
+            <button id="btn-next" class="btn-primary" onclick="nextQuestion()">Selanjutnya</button>
+            <button id="btn-submit" class="btn-success" style="display: none;" onclick="showModal()">Kumpulkan</button>
+        </div>
+    </div>
+
+    <!-- Results Section -->
+    <div id="results-container" class="card">
+        <div class="controls-top">
+            <button class="btn-outline" style="padding: 6px 12px; font-size: 13px;" onclick="resetQuiz()">Ulangi Kuis</button>
+        </div>
+        <div class="result-header">
+            <div class="score-circle" id="final-score">0</div>
+            <h2 id="score-message">Hasil Evaluasi</h2>
+            <p style="color: var(--text-muted); margin-top: 5px;">Review jawaban Anda di bawah ini.</p>
+        </div>
+        <div id="results-content"></div>
+    </div>
+</div>
+
+<!-- Confirmation Modal -->
+<div id="confirm-modal" class="modal-overlay">
+    <div class="modal-content">
+        <h3>Kumpulkan Jawaban?</h3>
+        <p id="modal-text">Anda sudah menjawab semua soal. Yakin ingin mengumpulkan dan melihat hasil?</p>
+        <div class="modal-actions">
+            <button class="btn-outline" onclick="closeModal()">Batal</button>
+            <button class="btn-primary" onclick="submitQuiz()">Ya, Kumpulkan</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const quizData = [{"q": "Perhatikan potongan kode C++ berikut:\n<pre><code>int x = 15;\nx = 25;\nint y = x;\nx = 35;\ncout &lt;&lt; y;</code></pre>\nApa output yang akan ditampilkan di layar?", "options": ["15", "25", "35", "Error"], "correct": 1, "rationale": "Variabel y mengambil nilai x pada saat x bernilai 25, dan perubahan x menjadi 35 setelahnya tidak mengubah nilai y yang sudah tersimpan."}, {"q": "Dalam sebuah modul Point of Sale (POS), stok barang dihitung menggunakan kode berikut:\n<pre><code>int stok = 50;\nstok = stok - 20;\nint masuk = 30;\nstok = stok + masuk;\ncout &lt;&lt; stok;</code></pre>\nBerapakah nilai akhir yang dicetak?", "options": ["50", "30", "60", "80"], "correct": 2, "rationale": "Stok awal 50 berkurang 20 menjadi 30. Kemudian, nilai 30 tersebut ditambah dengan variabel masuk (30), menghasilkan 60."}, {"q": "Jika pada saat program berjalan pengguna memasukkan angka <code>80</code>, apa output dari program tersebut?\n<pre><code>int nilai = 0;\ncin &gt;&gt; nilai;\nint bonus = 5;\nnilai = nilai + bonus;\ncout &lt;&lt; nilai;</code></pre>", "options": ["0", "5", "80", "85"], "correct": 3, "rationale": "Input pengguna 80 menggantikan nilai 0, lalu ditambah dengan variabel bonus yang bernilai 5, menghasilkan 85."}, {"q": "Perhatikan proses pemotongan (truncation) tipe data pada kode ini:\n<pre><code>double pi = 3.14;\nint angka = pi;\nangka = angka * 2;\ncout &lt;&lt; angka;</code></pre>\nApa hasil yang ditampilkan?", "options": ["6.28", "6", "7", "3"], "correct": 1, "rationale": "Saat 3.14 disimpan ke tipe integer, angka di belakang koma diabaikan sehingga menjadi 3, lalu dikalikan 2 menghasilkan 6."}, {"q": "Kode di bawah ini menggunakan tipe data karakter tunggal. Bagaimana output akhirnya?\n<pre><code>char grade = 'B';\ngrade = 'A';\nchar finalGrade = grade;\ngrade = 'C';\ncout &lt;&lt; finalGrade;</code></pre>", "options": ["A", "B", "C", "Error"], "correct": 0, "rationale": "Pada baris ketiga, grade bernilai 'A' dan disalin ke finalGrade. Perubahan grade berikutnya menjadi 'C' tidak berdampak mundur ke finalGrade."}, {"q": "Lacak operasi perhitungan variabel a, b, dan c berikut:\n<pre><code>int a = 10;\nint b = 20;\na = b;\nb = 30;\nint c = a + b;\ncout &lt;&lt; c;</code></pre>", "options": ["30", "40", "50", "60"], "correct": 2, "rationale": "Nilai a berubah menjadi 20 (mengambil dari b awal). Kemudian b berubah menjadi 30. Saat dijumlahkan, 20 + 30 = 50."}, {"q": "Sebuah sistem pembayaran membaca input pengguna sebesar <code>500</code>. Apa hasil yang dicetak oleh program ini?\n<pre><code>int modal = 1000;\nint untung;\ncin &gt;&gt; untung;\nint total = modal + untung;\nmodal = 0;\ncout &lt;&lt; total;</code></pre>", "options": ["0", "500", "1000", "1500"], "correct": 3, "rationale": "Variabel total menampung 1000 + 500 pada saat deklarasi. Mengubah isi penyusunnya (modal=0) di baris berikutnya tidak akan menganulir kalkulasi masa lalu."}, {"q": "Tipe data <code>bool</code> memiliki representasi khusus saat dicetak di konsol C++. Lacak nilainya di sini:\n<pre><code>bool aktif = true;\naktif = false;\nbool status = aktif;\naktif = true;\ncout &lt;&lt; status;</code></pre>", "options": ["false", "true", "0", "1"], "correct": 2, "rationale": "Variabel status menyalin aktif ketika nilainya sedang false. Di konsol C++, false secara default dicetak sebagai angka 0."}, {"q": "Logika matematis ini memanipulasi dua variabel. Lacak perubahannya dengan teliti:\n<pre><code>int x = 5;\nint y = 10;\nx = x + y;\nint z = x;\ny = z - y;\nx = x - y;\ncout &lt;&lt; x &lt;&lt; \" \" &lt;&lt; y;</code></pre>\nApa output akhirnya?", "options": ["5 10", "15 5", "10 5", "10 15"], "correct": 2, "rationale": "Baris 3: x=15. Baris 5: y=15-10=5. Baris 6: x=15-5=10. Output akhirnya adalah 10 5."}, {"q": "Kalkulasi modul Computer Based Test (CBT) memberikan skor awal. Perhatikan alurnya:\n<pre><code>int skor = 100;\nint denda = 20;\nskor = skor - denda;\ndenda = 50;\ncout &lt;&lt; skor;</code></pre>\nBerapa skor yang tersisa?", "options": ["30", "50", "80", "100"], "correct": 2, "rationale": "Skor 100 dikurangi denda 20 menjadi 80. Perubahan variabel denda menjadi 50 di baris selanjutnya tidak berpengaruh pada variabel skor yang sudah dihitung."}, {"q": "Perhatikan bentuk deklarasi berantai (chained assignment) di bawah ini:\n<pre><code>int x, y, z;\nx = y = z = 10;\ny = 20;\nx = y + z;\ncout &lt;&lt; x;</code></pre>\nApa output dari program tersebut?", "options": ["10", "20", "30", "Error"], "correct": 2, "rationale": "Awalnya semua variabel bernilai 10. Lalu y berubah menjadi 20. Saat operasi penjumlahan berjalan, nilai y adalah 20 dan z tetap 10, sehingga x = 20 + 10 = 30."}, {"q": "Kode berikut melakukan pertukaran data. Apa karakter yang akan dicetak?\n<pre><code>char kode = 'P';\nchar temp = kode;\nkode = 'X';\nkode = temp;\ncout &lt;&lt; kode;</code></pre>", "options": ["P", "X", "T", "Error"], "correct": 0, "rationale": "Variabel temp mengamankan karakter 'P'. Walaupun kode sempat berubah menjadi 'X', baris terakhir memulihkan nilainya dari temp yang berisi 'P'."}, {"q": "Logika kalkulasi usia berdasarkan tahun saat ini dan tahun masuk sekolah (misal siswa lahir 2008):\n<pre><code>int umur = 16;\nint tahun_sekarang = 2024;\numur = tahun_sekarang - 2008;\ntahun_sekarang = 2025;\ncout &lt;&lt; umur;</code></pre>\nBerapa output-nya?", "options": ["16", "17", "2008", "2024"], "correct": 0, "rationale": "umur dihitung dari 2024 - 2008 = 16. Perubahan tahun_sekarang menjadi 2025 setelahnya tidak memperbarui isi variabel umur."}, {"q": "Program ini menggunakan operator sisa bagi (modulo). Lacak nilainya:\n<pre><code>int sisa = 10;\nsisa = sisa % 3;\nint total = sisa * 5;\nsisa = 0;\ncout &lt;&lt; total;</code></pre>", "options": ["0", "3", "5", "15"], "correct": 2, "rationale": "Sisa dari 10 dibagi 3 adalah 1. Variabel total dihitung 1 dikali 5, menghasilkan 5."}, {"q": "Jika dua nilai input dimasukkan secara berturut-turut, yaitu <code>5</code> lalu <code>10</code> lewat terminal, apa outputnya?\n<pre><code>int panjang = 0;\nint lebar = 0;\ncin &gt;&gt; panjang;\ncin &gt;&gt; lebar;\nint luas = panjang * lebar;\npanjang = 20;\ncout &lt;&lt; luas;</code></pre>", "options": ["0", "50", "100", "200"], "correct": 1, "rationale": "Input panjang (5) dikalikan input lebar (10) menghasilkan 50. Modifikasi nilai panjang menjadi 20 di baris selanjutnya tidak mengubah luas."}, {"q": "C++ memiliki karakteristik khas saat tipe data bilangan bulat melakukan pembagian. Perhatikan kode ini:\n<pre><code>int a = 9;\nint b = 2;\nint c = a / b;\na = 10;\ncout &lt;&lt; c;</code></pre>\nApa hasilnya?", "options": ["4.5", "4", "5", "0"], "correct": 1, "rationale": "Dalam pembagian integer (int/int) di C++, hasil desimal dibuang sepenuhnya (truncated). 9 dibagi 2 menjadi 4."}, {"q": "Pelacakan variabel yang menumpuk (akumulasi increment berulang):\n<pre><code>int poin = 10;\nint tambah = 5;\npoin = poin + tambah;\ntambah = 10;\npoin = poin + tambah;\ncout &lt;&lt; poin;</code></pre>\nBerapakah output dari variabel poin?", "options": ["10", "15", "20", "25"], "correct": 3, "rationale": "Penambahan pertama: poin menjadi 15. Variabel tambah diubah jadi 10. Penambahan kedua: poin (15) + tambah (10) menghasilkan 25."}, {"q": "Logika variabel swap murni (pertukaran) menggunakan variabel perantara:\n<pre><code>int p = 50;\nint q = 100;\nint temp = p;\np = q;\nq = temp;\ncout &lt;&lt; q;</code></pre>\nApa output dari kode di atas?", "options": ["50", "100", "0", "Error"], "correct": 0, "rationale": "Variabel q mengambil nilai dari temp, di mana temp menyimpan nilai asli p (50) sebelum ditimpa."}, {"q": "Perhatikan tipe data float jika dipindahkan ke wadah integer:\n<pre><code>float berat = 5.5;\nberat = berat + 2.0;\nint bulat = berat;\ncout &lt;&lt; bulat;</code></pre>", "options": ["5.5", "7.5", "7", "8"], "correct": 2, "rationale": "Berat total adalah 7.5. Saat nilai tersebut dioper ke variabel bulat berjenis int, desimal (.5) diabaikan/dipotong."}, {"q": "Jika terminal memasukkan kata/huruf (misal: 'x') ke dalam variabel yang dideklarasikan <code>int</code>, apa perilaku umumnya dalam C++ modern untuk sintaks ini?\n<pre><code>int id_peserta = 100;\ncin &gt;&gt; id_peserta; \ncout &lt;&lt; id_peserta;</code></pre>", "options": ["Hello / x", "100", "0", "Crash"], "correct": 2, "rationale": "Dalam versi standar C++11 ke atas, operasi input yang gagal membaca tipe data dengan benar akan memicu fail-state dan mereset nilai variabel menjadi 0."}];
+    const totalQuestions = quizData.length;
+    
+    // State
+    let currentIndex = 0;
+    let userAnswers = JSON.parse(localStorage.getItem('cppQuizAnswers')) || new Array(totalQuestions).fill(null);
+    let isSubmitted = localStorage.getItem('cppQuizSubmitted') === 'true';
+
+    // DOM Elements
+    const quizContainer = document.getElementById('quiz-container');
+    const resultsContainer = document.getElementById('results-container');
+    const questionContent = document.getElementById('question-content');
+    const btnPrev = document.getElementById('btn-prev');
+    const btnNext = document.getElementById('btn-next');
+    const btnSubmit = document.getElementById('btn-submit');
+    const progressText = document.getElementById('progress-text');
+    const progressFill = document.getElementById('progress-fill');
+    const confirmModal = document.getElementById('confirm-modal');
+    const modalText = document.getElementById('modal-text');
+
+    function init() {
+        if (isSubmitted) {
+            showResults();
+        } else {
+            renderQuestion();
+        }
+    }
+
+    function renderQuestion() {
+        const qData = quizData[currentIndex];
+        
+        // Update Progress
+        progressText.innerText = `Soal ${currentIndex + 1} dari ${totalQuestions}`;
+        progressFill.style.width = `${((currentIndex + 1) / totalQuestions) * 100}%`;
+        
+        // Generate Question HTML
+        let optionsHtml = '';
+        qData.options.forEach((opt, idx) => {
+            const isSelected = userAnswers[currentIndex] === idx;
+            optionsHtml += `
+                <div class="option ${isSelected ? 'selected' : ''}" onclick="selectOption(${idx})">
+                    ${String.fromCharCode(65 + idx)}. ${opt}
+                </div>
+            `;
+        });
+
+        questionContent.innerHTML = `
+            <div class="question-text">${qData.q}</div>
+            <div class="options">${optionsHtml}</div>
+        `;
+
+        // Update Buttons
+        btnPrev.disabled = currentIndex === 0;
+        
+        if (currentIndex === totalQuestions - 1) {
+            btnNext.style.display = 'none';
+            btnSubmit.style.display = 'block';
+        } else {
+            btnNext.style.display = 'block';
+            btnSubmit.style.display = 'none';
+        }
+    }
+
+    function selectOption(idx) {
+        userAnswers[currentIndex] = idx;
+        localStorage.setItem('cppQuizAnswers', JSON.stringify(userAnswers));
+        renderQuestion(); // Re-render to show selection
+    }
+
+    function prevQuestion() {
+        if (currentIndex > 0) {
+            currentIndex--;
+            renderQuestion();
+        }
+    }
+
+    function nextQuestion() {
+        if (currentIndex < totalQuestions - 1) {
+            currentIndex++;
+            renderQuestion();
+        }
+    }
+
+    function showModal() {
+        const answeredCount = userAnswers.filter(ans => ans !== null).length;
+        if (answeredCount < totalQuestions) {
+            modalText.innerHTML = `Anda baru menjawab <b>${answeredCount} dari ${totalQuestions}</b> soal.<br>Yakin ingin mengumpulkan sekarang?`;
+        } else {
+            modalText.innerHTML = `Anda sudah menjawab semua soal.<br>Yakin ingin melihat skor?`;
+        }
+        confirmModal.classList.add('active');
+    }
+
+    function closeModal() {
+        confirmModal.classList.remove('active');
+    }
+
+    function submitQuiz() {
+        closeModal();
+        localStorage.setItem('cppQuizSubmitted', 'true');
+        showResults();
+    }
+
+    function showResults() {
+        quizContainer.classList.remove('active');
+        resultsContainer.classList.add('active');
+        
+        let correctCount = 0;
+        let resultsHtml = '';
+
+        quizData.forEach((q, idx) => {
+            const userAns = userAnswers[idx];
+            const isCorrect = userAns === q.correct;
+            
+            if (isCorrect) correctCount++;
+            
+            let badgeHtml = '';
+            let choiceHtml = '';
+            
+            if (userAns === null) {
+                badgeHtml = '<span class="badge unanswered">Tidak Dijawab</span>';
+                choiceHtml = `Jawaban yang benar: <b>${String.fromCharCode(65 + q.correct)}. ${q.options[q.correct]}</b>`;
+            } else if (isCorrect) {
+                badgeHtml = '<span class="badge correct">Benar</span>';
+                choiceHtml = `Anda menjawab: <span class="text-green">${String.fromCharCode(65 + userAns)}. ${q.options[userAns]}</span>`;
+            } else {
+                badgeHtml = '<span class="badge incorrect">Salah</span>';
+                choiceHtml = `Anda menjawab: <span class="text-red">${String.fromCharCode(65 + userAns)}. ${q.options[userAns]}</span><br>
+                              Jawaban yang benar: <b class="text-green">${String.fromCharCode(65 + q.correct)}. ${q.options[q.correct]}</b>`;
+            }
+
+            resultsHtml += `
+                <div class="result-item">
+                    ${badgeHtml}
+                    <div style="font-weight: 500; margin-top: 10px;">${idx + 1}. ${q.q.replace(/<pre><code>.*?<\/code><\/pre>/gs, ' <i>[Lihat Kode pada Soal]</i> ')}</div>
+                    <div class="user-choice">${choiceHtml}</div>
+                    <div class="rationale-box">
+                        <div class="rationale-title">Penjelasan:</div>
+                        ${q.rationale}
+                    </div>
+                </div>
+            `;
+        });
+
+        const score = Math.round((correctCount / totalQuestions) * 100);
+        document.getElementById('final-score').innerText = score;
+        
+        let msg = '';
+        if(score >= 80) msg = "Luar Biasa! Logika Anda sangat tajam.";
+        else if(score >= 60) msg = "Kerja Bagus! Tingkatkan lagi ketelitiannya.";
+        else msg = "Jangan menyerah! Coba pelajari ulang alur variabelnya.";
+        
+        document.getElementById('score-message').innerText = msg;
+        document.getElementById('results-content').innerHTML = resultsHtml;
+    }
+
+    function resetQuiz() {
+        if(confirm("Seluruh riwayat jawaban akan dihapus. Lanjutkan?")) {
+            localStorage.removeItem('cppQuizAnswers');
+            localStorage.removeItem('cppQuizSubmitted');
+            userAnswers = new Array(totalQuestions).fill(null);
+            currentIndex = 0;
+            isSubmitted = false;
+            resultsContainer.classList.remove('active');
+            quizContainer.classList.add('active');
+            renderQuestion();
+        }
+    }
+
+    // Run on load
+    init();
+</script>
+</body>
+</html>
