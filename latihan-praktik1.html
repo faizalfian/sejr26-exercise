@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lembar Kerja Siswa: Praktik Variabel C++</title>
+    
+    <!-- CodeMirror CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/monokai.min.css">
+    
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --secondary: #f8fafc;
+            --border: #e2e8f0;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --success: #10b981;
+            --code-bg: #1e1e1e;
+            --code-text: #d4d4d4;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        body { background-color: #f1f5f9; color: var(--text-dark); line-height: 1.6; padding: 20px; }
+        
+        .container { max-width: 1000px; margin: 0 auto; }
+        
+        header { text-align: center; margin-bottom: 30px; }
+        header h1 { color: var(--primary); margin-bottom: 5px; }
+        
+        .card {
+            background: white; border-radius: 10px; padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px;
+        }
+        
+        /* Form Identitas */
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 14px; }
+        .form-control {
+            width: 100%; padding: 10px; border: 1px solid var(--border);
+            border-radius: 6px; font-size: 14px;
+        }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        
+        /* Navigasi Soal */
+        .nav-soal { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; justify-content: center; }
+        .btn-nav {
+            background: white; border: 1px solid var(--border); padding: 10px 20px;
+            border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.2s;
+        }
+        .btn-nav:hover { border-color: var(--primary); color: var(--primary); }
+        .btn-nav.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .btn-nav.done { border-bottom: 4px solid var(--success); }
+        
+        /* Area Soal */
+        .story-box { background: var(--secondary); padding: 15px; border-left: 4px solid var(--primary); border-radius: 0 8px 8px 0; margin-bottom: 20px; }
+        
+        .instructions ul { padding-left: 20px; margin-bottom: 20px; }
+        .instructions li { margin-bottom: 8px; font-size: 14.5px; }
+        
+        .terminal {
+            background: var(--code-bg); color: var(--code-text);
+            padding: 15px; border-radius: 8px; font-family: 'Courier New', Courier, monospace;
+            white-space: pre-wrap; font-size: 13px; margin-bottom: 20px;
+        }
+        
+        .terminal-header { color: #888; font-size: 12px; margin-bottom: 10px; border-bottom: 1px solid #444; padding-bottom: 5px; }
+        
+        /* CodeMirror custom adjustments */
+        .CodeMirror {
+            height: 350px;
+            border-radius: 8px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border);
+        }
+        
+        /* Buttons */
+        .btn { padding: 10px 20px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-success { background: var(--success); color: white; }
+        .btn-outline { background: white; border: 1px solid var(--border); color: var(--text-dark); }
+        .btn-outline:hover { background: var(--secondary); }
+        
+        .flex-between { display: flex; justify-content: space-between; align-items: center; }
+        
+        /* Hasil Pengerjaan */
+        #hasil-container { display: none; }
+        .hasil-kode { 
+            background: #f4f4f4; border: 1px solid #ddd; border-left: 4px solid var(--success);
+            padding: 15px; border-radius: 4px; font-family: monospace; white-space: pre-wrap; font-size: 13px; overflow-x: auto;
+        }
+        
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white; padding: 0; }
+            .card { box-shadow: none; border: none; padding: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header class="no-print">
+        <h1>Praktik C++: Update Variabel</h1>
+        <p style="color: var(--text-light);">Latihan pelacakan dan perubahan memori baris demi baris.</p>
+    </header>
+
+    <!-- Data Kelompok -->
+    <div class="card" id="form-kelompok">
+        <h3 style="margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 10px;">Data Praktikan</h3>
+        <div class="grid-2">
+            <div class="form-group">
+                <label>Nama Kelompok / Siswa</label>
+                <input type="text" id="input-kelompok" class="form-control" placeholder="Contoh: Kelompok 1" onchange="saveDataKelompok()">
+            </div>
+            <div class="form-group">
+                <label>Kelas</label>
+                <input type="text" id="input-kelas" class="form-control" placeholder="Contoh: XI RPL 1" onchange="saveDataKelompok()">
+            </div>
+        </div>
+        <div class="form-group" style="margin-bottom: 0;">
+            <label>Anggota Kelompok (pisahkan dengan koma)</label>
+            <input type="text" id="input-anggota" class="form-control" placeholder="Contoh: Andi, Budi, Citra" onchange="saveDataKelompok()">
+        </div>
+    </div>
+
+    <!-- Navigasi Soal -->
+    <div class="nav-soal no-print" id="nav-container">
+        <!-- Buttons injected by JS -->
+    </div>
+
+    <!-- Area Pengerjaan Soal -->
+    <div class="card no-print" id="soal-container">
+        <h2 id="soal-title" style="margin-bottom: 15px;">Pilih Soal</h2>
+        
+        <div class="story-box" id="soal-cerita">Silakan pilih nomor soal di atas.</div>
+        
+        <div class="grid-2">
+            <div>
+                <h4 style="margin-bottom: 10px;">Alur Program:</h4>
+                <div class="instructions"><ul id="soal-alur"></ul></div>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 10px;">Contoh Output di Terminal:</h4>
+                <div class="terminal">
+                    <div class="terminal-header">Terminal / Console</div>
+                    <div id="soal-output"></div>
+                </div>
+            </div>
+        </div>
+
+        <h4 style="margin-top: 20px; margin-bottom: 10px;">Workspace C++:</h4>
+        <textarea id="code-editor"></textarea>
+        
+        <div class="flex-between">
+            <button class="btn btn-primary" onclick="simpanJawaban()">💾 Simpan Kode</button>
+            <button class="btn btn-success" onclick="tampilkanHasil()">Lihat Hasil Soal Ini ➔</button>
+        </div>
+        <div id="save-notif" style="color: var(--success); font-weight: bold; font-size: 14px; margin-top: 10px; display: none;">✅ Kode berhasil disimpan di browser!</div>
+    </div>
+
+    <!-- Halaman Hasil / Review -->
+    <div class="card" id="hasil-container">
+        <div class="no-print" style="margin-bottom: 20px; display: flex; justify-content: space-between;">
+            <button class="btn btn-outline" onclick="kembaliKeSoal()">← Kembali Edit</button>
+            <button class="btn btn-primary" onclick="window.print()">🖨️ Cetak Hasil Ini</button>
+        </div>
+        
+        <div style="text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid var(--border);">
+            <h2>Laporan Praktik Pemrograman C++</h2>
+            <h3 style="color: var(--text-light); margin-top: 5px;" id="cetak-kelompok">Kelompok: -</h3>
+            <p id="cetak-kelas">Kelas: -</p>
+            <p id="cetak-anggota" style="font-style: italic;">Anggota: -</p>
+        </div>
+
+        <div id="hasil-detail-soal">
+            <!-- Injected by JS (Only Current Question) -->
+        </div>
+    </div>
+</div>
+
+<!-- CodeMirror JS dependencies -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/clike/clike.min.js"></script>
+
+<script>
+    const soalData = [{"id": 1, "title": "Soal 1: Simulasi Stok Gudang Koperasi", "cerita": "Sebuah koperasi sekolah memiliki stok awal buku tulis. Pagi harinya, koperasi menerima pasokan buku baru dari distributor. Siang harinya, beberapa siswa datang membeli buku tersebut. Sore harinya, petugas menemukan ada beberapa buku yang rusak dan harus dibuang dari stok.", "alur": ["Buat variabel <code>stok_buku</code> dengan nilai <code>150</code>. Cetak nilai awal ini ke layar.", "Minta input (menggunakan <code>cin</code>) jumlah buku dari distributor hari ini. Simpan ke variabel <code>tambahan</code>.", "Tambahkan <code>stok_buku</code> dengan <code>tambahan</code>. <b>Cetak stok setelah ditambah.</b>", "Minta input jumlah buku yang terjual ke siswa (variabel <code>terjual</code>).", "Kurangi <code>stok_buku</code> dengan <code>terjual</code>. <b>Cetak stok setelah penjualan.</b>", "Minta input jumlah buku rusak (variabel <code>buku_rusak</code>).", "Kurangi kembali <code>stok_buku</code> dengan <code>buku_rusak</code>.", "Cetak hasil akhir: <code>\"Stok buku akhir di koperasi adalah: [nilai] buku\"</code>."], "output": "Stok awal koperasi: 150\nMasukkan tambahan buku dari distributor: 50\n[Update] Stok saat ini: 200\nMasukkan jumlah buku terjual: 30\n[Update] Stok setelah terjual: 170\nMasukkan jumlah buku rusak: 5\nStok buku akhir di koperasi adalah: 165 buku"}, {"id": 2, "title": "Soal 2: Sistem Poin Ujian CBT", "cerita": "Dalam sebuah sistem CBT, seorang peserta ujian diberikan poin dasar sebesar 100 saat login. Setiap kali ia menjawab soal HOTS dengan benar, poinnya bertambah. Namun, jika ia salah menjawab soal jebakan, poinnya akan dipotong. Di akhir sesi, sistem memberikan bonus poin kehadiran.", "alur": ["Deklarasikan variabel <code>poin_peserta</code> bertipe <code>float</code> dengan nilai <code>100.0</code>. Cetak poin awal.", "Minta input poin dari soal HOTS, simpan ke <code>poin_hots</code>.", "Tambahkan <code>poin_hots</code> ke <code>poin_peserta</code>. <b>Cetak poin sementara.</b>", "Minta input nilai penalti salah jawab, simpan ke <code>penalti</code>.", "Kurangi <code>poin_peserta</code> dengan nilai <code>penalti</code>. <b>Cetak poin setelah penalti.</b>", "Buat variabel <code>bonus</code> bernilai <code>12.5</code> dan tambahkan ke <code>poin_peserta</code>.", "Cetak skor akhir peserta: <code>\"Skor akhir CBT ujian: [nilai] poin\"</code>."], "output": "Poin awal peserta: 100\nMasukkan poin soal HOTS yang didapat: 25.5\n[Update] Poin setelah soal HOTS: 125.5\nMasukkan potongan poin penalti: 10\n[Update] Poin setelah penalti: 115.5\nSistem menambahkan bonus kehadiran: 12.5\nSkor akhir CBT ujian: 128 poin"}, {"id": 3, "title": "Soal 3: Mesin Kasir Sederhana (POS)", "cerita": "Seorang pelanggan berbelanja di minimarket. Ia membeli sebuah produk yang harganya ditentukan oleh kasir. Ia membeli beberapa buah dari produk tersebut. Minimarket tersebut kemudian memberikan potongan harga (diskon) berupa potongan nominal tetap.", "alur": ["Buat variabel <code>harga_satuan</code> (<code>int</code>) dan minta user memasukkan nilainya.", "Buat variabel <code>jumlah_beli</code> (<code>int</code>) dan minta input angkanya.", "Buat variabel <code>total_belanja</code>, hitung nilainya (harga dikali jumlah). <b>Cetak total sementara.</b>", "Minta input nominal potongan harga, simpan di <code>diskon</code>.", "Kurangi <code>total_belanja</code> dengan <code>diskon</code>. <b>Cetak total setelah diskon.</b>", "Minta input uang yang dibayarkan pelanggan ke variabel <code>uang_bayar</code>.", "Buat variabel <code>kembalian</code> dan hitung nilainya (uang bayar dikurangi total akhir).", "Tampilkan uang bayar dan kembaliannya ke layar."], "output": "Masukkan harga satuan barang: 15000\nMasukkan jumlah beli: 2\n[Update] Total belanja sementara: 30000\nMasukkan nominal diskon: 5000\n[Update] Total tagihan setelah diskon: 25000\nMasukkan uang bayar pelanggan: 50000\nUang Bayar: 50000\nKembalian: 25000"}, {"id": 4, "title": "Soal 4: Kalkulator Lahan Pertanian", "cerita": "Seorang petani sedang merancang kebun sayurnya. Ia memiliki sebidang tanah dan ingin menghitung berapa banyak bibit yang bisa ditanam. Awalnya ia merencanakan panjang dan lebar tertentu, namun karena sebagian tanahnya berbatu, ia harus mengurangi ukuran panjangnya.", "alur": ["Deklarasikan <code>panjang_lahan</code> dan <code>lebar_lahan</code> (<code>float</code>). Minta input keduanya.", "Hitung dan simpan di <code>luas_tanah</code> (panjang x lebar). <b>Cetak luas awal.</b>", "Minta input panjang tanah yang berbatu dan harus dipotong (simpan di <code>potongan_panjang</code>).", "Kurangi <code>panjang_lahan</code> dengan <code>potongan_panjang</code>. <b>Cetak panjang lahan yang baru.</b>", "Hitung ulang <code>luas_tanah</code> menggunakan panjang baru. <b>Cetak luas lahan yang baru.</b>", "Buat variabel <code>kapasitas_bibit</code> (<code>int</code>). Asumsikan 1 meter persegi muat 4 bibit.", "Masukkan nilai (luas tanah baru dikali 4) ke dalam <code>kapasitas_bibit</code>.", "Tampilkan total bibit yang bisa ditanam."], "output": "Masukkan panjang lahan (meter): 10.5\nMasukkan lebar lahan (meter): 5\nLuas awal lahan: 52.5 m2\nMasukkan panjang tanah berbatu yang harus dipotong: 2.5\n[Update] Panjang lahan baru menjadi: 8 m\n[Update] Luas lahan baru direvisi menjadi: 40 m2\nTotal bibit yang bisa ditanam: 160 bibit"}, {"id": 5, "title": "Soal 5: Pertarungan Game RPG", "cerita": "Dalam sebuah game, seorang karakter ksatria masuk ke dalam arena. Ia terkena jebakan sehingga HP-nya berkurang. Ia lalu meminum ramuan penyembuh (potion), lalu terkena serangan monster.", "alur": ["Deklarasikan variabel karakter tunggal <code>tipe_kelas = 'K'</code>. Cetak kelas ke layar.", "Buat variabel <code>hp_karakter = 1000</code>. Cetak HP awal.", "Minta input damage jebakan, simpan ke <code>damage_jebakan</code>.", "Kurangi <code>hp_karakter</code> dengan <code>damage_jebakan</code>. <b>Cetak sisa HP setelah terkena jebakan.</b>", "Minta input nilai penyembuhan potion, simpan di <code>heal_potion</code>.", "Tambahkan <code>heal_potion</code> ke <code>hp_karakter</code>. <b>Cetak sisa HP setelah minum potion.</b>", "Minta input nilai serangan monster di variabel <code>serangan_monster</code>.", "Kurangi <code>hp_karakter</code> dengan serangan monster.", "Cetak hasil akhir: <code>\"Pertarungan selesai. Sisa HP karakter: [nilai]\"</code>."], "output": "Kelas Karakter: K\nHP Awal: 1000\nMasukkan damage dari jebakan: 150\n[Update] Terkena jebakan! Sisa HP: 850\nMasukkan nilai heal dari Potion: 200\n[Update] Memulihkan diri! Sisa HP: 1050\nMasukkan damage serangan monster: 300\nPertarungan selesai. Sisa HP karakter: 750"}, {"id": 6, "title": "Soal 6: Agen Saldo Pulsa", "cerita": "Seorang agen pulsa memulai harinya dengan saldo tertentu. Pelanggan pertama datang membeli pulsa, sehingga saldo agen berkurang namun ia mendapat sedikit komisi yang ditambahkan langsung ke saldo kas uang.", "alur": ["Buat <code>saldo_pulsa</code> (<code>long long</code>) dan minta input saldo awalnya. Cetak saldo awal.", "Buat <code>kas_uang = 0</code>.", "Minta input nominal pulsa pelanggan 1 (simpan di <code>pembelian_satu</code>).", "Kurangi <code>saldo_pulsa</code> dengan <code>pembelian_satu</code>. <b>Cetak sisa saldo pulsa.</b>", "Minta input uang yang dibayar pelanggan 1 (simpan di <code>uang_diterima</code>).", "Tambahkan <code>uang_diterima</code> ke <code>kas_uang</code>. <b>Cetak isi kas uang.</b>", "Ulangi untuk pelanggan 2: minta input <code>pembelian_dua</code>, kurangi saldo pulsa, <b>cetak sisa saldo</b>. Minta <code>uang_diterima_dua</code>, tambahkan ke kas, <b>cetak total kas</b>.", "Tampilkan ringkasan saldo akhir dan kas akhir di satu baris."], "output": "Masukkan saldo pulsa modal awal: 500000\nSaldo awal: 500000 | Kas awal: 0\nMasukkan nominal beli pelanggan 1: 50000\n[Update] Sisa saldo pulsa: 450000\nMasukkan uang dibayar pelanggan 1: 52000\n[Update] Kas uang saat ini: 52000\nMasukkan nominal beli pelanggan 2: 20000\n[Update] Sisa saldo pulsa: 430000\nMasukkan uang dibayar pelanggan 2: 22000\n[Update] Kas uang saat ini: 74000\n\n--- RINGKASAN ---\nSaldo Pulsa Akhir: 430000\nTotal Uang Kas: 74000"}, {"id": 7, "title": "Soal 7: Modul Handoff Sesi Token", "cerita": "Seorang pengguna mendapatkan 'Token ID' saat berhasil login. Saat ia berpindah ke modul ujian, token ID tersebut dikalikan dengan sebuah kunci rahasia dan ditambah kode sesi agar aman.", "alur": ["Buat variabel <code>id_token</code> (<code>long long</code>). Minta input angka dasar (misal: 100). Cetak token mentah.", "Buat variabel <code>secret_key = 5</code> dan <code>kode_sesi = 1010</code>.", "Ubah nilai <code>id_token</code> menjadi nilainya dikali <code>secret_key</code>. <b>Cetak token tahap 1.</b>", "Tambahkan <code>id_token</code> dengan <code>kode_sesi</code>. <b>Cetak token tahap 2.</b>", "Minta input angka pengurang sinkronisasi manual, simpan di <code>pengurang</code>.", "Kurangi <code>id_token</code> dengan <code>pengurang</code>.", "Cetak hasil akhirnya: <code>\"Token final untuk handoff sesi adalah: [nilai]\"</code>."], "output": "Masukkan ID Token Mentah: 100\nToken mentah diterima: 100\n[Update] Enkripsi Tahap 1 (x5): 500\n[Update] Enkripsi Tahap 2 (+1010): 1510\nMasukkan angka pengurang sinkronisasi: 10\nToken final untuk handoff sesi adalah: 1500"}, {"id": 8, "title": "Soal 8: Bisnis Rental Komputer", "cerita": "Seorang pelanggan menyewa komputer dengan tarif per jam. Ia menyewa untuk beberapa jam, lalu meminta tambahan waktu (extend). Di akhir sesi, kasir menghitung total tagihan.", "alur": ["Deklarasikan <code>tarif_per_jam</code> dan minta input angkanya.", "Buat <code>jam_sewa</code> (<code>int</code>) dan minta input durasi main awal.", "Hitung <code>total_tagihan</code> (tarif dikali jam). <b>Cetak total tagihan sementara.</b>", "Minta input tambahan jam bermain (extend), simpan di <code>tambah_jam</code>.", "Tambahkan <code>tambah_jam</code> ke variabel <code>jam_sewa</code>. <b>Cetak total durasi jam sewa saat ini.</b>", "Hitung ulang <code>total_tagihan</code> (tarif dikali jam sewa baru). <b>Cetak update tagihan.</b>", "Minta input harga minuman di variabel <code>harga_minuman</code>.", "Tambahkan <code>harga_minuman</code> ke <code>total_tagihan</code>.", "Cetak total durasi akhir dan total tagihan akhir."], "output": "Masukkan tarif per jam: 4000\nMasukkan durasi main awal (jam): 2\n[Update] Tagihan sementara: 8000\nMasukkan durasi tambahan extend (jam): 1\n[Update] Total durasi main menjadi: 3 jam\n[Update] Tagihan direvisi menjadi: 12000\nMasukkan harga beli minuman: 5000\n--- KASIR ---\nTotal Waktu Main: 3 jam\nTotal Tagihan Akhir: 17000"}, {"id": 9, "title": "Soal 9: Pembagian Uang Saku Kakak Beradik", "cerita": "Ibu memberikan uang saku bulanan kepada sang Kakak, yang diwajibkan untuk membaginya secara rata dengan sang Adik. Setelah dibagi, sang Kakak menggunakan sebagian uangnya untuk membeli buku, dan kemudian ia mendapat tambahan uang dari pamannya.", "alur": ["Buat <code>uang_ibu</code> dan minta input total uang dari ibu.", "Buat variabel <code>uang_kakak</code> dan <code>uang_adik</code>.", "Bagi <code>uang_ibu</code> dengan 2, masukkan ke <code>uang_kakak</code> dan <code>uang_adik</code>. <b>Cetak saldo masing-masing.</b>", "Minta input harga buku yang dibeli kakak, simpan di <code>harga_buku</code>.", "Kurangi <code>uang_kakak</code> dengan <code>harga_buku</code>. <b>Cetak sisa uang kakak.</b>", "Minta input uang pemberian paman, simpan di <code>uang_paman</code>.", "Tambahkan <code>uang_paman</code> HANYA ke dalam <code>uang_kakak</code>.", "Cetak saldo akhir uang kakak dan uang adik."], "output": "Masukkan total uang saku dari Ibu: 100000\n[Update] Uang dibagi rata.\nSaldo Kakak: 50000 | Saldo Adik: 50000\nMasukkan harga buku yang dibeli kakak: 20000\n[Update] Sisa uang Kakak setelah beli buku: 30000\nMasukkan uang tambahan dari paman untuk kakak: 50000\n--- SALDO AKHIR ---\nUang Kakak sekarang: 80000\nUang Adik tetap: 50000"}];
+    let currentSoal = null;
+    let editor = null;
+    
+    // Inisialisasi State dari LocalStorage
+    let userAnswers = JSON.parse(localStorage.getItem('cppPraktikAnswers')) || {};
+    let dataKelompok = JSON.parse(localStorage.getItem('cppPraktikData')) || { kelompok: '', kelas: '', anggota: '' };
+
+    // DOM Elements
+    const navContainer = document.getElementById('nav-container');
+    const soalContainer = document.getElementById('soal-container');
+    const hasilContainer = document.getElementById('hasil-container');
+    
+    // Form Elements
+    const inputKelompok = document.getElementById('input-kelompok');
+    const inputKelas = document.getElementById('input-kelas');
+    const inputAnggota = document.getElementById('input-anggota');
+
+    function init() {
+        // Init CodeMirror
+        editor = CodeMirror.fromTextArea(document.getElementById('code-editor'), {
+            mode: "text/x-c++src",
+            theme: "monokai",
+            lineNumbers: true,
+            indentUnit: 4,
+            matchBrackets: true
+        });
+
+        // Load Identitas
+        inputKelompok.value = dataKelompok.kelompok;
+        inputKelas.value = dataKelompok.kelas;
+        inputAnggota.value = dataKelompok.anggota;
+
+        // Build Nav Buttons
+        soalData.forEach(s => {
+            const btn = document.createElement('button');
+            btn.className = 'btn-nav';
+            if (userAnswers[s.id]) btn.classList.add('done');
+            btn.innerText = `Soal ${s.id}`;
+            btn.onclick = () => renderSoal(s.id);
+            btn.id = `nav-btn-${s.id}`;
+            navContainer.appendChild(btn);
+        });
+
+        // Pilih soal 1 secara default
+        renderSoal(1);
+    }
+
+    function saveDataKelompok() {
+        dataKelompok = {
+            kelompok: inputKelompok.value,
+            kelas: inputKelas.value,
+            anggota: inputAnggota.value
+        };
+        localStorage.setItem('cppPraktikData', JSON.stringify(dataKelompok));
+    }
+
+    function renderSoal(id) {
+        // Auto simpan soal sebelumnya jika ada perubahan sebelum pindah
+        if (currentSoal) {
+            userAnswers[currentSoal.id] = editor.getValue();
+            localStorage.setItem('cppPraktikAnswers', JSON.stringify(userAnswers));
+        }
+
+        currentSoal = soalData.find(s => s.id === id);
+        
+        // Update Nav UI
+        document.querySelectorAll('.btn-nav').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(`nav-btn-${id}`).classList.add('active');
+
+        // Update Content
+        document.getElementById('soal-title').innerText = currentSoal.title;
+        document.getElementById('soal-cerita').innerText = currentSoal.cerita;
+        
+        const ulAlur = document.getElementById('soal-alur');
+        ulAlur.innerHTML = '';
+        currentSoal.alur.forEach(langkah => {
+            const li = document.createElement('li');
+            li.innerHTML = langkah;
+            ulAlur.appendChild(li);
+        });
+
+        document.getElementById('soal-output').innerText = currentSoal.output;
+        
+        // Load answer if exists into CodeMirror
+        const defaultCode = "#include <iostream>\nusing namespace std;\n\nint main() {\n    // Tulis kodemu disini...\n    \n    return 0;\n}";
+        editor.setValue(userAnswers[id] || defaultCode);
+        
+        // Refresh editor so it renders correctly if it was hidden
+        setTimeout(() => editor.refresh(), 10);
+        
+        document.getElementById('save-notif').style.display = 'none';
+    }
+
+    function simpanJawaban() {
+        if (!currentSoal) return;
+        
+        const code = editor.getValue();
+        userAnswers[currentSoal.id] = code;
+        localStorage.setItem('cppPraktikAnswers', JSON.stringify(userAnswers));
+        
+        // Mark button as done (cek jika kode bukan sekadar default template kosong)
+        if(code.length > 80) {
+            document.getElementById(`nav-btn-${currentSoal.id}`).classList.add('done');
+        }
+
+        // Show notif
+        const notif = document.getElementById('save-notif');
+        notif.style.display = 'block';
+        setTimeout(() => notif.style.display = 'none', 3000);
+    }
+
+    function tampilkanHasil() {
+        // Pastikan menyimpan state terakhir editor
+        simpanJawaban();
+        saveDataKelompok();
+
+        // Switch View
+        soalContainer.style.display = 'none';
+        navContainer.style.display = 'none';
+        document.getElementById('form-kelompok').style.display = 'none';
+        hasilContainer.style.display = 'block';
+
+        // Set Kop Surat
+        document.getElementById('cetak-kelompok').innerText = `Kelompok: ${dataKelompok.kelompok || '-'}`;
+        document.getElementById('cetak-kelas').innerText = `Kelas: ${dataKelompok.kelas || '-'}`;
+        document.getElementById('cetak-anggota').innerText = `Anggota: ${dataKelompok.anggota || '-'}`;
+
+        // Render HANYA SOAL SAAT INI
+        const listHtml = document.getElementById('hasil-detail-soal');
+        const kode = userAnswers[currentSoal.id] || "// Kode masih kosong";
+        
+        listHtml.innerHTML = `
+            <div style="margin-bottom: 15px;">
+                <h3 style="color: var(--primary);">${currentSoal.title}</h3>
+                <p style="color: var(--text-light); font-size: 14px; margin-top: 5px;">${currentSoal.cerita}</p>
+            </div>
+            <h4 style="margin-bottom: 10px;">Source Code:</h4>
+            <div class="hasil-kode">${kode.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</div>
+        `;
+    }
+
+    function kembaliKeSoal() {
+        soalContainer.style.display = 'block';
+        navContainer.style.display = 'flex';
+        document.getElementById('form-kelompok').style.display = 'block';
+        hasilContainer.style.display = 'none';
+        editor.refresh(); // Important for CodeMirror rendering after un-hiding
+    }
+
+    // Run
+    init();
+</script>
+</body>
+</html>
