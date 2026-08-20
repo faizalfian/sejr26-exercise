@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LKS Tingkat Lanjut: C++ Math & Boolean</title>
+    
+    <!-- CodeMirror CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/monokai.min.css">
+    
+    <style>
+        :root {
+            --primary: #8b5cf6;
+            --primary-hover: #7c3aed;
+            --secondary: #f8fafc;
+            --border: #e2e8f0;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --code-bg: #1e1e1e;
+            --code-text: #d4d4d4;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        body { background-color: #f1f5f9; color: var(--text-dark); line-height: 1.6; padding: 20px; }
+        
+        .container { max-width: 1000px; margin: 0 auto; }
+        
+        header { text-align: center; margin-bottom: 20px; }
+        header h1 { color: var(--primary); margin-bottom: 5px; }
+        
+        .card {
+            background: white; border-radius: 10px; padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px;
+        }
+        
+        /* Modul Info/Cheatsheet */
+        .info-box {
+            background-color: #fdf4ff; border-left: 5px solid var(--primary);
+        }
+        .info-box h3 { color: var(--primary-hover); margin-bottom: 10px; display: flex; align-items: center; gap: 8px;}
+        .info-box code { background-color: #f3e8ff; padding: 2px 6px; border-radius: 4px; color: #6b21a8; font-weight: bold; }
+        
+        /* Form Identitas */
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 14px; }
+        .form-control {
+            width: 100%; padding: 10px; border: 1px solid var(--border);
+            border-radius: 6px; font-size: 14px;
+        }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        
+        /* Navigasi Soal */
+        .nav-soal { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; justify-content: center; }
+        .btn-nav {
+            background: white; border: 1px solid var(--border); padding: 10px 20px;
+            border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.2s;
+        }
+        .btn-nav:hover { border-color: var(--primary); color: var(--primary); }
+        .btn-nav.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .btn-nav.done { border-bottom: 4px solid var(--success); }
+        
+        /* Area Soal */
+        .story-box { background: var(--secondary); padding: 15px; border-left: 4px solid var(--warning); border-radius: 0 8px 8px 0; margin-bottom: 20px; }
+        
+        .instructions ul { padding-left: 20px; margin-bottom: 20px; }
+        .instructions li { margin-bottom: 8px; font-size: 14.5px; }
+        
+        .terminal {
+            background: var(--code-bg); color: var(--code-text);
+            padding: 15px; border-radius: 8px; font-family: 'Courier New', Courier, monospace;
+            white-space: pre-wrap; font-size: 13px; margin-bottom: 20px;
+        }
+        .terminal-header { color: #888; font-size: 12px; margin-bottom: 10px; border-bottom: 1px solid #444; padding-bottom: 5px; }
+        
+        /* CodeMirror custom adjustments */
+        .CodeMirror {
+            height: 400px; border-radius: 8px; font-family: 'Courier New', Courier, monospace;
+            font-size: 14px; margin-bottom: 15px; border: 1px solid var(--border);
+        }
+        
+        /* Buttons */
+        .btn { padding: 10px 20px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-success { background: var(--success); color: white; }
+        .btn-outline { background: white; border: 1px solid var(--border); color: var(--text-dark); }
+        .btn-outline:hover { background: var(--secondary); }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; }
+        
+        /* Hasil Pengerjaan */
+        #hasil-container { display: none; }
+        .hasil-kode { 
+            background: #f4f4f4; border: 1px solid #ddd; border-left: 4px solid var(--success);
+            padding: 15px; border-radius: 4px; font-family: monospace; white-space: pre-wrap; font-size: 13px; overflow-x: auto;
+        }
+        
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white; padding: 0; }
+            .card { box-shadow: none; border: none; padding: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header class="no-print">
+        <h1>Modul Praktik Lanjutan C++</h1>
+        <p style="color: var(--text-light);">Fungsi Matematika (cmath), Manipulasi Double, dan Boolean</p>
+    </header>
+
+    <!-- Cheatsheet / Catatan Materi -->
+    <div class="card info-box no-print">
+        <h3>📚 Catatan Materi: Operasi Matematika Kompleks</h3>
+        <p style="margin-bottom: 10px; font-size: 14px;">Sebelum mengerjakan soal-soal di bawah, pelajari fungsi khusus matematika dalam C++ ini:</p>
+        
+        <div class="grid-2">
+            <div>
+                <ul style="font-size: 14px; padding-left: 20px;">
+                    <li style="margin-bottom: 8px;"><b>Library Tambahan:</b> Untuk menggunakan rumus matematika, kamu <u>wajib</u> menambahkan <code>#include &lt;cmath&gt;</code> di baris paling atas (di bawah iostream).</li>
+                    <li style="margin-bottom: 8px;"><b>Tipe Data Double:</b> Jika perhitungan melibatkan angka desimal panjang atau akar kuadrat, gunakan tipe data <code>double</code> (jangan gunakan <code>int</code> karena int akan menghapus angka di belakang koma).</li>
+                </ul>
+            </div>
+            <div>
+                <ul style="font-size: 14px; padding-left: 20px;">
+                    <li style="margin-bottom: 8px;"><b>Fungsi Pangkat (Power):</b> Gunakan <code>pow(angka, pangkat)</code>.<br>
+                        <em>Contoh:</em> <code>pow(5, 2)</code> artinya 5 pangkat 2 (hasil: 25).
+                    </li>
+                    <li style="margin-bottom: 8px;"><b>Fungsi Akar (Square Root):</b> Gunakan <code>sqrt(angka)</code>.<br>
+                        <em>Contoh:</em> <code>sqrt(144)</code> artinya akar dari 144 (hasil: 12).
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Kelompok -->
+    <div class="card" id="form-kelompok">
+        <h3 style="margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 10px;">Data Praktikan</h3>
+        <div class="grid-2">
+            <div class="form-group">
+                <label>Nama Siswa / Kelompok</label>
+                <input type="text" id="input-kelompok" class="form-control" placeholder="Contoh: Kelompok Alpha" onchange="saveDataKelompok()">
+            </div>
+            <div class="form-group">
+                <label>Kelas</label>
+                <input type="text" id="input-kelas" class="form-control" placeholder="Contoh: XI RPL 1" onchange="saveDataKelompok()">
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigasi Soal -->
+    <div class="nav-soal no-print" id="nav-container">
+        <!-- Buttons injected by JS -->
+    </div>
+
+    <!-- Area Pengerjaan Soal -->
+    <div class="card no-print" id="soal-container">
+        <h2 id="soal-title" style="margin-bottom: 15px;">Pilih Soal</h2>
+        
+        <div class="story-box" id="soal-cerita">Silakan pilih nomor soal di atas.</div>
+        
+        <div class="grid-2">
+            <div>
+                <h4 style="margin-bottom: 10px;">Alur Program (Ikuti secara berurutan):</h4>
+                <div class="instructions"><ul id="soal-alur"></ul></div>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 10px;">Target Output di Terminal:</h4>
+                <div class="terminal">
+                    <div class="terminal-header">Terminal / Console</div>
+                    <div id="soal-output"></div>
+                </div>
+            </div>
+        </div>
+
+        <h4 style="margin-top: 20px; margin-bottom: 10px;">Workspace C++:</h4>
+        <textarea id="code-editor"></textarea>
+        
+        <div class="flex-between">
+            <button class="btn btn-primary" onclick="simpanJawaban()">💾 Simpan Kode</button>
+            <button class="btn btn-success" onclick="tampilkanHasil()">Lihat Hasil Soal Ini ➔</button>
+        </div>
+        <div id="save-notif" style="color: var(--success); font-weight: bold; font-size: 14px; margin-top: 10px; display: none;">✅ Kode berhasil disimpan di browser!</div>
+    </div>
+
+    <!-- Halaman Hasil / Review -->
+    <div class="card" id="hasil-container">
+        <div class="no-print" style="margin-bottom: 20px; display: flex; justify-content: space-between;">
+            <button class="btn btn-outline" onclick="kembaliKeSoal()">← Kembali Edit</button>
+            <button class="btn btn-primary" onclick="window.print()">🖨️ Cetak Hasil Ini</button>
+        </div>
+        
+        <div style="text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid var(--border);">
+            <h2>Laporan Praktik Pemrograman C++ (Advance)</h2>
+            <h3 style="color: var(--text-light); margin-top: 5px;" id="cetak-kelompok">Kelompok: -</h3>
+            <p id="cetak-kelas">Kelas: -</p>
+        </div>
+
+        <div id="hasil-detail-soal">
+            <!-- Injected by JS -->
+        </div>
+    </div>
+</div>
+
+<!-- CodeMirror JS dependencies -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/clike/clike.min.js"></script>
+
+<script>
+    const soalData = [{"id": 1, "title": "Soal 1: Radar Deteksi UFO", "cerita": "Stasiun radar mendeteksi objek tak dikenal (UFO) di udara. Sistem radar membaca posisi UFO berdasarkan jarak horizontal (X) dan jarak vertikal (Y). Komputer harus menghitung jarak lurus dari stasiun ke UFO menggunakan Teorema Pythagoras. Tiba-tiba, UFO tersebut bergerak menukik turun, sehingga jaraknya harus dihitung ulang.", "alur": ["Minta user menginputkan <code>nama_operator</code> (string). Cetak pesan: <code>\"Operator [nama] bersiap di konsol radar.\"</code>", "Buat variabel <code>koordinat_x</code> dan <code>koordinat_y</code> bertipe <code>double</code>. Minta user memasukkan kedua nilainya.", "Gunakan fungsi <code>pow(variabel, 2)</code> untuk menghitung kuadrat dari X dan Y. Simpan di variabel <code>x_kuadrat</code> dan <code>y_kuadrat</code>.", "Hitung jarak awal (jumlahkan x_kuadrat dan y_kuadrat, lalu akarkan dengan <code>sqrt()</code>). Simpan di <code>jarak_awal</code>. <b>Cetak jarak awal.</b>", "UFO menukik turun! Kurangi nilai <code>koordinat_y</code> sebesar <code>500.5</code>.", "Hitung ulang kuadrat dari Y yang baru, lalu hitung ulang jarak lurusnya seperti langkah 4. Simpan di <code>jarak_baru</code>. <b>Cetak jarak setelah pergerakan.</b>", "Buat variabel <code>bool status_bahaya;</code>. Cek apakah <code>jarak_baru</code> <b>kurang dari</b> <code>1000</code>?", "Cetak status ancaman (1 = Bahaya/Terlalu Dekat, 0 = Aman)."], "output": "Masukkan Nama Operator: Ibrahim\nOperator Ibrahim bersiap di konsol radar.\nMasukkan Koordinat X: 1200\nMasukkan Koordinat Y: 900\n[Info] Jarak lurus awal UFO: 1500 km.\n[Update] UFO menukik turun 500.5 km di sumbu Y!\n[Info] Jarak lurus saat ini: 1264.44 km.\nStatus Ancaman (1=Bahaya, 0=Aman): 0"}, {"id": 2, "title": "Soal 2: Volume Silinder Reaktor Kimia", "cerita": "Sebuah pabrik kimia perlu menghitung total cairan di dalam tangki reaktor berbentuk silinder. Operator memasukkan ukuran jari-jari alas dan tinggi cairan. Karena terjadi reaksi pemanasan, volume cairan memuai secara eksponensial. Sistem harus mengecek apakah tangki akan meledak.", "alur": ["Minta input <code>kode_tangki</code> (string).", "Buat variabel <code>kapasitas_maksimal = 50000.0</code> (tipe <code>double</code>). Cetak batas aman tangki.", "Minta user memasukkan <code>jari_jari</code> dan <code>tinggi_cairan</code> (tipe <code>double</code>).", "Hitung luas alas dengan rumus: <code>3.14 * pow(jari_jari, 2)</code>. Simpan di <code>luas_alas</code>.", "Hitung <code>volume_awal</code> (kalikan luas_alas dengan tinggi_cairan). <b>Cetak volume awal.</b>", "Reaksi pemanasan! Cairan memuai menjadi pangkat 1.15 dari aslinya. Ubah <code>volume_awal</code> dengan rumus <code>pow(volume_awal, 1.15)</code>. <b>Cetak update volume.</b>", "Buat variabel <code>bool peringatan_ledakan;</code>. Cek apakah volume cairan saat ini <b>lebih besar dari</b> <code>kapasitas_maksimal</code>?", "Cetak peringatan ledakan (1 = Segera Evakuasi, 0 = Tangki Aman)."], "output": "Masukkan Kode Tangki: RX-99\n[Info] Kapasitas Maksimal Tangki: 50000 liter.\nMasukkan jari-jari tangki (m): 10\nMasukkan tinggi cairan (m): 15\n[Info] Volume awal cairan: 4710 liter.\n[Update] Reaksi pemanasan! Cairan memuai...\n[Info] Volume cairan sekarang: 16182.2 liter.\nPeringatan Ledakan (1=Evakuasi, 0=Aman): 0"}, {"id": 3, "title": "Soal 3: Manuver Drone Pengiriman 3D", "cerita": "Sebuah drone bergerak di ruang 3 Dimensi (X, Y, dan Z untuk Ketinggian). Sistem menghitung jarak drone dari titik awal (0,0,0) untuk memastikan sinyal tidak terputus. Saat mengudara, drone terkena angin yang menggeser posisinya secara acak.", "alur": ["Minta input <code>id_drone</code> (string).", "Buat variabel <code>batas_sinyal = 2500.0</code> (tipe <code>double</code>).", "Minta user memasukkan posisi berurutan: <code>pos_x</code>, <code>pos_y</code>, dan <code>pos_z</code> (tipe <code>double</code>).", "Hitung jarak 3D: Pangkat duakan masing-masing posisi dengan <code>pow()</code>, jumlahkan ketiganya, lalu akarkan dengan <code>sqrt()</code>. Simpan di <code>jarak_drone</code>. <b>Cetak jarak awal.</b>", "Badai angin menggeser drone! Tambahkan <code>pos_x</code> sebesar 300.5, kurangi <code>pos_y</code> sebesar 150.2, dan turunkan <code>pos_z</code> sebesar 50.0.", "Hitung ulang jarak drone dari titik awal menggunakan koordinat yang baru ditimpa. Timpa nilai <code>jarak_drone</code> yang lama. <b>Cetak jarak setelah badai.</b>", "Buat variabel <code>bool sinyal_hilang;</code>. Cek apakah <code>jarak_drone</code> <b>lebih besar dari</b> <code>batas_sinyal</code>?", "Cetak status koneksi (1 = Sinyal Hilang, 0 = Terhubung)."], "output": "Masukkan ID Drone: D-Falcon\n[Info] Batas jangkauan sinyal: 2500 meter.\nMasukkan posisi X: 1000\nMasukkan posisi Y: 1000\nMasukkan posisi Z (Ketinggian): 500\n[Info] Jarak drone dari markas: 1500 meter.\n[Update] Peringatan! Badai angin menggeser posisi drone.\n[Info] Jarak drone dari markas sekarang: 1656.88 meter.\nStatus Sinyal (1=Hilang, 0=Terhubung): 0"}];
+    let currentSoal = null;
+    let editor = null;
+    
+    // Inisialisasi State dari LocalStorage
+    let userAnswers = JSON.parse(localStorage.getItem('cppPraktikAnswersAdvanced')) || {};
+    let dataKelompok = JSON.parse(localStorage.getItem('cppPraktikDataAdvanced')) || { kelompok: '', kelas: '' };
+
+    // DOM Elements
+    const navContainer = document.getElementById('nav-container');
+    const soalContainer = document.getElementById('soal-container');
+    const hasilContainer = document.getElementById('hasil-container');
+    
+    const inputKelompok = document.getElementById('input-kelompok');
+    const inputKelas = document.getElementById('input-kelas');
+
+    function init() {
+        editor = CodeMirror.fromTextArea(document.getElementById('code-editor'), {
+            mode: "text/x-c++src",
+            theme: "monokai",
+            lineNumbers: true,
+            indentUnit: 4,
+            matchBrackets: true
+        });
+
+        inputKelompok.value = dataKelompok.kelompok;
+        inputKelas.value = dataKelompok.kelas;
+
+        soalData.forEach(s => {
+            const btn = document.createElement('button');
+            btn.className = 'btn-nav';
+            if (userAnswers[s.id]) btn.classList.add('done');
+            btn.innerText = `Soal ${s.id}`;
+            btn.onclick = () => renderSoal(s.id);
+            btn.id = `nav-btn-${s.id}`;
+            navContainer.appendChild(btn);
+        });
+
+        renderSoal(1);
+    }
+
+    function saveDataKelompok() {
+        dataKelompok = {
+            kelompok: inputKelompok.value,
+            kelas: inputKelas.value
+        };
+        localStorage.setItem('cppPraktikDataAdvanced', JSON.stringify(dataKelompok));
+    }
+
+    function renderSoal(id) {
+        if (currentSoal) {
+            userAnswers[currentSoal.id] = editor.getValue();
+            localStorage.setItem('cppPraktikAnswersAdvanced', JSON.stringify(userAnswers));
+        }
+
+        currentSoal = soalData.find(s => s.id === id);
+        
+        document.querySelectorAll('.btn-nav').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(`nav-btn-${id}`).classList.add('active');
+
+        document.getElementById('soal-title').innerText = currentSoal.title;
+        document.getElementById('soal-cerita').innerText = currentSoal.cerita;
+        
+        const ulAlur = document.getElementById('soal-alur');
+        ulAlur.innerHTML = '';
+        currentSoal.alur.forEach(langkah => {
+            const li = document.createElement('li');
+            li.innerHTML = langkah;
+            ulAlur.appendChild(li);
+        });
+
+        document.getElementById('soal-output').innerText = currentSoal.output;
+        
+        const defaultCode = "#include <iostream>\n#include <string>\n#include <cmath>\n\nusing namespace std;\n\nint main() {\n    // Tulis kodemu disini...\n    \n    return 0;\n}";
+        editor.setValue(userAnswers[id] || defaultCode);
+        
+        setTimeout(() => editor.refresh(), 10);
+        document.getElementById('save-notif').style.display = 'none';
+    }
+
+    function simpanJawaban() {
+        if (!currentSoal) return;
+        
+        const code = editor.getValue();
+        userAnswers[currentSoal.id] = code;
+        localStorage.setItem('cppPraktikAnswersAdvanced', JSON.stringify(userAnswers));
+        
+        if(code.length > 120) {
+            document.getElementById(`nav-btn-${currentSoal.id}`).classList.add('done');
+        }
+
+        const notif = document.getElementById('save-notif');
+        notif.style.display = 'block';
+        setTimeout(() => notif.style.display = 'none', 3000);
+    }
+
+    function tampilkanHasil() {
+        simpanJawaban();
+        saveDataKelompok();
+
+        soalContainer.style.display = 'none';
+        navContainer.style.display = 'none';
+        document.getElementById('form-kelompok').style.display = 'none';
+        document.querySelector('.info-box').style.display = 'none'; // hide cheatsheet
+        hasilContainer.style.display = 'block';
+
+        document.getElementById('cetak-kelompok').innerText = `Kelompok: ${dataKelompok.kelompok || '-'}`;
+        document.getElementById('cetak-kelas').innerText = `Kelas: ${dataKelompok.kelas || '-'}`;
+
+        const listHtml = document.getElementById('hasil-detail-soal');
+        const kode = userAnswers[currentSoal.id] || "// Kode masih kosong";
+        
+        listHtml.innerHTML = `
+            <div style="margin-bottom: 15px;">
+                <h3 style="color: var(--primary);">${currentSoal.title}</h3>
+                <p style="color: var(--text-light); font-size: 14px; margin-top: 5px;">${currentSoal.cerita}</p>
+            </div>
+            <h4 style="margin-bottom: 10px;">Source Code:</h4>
+            <div class="hasil-kode">${kode.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</div>
+        `;
+    }
+
+    function kembaliKeSoal() {
+        soalContainer.style.display = 'block';
+        navContainer.style.display = 'flex';
+        document.getElementById('form-kelompok').style.display = 'block';
+        document.querySelector('.info-box').style.display = 'block';
+        hasilContainer.style.display = 'none';
+        editor.refresh(); 
+    }
+
+    init();
+</script>
+</body>
+</html>
