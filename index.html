@@ -1,0 +1,103 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SEJR26 Lab Portal</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@400;700&display=swap');
+        
+        body {
+            background-color: #050505;
+            color: #e2e8f0;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-image: radial-gradient(#1e293b 0.5px, transparent 0.5px);
+            background-size: 30px 30px;
+        }
+        
+        .terminal {
+            width: 90%;
+            max-width: 600px;
+            background: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+        }
+
+        .header {
+            background: #1e293b;
+            padding: 10px 15px;
+            display: flex;
+            gap: 8px;
+        }
+
+        .dot { width: 12px; height: 12px; border-radius: 50%; }
+        .red { background: #ef4444; }
+        .yellow { background: #f59e0b; }
+        .green { background: #10b981; }
+
+        .content { padding: 2rem; }
+        
+        h1 {
+            font-family: 'Fira Code', monospace;
+            font-size: 1.25rem;
+            color: #38bdf8;
+            margin-bottom: 1.5rem;
+        }
+
+        ul { list-style: none; padding: 0; }
+
+        li { margin-bottom: 1rem; }
+
+        a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #94a3b8;
+            font-family: 'Fira Code', monospace;
+            padding: 10px 15px;
+            border-radius: 6px;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        a:hover {
+            background: #1e293b;
+            color: #f8fafc;
+            border-color: #475569;
+            transform: translateX(5px);
+        }
+
+        a::before {
+            content: ">";
+            margin-right: 15px;
+            color: #38bdf8;
+        }
+    </style>
+</head>
+<body>
+    <div class="terminal">
+        <div class="header">
+            <div class="dot red"></div>
+            <div class="dot yellow"></div>
+            <div class="dot green"></div>
+        </div>
+        <div class="content">
+            <h1>~/sejr26/exercises > ls</h1>
+            <ul>
+                <li><a href="kuis-latihan1.html">kuis-latihan1.html</a></li>
+                <li><a href="latihan-praktik1.html">latihan-praktik1.html</a></li>
+                <li><a href="latihan-praktik2.html">latihan-praktik2.html</a></li>
+                <li><a href="latihan-praktik3.html">latihan-praktik3.html</a></li>
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
