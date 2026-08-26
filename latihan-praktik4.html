@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lembar Kerja Siswa: Percabangan (Conditionals) C++</title>
+    
+    <!-- CodeMirror CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/monokai.min.css">
+    
+    <style>
+        :root {
+            --primary: #c026d3; /* Fuchsia for Conditionals */
+            --primary-hover: #a21caf;
+            --secondary: #fdf4ff;
+            --border: #e879f9;
+            --text-dark: #334155;
+            --text-light: #64748b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --code-bg: #1e1e1e;
+            --code-text: #d4d4d4;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        body { background-color: #f8fafc; color: var(--text-dark); line-height: 1.6; padding: 20px; }
+        
+        .container { max-width: 1000px; margin: 0 auto; }
+        
+        header { text-align: center; margin-bottom: 20px; }
+        header h1 { color: var(--primary); margin-bottom: 5px; }
+        
+        .card {
+            background: white; border-radius: 10px; padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; border: 1px solid #f3e8ff;
+        }
+        
+        /* Modul Info/Cheatsheet */
+        .info-box {
+            background-color: #fdf4ff; border-left: 5px solid var(--primary);
+        }
+        .info-box h3 { color: var(--primary-hover); margin-bottom: 10px; }
+        .info-box code { background-color: #f3e8ff; padding: 2px 6px; border-radius: 4px; color: #86198f; font-weight: bold; }
+        .info-box pre { background-color: #1e293b; color: #e2e8f0; padding: 10px; border-radius: 6px; font-size: 13px; overflow-x: auto;}
+        
+        /* Form Identitas */
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 14px; }
+        .form-control {
+            width: 100%; padding: 10px; border: 1px solid #cbd5e1;
+            border-radius: 6px; font-size: 14px;
+        }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        
+        /* Navigasi Soal */
+        .nav-soal { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; justify-content: center; }
+        .btn-nav {
+            background: white; border: 1px solid var(--primary); padding: 10px 20px;
+            border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.2s; color: var(--primary);
+        }
+        .btn-nav:hover { background: var(--secondary); }
+        .btn-nav.active { background: var(--primary); color: white; }
+        .btn-nav.done { border-bottom: 4px solid var(--success); }
+        
+        /* Area Soal */
+        .story-box { background: #fffbeb; padding: 15px; border-left: 4px solid var(--warning); border-radius: 0 8px 8px 0; margin-bottom: 20px; }
+        
+        .instructions ul { padding-left: 20px; margin-bottom: 20px; }
+        .instructions li { margin-bottom: 8px; font-size: 14.5px; }
+        
+        .terminal {
+            background: var(--code-bg); color: var(--code-text);
+            padding: 15px; border-radius: 8px; font-family: 'Courier New', Courier, monospace;
+            white-space: pre-wrap; font-size: 13px; margin-bottom: 20px;
+        }
+        .terminal-header { color: #888; font-size: 12px; margin-bottom: 10px; border-bottom: 1px solid #444; padding-bottom: 5px; }
+        
+        /* CodeMirror custom adjustments */
+        .CodeMirror {
+            height: 450px; border-radius: 8px; font-family: 'Courier New', Courier, monospace;
+            font-size: 14px; margin-bottom: 15px; border: 1px solid #cbd5e1;
+        }
+        
+        /* Buttons */
+        .btn { padding: 10px 20px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-success { background: var(--success); color: white; }
+        .btn-outline { background: white; border: 1px solid #cbd5e1; color: var(--text-dark); }
+        .btn-outline:hover { background: #f1f5f9; }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; }
+        
+        /* Hasil Pengerjaan */
+        #hasil-container { display: none; }
+        .hasil-kode { 
+            background: #f8fafc; border: 1px solid #cbd5e1; border-left: 4px solid var(--success);
+            padding: 15px; border-radius: 4px; font-family: monospace; white-space: pre-wrap; font-size: 13px; overflow-x: auto;
+        }
+        
+        @media print {
+            .no-print { display: none !important; }
+            body { background: white; padding: 0; }
+            .card { box-shadow: none; border: none; padding: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header class="no-print">
+        <h1>Modul Praktik C++: Conditionals</h1>
+        <p style="color: var(--text-light);">Logika Percabangan IF Mandiri dan Operator AND (&&)</p>
+    </header>
+
+    <!-- Cheatsheet / Catatan Materi -->
+    <div class="card info-box no-print">
+        <h3>📚 Catatan Materi: IF Mandiri & Operator Logika</h3>
+        
+        <div class="grid-2">
+            <div>
+                <p style="font-size: 14px; margin-bottom: 5px;"><b>1. IF yang Berdiri Sendiri (Independent IF)</b></p>
+                <p style="font-size: 13px; margin-bottom: 10px;">Jika kita ingin mengecek beberapa kondisi secara berurutan dan <b>semuanya bisa terjadi sekaligus</b>, jangan gunakan <code>else if</code>. Gunakan <code>if</code> baru.</p>
+<pre>if (nilai_fisik > 80) {
+    // Mengecek fisik
+}
+if (nilai_sihir > 70) {
+    // Mengecek sihir (dijalankan walaupun fisik juga > 80)
+}</pre>
+            </div>
+            <div>
+                <p style="font-size: 14px; margin-bottom: 5px;"><b>2. Penggabungan Syarat Lulus (&&)</b></p>
+                <p style="font-size: 13px; margin-bottom: 10px;">Untuk mengecek dua syarat yang <b>keduanya harus terpenuhi</b>, gunakan operator AND (<code>&&</code>).</p>
+<pre>if (skor >= 100 && stamina > 0) {
+    cout << "Kamu Lulus!";
+} else {
+    cout << "Kamu Gagal!";
+}</pre>
+            </div>
+        </div>
+    </div>
+
+    <!-- Data Kelompok -->
+    <div class="card" id="form-kelompok">
+        <h3 style="margin-bottom: 15px; border-bottom: 1px solid #cbd5e1; padding-bottom: 10px;">Data Praktikan</h3>
+        <div class="grid-2">
+            <div class="form-group">
+                <label>Nama Siswa / Kelompok</label>
+                <input type="text" id="input-kelompok" class="form-control" placeholder="Contoh: Kelompok Alpha" onchange="saveDataKelompok()">
+            </div>
+            <div class="form-group">
+                <label>Kelas</label>
+                <input type="text" id="input-kelas" class="form-control" placeholder="Contoh: XI RPL 1" onchange="saveDataKelompok()">
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigasi Soal -->
+    <div class="nav-soal no-print" id="nav-container">
+        <!-- Buttons injected by JS -->
+    </div>
+
+    <!-- Area Pengerjaan Soal -->
+    <div class="card no-print" id="soal-container">
+        <h2 id="soal-title" style="margin-bottom: 15px;">Pilih Soal</h2>
+        
+        <div class="story-box" id="soal-cerita">Silakan pilih nomor soal di atas.</div>
+        
+        <div class="grid-2">
+            <div>
+                <h4 style="margin-bottom: 10px;">Alur Program (Ikuti secara berurutan):</h4>
+                <div class="instructions"><ul id="soal-alur"></ul></div>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 10px;">Contoh Output di Terminal:</h4>
+                <div class="terminal">
+                    <div class="terminal-header">Terminal / Console</div>
+                    <div id="soal-output"></div>
+                </div>
+            </div>
+        </div>
+
+        <h4 style="margin-top: 20px; margin-bottom: 10px;">Workspace C++:</h4>
+        <textarea id="code-editor"></textarea>
+        
+        <div class="flex-between">
+            <button class="btn btn-primary" onclick="simpanJawaban()">💾 Simpan Kode</button>
+            <button class="btn btn-success" onclick="tampilkanHasil()">Lihat Hasil Soal Ini ➔</button>
+        </div>
+        <div id="save-notif" style="color: var(--success); font-weight: bold; font-size: 14px; margin-top: 10px; display: none;">✅ Kode berhasil disimpan di browser!</div>
+    </div>
+
+    <!-- Halaman Hasil / Review -->
+    <div class="card" id="hasil-container">
+        <div class="no-print" style="margin-bottom: 20px; display: flex; justify-content: space-between;">
+            <button class="btn btn-outline" onclick="kembaliKeSoal()">← Kembali Edit</button>
+            <button class="btn btn-primary" onclick="window.print()">🖨️ Cetak Hasil Ini</button>
+        </div>
+        
+        <div style="text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid #cbd5e1;">
+            <h2>Laporan Praktik Pemrograman C++ (Conditionals)</h2>
+            <h3 style="color: var(--text-light); margin-top: 5px;" id="cetak-kelompok">Kelompok: -</h3>
+            <p id="cetak-kelas">Kelas: -</p>
+        </div>
+
+        <div id="hasil-detail-soal">
+            <!-- Injected by JS -->
+        </div>
+    </div>
+</div>
+
+<!-- CodeMirror JS dependencies -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/clike/clike.min.js"></script>
+
+<script>
+    const soalData = [{"id": 1, "title": "Soal 1: Seleksi Ksatria Pelindung", "cerita": "Sistem kerajaan mengevaluasi Ksatria berdasarkan Kekuatan, Sihir, dan Ketangkasan. Sihir sangat kuat tapi menguras stamina. Gerakan yang lambat akan memberikan penalti. Syarat lulus: Skor tinggi dan tidak pingsan.", "alur": ["Buat variabel <code>stamina = 100</code> dan <code>total_skor = 0</code>.", "Minta input <code>nama_ksatria</code> (string), lalu <code>kekuatan</code>, <code>sihir</code>, dan <code>ketangkasan</code> (int).", "<b>[If ke-1]</b> Jika <code>kekuatan > 80</code>: total_skor +50, stamina +20. Cetak: <i>\"[Bonus] Otot kuat! Skor +50, Stamina +20\"</i>.", "<b>[If ke-2]</b> Jika <code>sihir > 70</code>: total_skor +60, stamina -40. Cetak: <i>\"[Bonus] Sihir hebat! Skor +60, Stamina -40\"</i>.", "<b>[If ke-3]</b> Jika <code>ketangkasan < 50</code>: total_skor -40. Cetak: <i>\"[Penalti] Terlalu lambat! Skor -40\"</i>.", "Cetak hasil akhir <code>total_skor</code> dan <code>stamina</code>.", "<b>[If/Else Akhir]</b> Jika <code>total_skor >= 100</code> <b>DAN</b> (<code>&&</code>) <code>stamina > 0</code>, cetak <i>\"Selamat [nama], lulus!\"</i>. Jika tidak, cetak <i>\"Maaf [nama], gugur.\"</i>"], "output": "Masukkan Nama: Arthur\nMasukkan Kekuatan: 85\nMasukkan Sihir: 75\nMasukkan Ketangkasan: 60\n\n--- PROSES ---\n[Bonus] Otot kuat! Skor +50, Stamina +20\n[Bonus] Sihir hebat! Skor +60, Stamina -40\n\n--- HASIL ---\nTotal Skor: 110\nSisa Stamina: 80\nSelamat Arthur, lulus!"}, {"id": 2, "title": "Soal 2: Ujian Penyihir Menara", "cerita": "Seorang murid penyihir dievaluasi berdasarkan nilai Ramuan, Mantra, dan Terbang. Membaca mantra tingkat tinggi sangat menguras Mana (energi sihir). Kemampuan terbang yang buruk akan mengurangi skor evaluasi.", "alur": ["Buat variabel <code>mana = 100</code> dan <code>total_skor = 0</code>.", "Minta input <code>nama_penyihir</code>, lalu <code>nilai_ramuan</code>, <code>nilai_mantra</code>, dan <code>nilai_terbang</code> (int).", "<b>[If ke-1]</b> Jika <code>nilai_ramuan > 80</code>: total_skor +50, mana +20. Cetak: <i>\"[Bonus] Ramuan sempurna! Skor +50, Mana +20\"</i>.", "<b>[If ke-2]</b> Jika <code>nilai_mantra > 70</code>: total_skor +60, mana -40. Cetak: <i>\"[Bonus] Mantra kuat! Skor +60, Mana -40\"</i>.", "<b>[If ke-3]</b> Jika <code>nilai_terbang < 50</code>: total_skor -40. Cetak: <i>\"[Penalti] Terbang goyah! Skor -40\"</i>.", "Cetak hasil akhir <code>total_skor</code> dan <code>mana</code>.", "<b>[If/Else Akhir]</b> Jika <code>total_skor >= 100</code> <b>DAN</b> <code>mana > 0</code>, cetak <i>\"Selamat [nama], lulus!\"</i>. Jika tidak, cetak <i>\"Maaf [nama], gugur.\"</i>"], "output": "Masukkan Nama: Merlin\nMasukkan Nilai Ramuan: 85\nMasukkan Nilai Mantra: 80\nMasukkan Nilai Terbang: 40\n\n--- PROSES ---\n[Bonus] Ramuan sempurna! Skor +50, Mana +20\n[Bonus] Mantra kuat! Skor +60, Mana -40\n[Penalti] Terbang goyah! Skor -40\n\n--- HASIL ---\nTotal Skor: 70\nSisa Mana: 80\nMaaf Merlin, gugur."}, {"id": 3, "title": "Soal 3: Evaluasi Agen Rahasia", "cerita": "Agen dievaluasi dari Menembak, Meretas, dan Menyamar. Meretas sistem keamanan tinggi sangat menguras fokus agen. Penyamaran yang buruk akan mengorbankan poin misi keseluruhan.", "alur": ["Buat variabel <code>fokus = 100</code> dan <code>poin_misi = 0</code>.", "Minta input <code>nama_agen</code>, lalu <code>menembak</code>, <code>meretas</code>, dan <code>menyamar</code>.", "<b>[If ke-1]</b> Jika <code>menembak > 80</code>: poin_misi +50, fokus +20. Cetak: <i>\"[Bonus] Tembakan jitu! Poin +50, Fokus +20\"</i>.", "<b>[If ke-2]</b> Jika <code>meretas > 70</code>: poin_misi +60, fokus -40. Cetak: <i>\"[Bonus] Retasan sukses! Poin +60, Fokus -40\"</i>.", "<b>[If ke-3]</b> Jika <code>menyamar < 50</code>: poin_misi -40. Cetak: <i>\"[Penalti] Penyamaran terbongkar! Poin -40\"</i>.", "Cetak hasil akhir <code>poin_misi</code> dan <code>fokus</code>.", "<b>[If/Else Akhir]</b> Jika <code>poin_misi >= 100</code> <b>DAN</b> <code>fokus > 0</code>, cetak <i>\"Selamat Agen [nama], misi sukses!\"</i>. Jika tidak, cetak <i>\"Maaf Agen [nama], misi gagal.\"</i>"], "output": "Masukkan Nama: Bond\nMasukkan Nilai Menembak: 90\nMasukkan Nilai Meretas: 75\nMasukkan Nilai Menyamar: 55\n\n--- PROSES ---\n[Bonus] Tembakan jitu! Poin +50, Fokus +20\n[Bonus] Retasan sukses! Poin +60, Fokus -40\n\n--- HASIL ---\nTotal Poin: 110\nSisa Fokus: 80\nSelamat Agen Bond, misi sukses!"}, {"id": 4, "title": "Soal 4: Balap Mobil Siber", "cerita": "Mobil balap dinilai dari Akselerasi, Turbo (NOS), dan Ban. Menggunakan Turbo sangat menguras kapasitas baterai utama. Ban yang aus (nilai kecil) akan memperlambat waktu dan mengurangi skor.", "alur": ["Buat variabel <code>baterai = 100</code> dan <code>skor_balap = 0</code>.", "Minta input <code>nama_pembalap</code>, lalu <code>akselerasi</code>, <code>turbo</code>, dan <code>kondisi_ban</code>.", "<b>[If ke-1]</b> Jika <code>akselerasi > 80</code>: skor_balap +50, baterai +20. Cetak: <i>\"[Bonus] Melesat cepat! Skor +50, Baterai +20\"</i>.", "<b>[If ke-2]</b> Jika <code>turbo > 70</code>: skor_balap +60, baterai -40. Cetak: <i>\"[Bonus] Turbo aktif! Skor +60, Baterai -40\"</i>.", "<b>[If ke-3]</b> Jika <code>kondisi_ban < 50</code>: skor_balap -40. Cetak: <i>\"[Penalti] Ban selip! Skor -40\"</i>.", "Cetak hasil akhir <code>skor_balap</code> dan <code>baterai</code>.", "<b>[If/Else Akhir]</b> Jika <code>skor_balap >= 100</code> <b>DAN</b> <code>baterai > 0</code>, cetak <i>\"Selamat [nama], juara!\"</i>. Jika tidak, cetak <i>\"Maaf [nama], mobil mogok/kalah.\"</i>"], "output": "Masukkan Nama: Toretto\nMasukkan Akselerasi: 85\nMasukkan Turbo: 90\nMasukkan Kondisi Ban: 30\n\n--- PROSES ---\n[Bonus] Melesat cepat! Skor +50, Baterai +20\n[Bonus] Turbo aktif! Skor +60, Baterai -40\n[Penalti] Ban selip! Skor -40\n\n--- HASIL ---\nTotal Skor: 70\nSisa Baterai: 80\nMaaf Toretto, mobil mogok/kalah."}, {"id": 5, "title": "Soal 5: Audisi Koki Kerajaan", "cerita": "Koki diuji melalui 3 aspek: Rasa, Plating (hiasan), dan Kebersihan. Plating yang rumit akan sangat menguras waktu persediaan hidangan. Dapur yang kotor akan memberi penalti skor besar.", "alur": ["Buat variabel <code>waktu_sisa = 100</code> dan <code>skor_masak = 0</code>.", "Minta input <code>nama_koki</code>, lalu <code>rasa</code>, <code>plating</code>, dan <code>kebersihan</code>.", "<b>[If ke-1]</b> Jika <code>rasa > 80</code>: skor_masak +50, waktu_sisa +20. Cetak: <i>\"[Bonus] Sangat lezat! Skor +50, Waktu +20\"</i>.", "<b>[If ke-2]</b> Jika <code>plating > 70</code>: skor_masak +60, waktu_sisa -40. Cetak: <i>\"[Bonus] Hiasan indah! Skor +60, Waktu -40\"</i>.", "<b>[If ke-3]</b> Jika <code>kebersihan < 50</code>: skor_masak -40. Cetak: <i>\"[Penalti] Dapur berantakan! Skor -40\"</i>.", "Cetak hasil akhir <code>skor_masak</code> dan <code>waktu_sisa</code>.", "<b>[If/Else Akhir]</b> Jika <code>skor_masak >= 100</code> <b>DAN</b> <code>waktu_sisa > 0</code>, cetak <i>\"Selamat Chef [nama], Anda diterima!\"</i>. Jika tidak, cetak <i>\"Maaf Chef [nama], Anda ditolak.\"</i>"], "output": "Masukkan Nama: Gordon\nMasukkan Rasa: 90\nMasukkan Plating: 75\nMasukkan Kebersihan: 80\n\n--- PROSES ---\n[Bonus] Sangat lezat! Skor +50, Waktu +20\n[Bonus] Hiasan indah! Skor +60, Waktu -40\n\n--- HASIL ---\nTotal Skor: 110\nSisa Waktu: 80\nSelamat Chef Gordon, Anda diterima!"}, {"id": 6, "title": "Soal 6: Pendaki Puncak Everest", "cerita": "Pendaki dinilai dari Fisik, Navigasi, dan Mental. Navigasi melewati jalur badai sangat menguras perbekalan makanan. Mental yang turun (nilai kecil) membuat langkah melambat (penalti skor).", "alur": ["Buat variabel <code>bekal = 100</code> dan <code>skor_daki = 0</code>.", "Minta input <code>nama_pendaki</code>, lalu <code>fisik</code>, <code>navigasi</code>, dan <code>mental</code>.", "<b>[If ke-1]</b> Jika <code>fisik > 80</code>: skor_daki +50, bekal +20. Cetak: <i>\"[Bonus] Fisik prima! Skor +50, Bekal +20\"</i>.", "<b>[If ke-2]</b> Jika <code>navigasi > 70</code>: skor_daki +60, bekal -40. Cetak: <i>\"[Bonus] Rute akurat! Skor +60, Bekal -40\"</i>.", "<b>[If ke-3]</b> Jika <code>mental < 50</code>: skor_daki -40. Cetak: <i>\"[Penalti] Mental down! Skor -40\"</i>.", "Cetak hasil akhir <code>skor_daki</code> dan <code>bekal</code>.", "<b>[If/Else Akhir]</b> Jika <code>skor_daki >= 100</code> <b>DAN</b> <code>bekal > 0</code>, cetak <i>\"Selamat [nama], mencapai puncak!\"</i>. Jika tidak, cetak <i>\"Maaf [nama], gagal mendaki.\"</i>"], "output": "Masukkan Nama: Edmund\nMasukkan Fisik: 85\nMasukkan Navigasi: 80\nMasukkan Mental: 40\n\n--- PROSES ---\n[Bonus] Fisik prima! Skor +50, Bekal +20\n[Bonus] Rute akurat! Skor +60, Bekal -40\n[Penalti] Mental down! Skor -40\n\n--- HASIL ---\nTotal Skor: 70\nSisa Bekal: 80\nMaaf Edmund, gagal mendaki."}, {"id": 7, "title": "Soal 7: Hacker Pembobol Server", "cerita": "Hacker mengeksekusi misi berdasarkan Kriptografi, Injeksi, dan Anonimitas. Melakukan Injeksi berat sangat menguras memori RAM. Anonimitas yang buruk akan memotong skor karena terlacak.", "alur": ["Buat variabel <code>ram_sisa = 100</code> dan <code>skor_hack = 0</code>.", "Minta input <code>nama_hacker</code>, lalu <code>kriptografi</code>, <code>injeksi</code>, dan <code>anonimitas</code>.", "<b>[If ke-1]</b> Jika <code>kriptografi > 80</code>: skor_hack +50, ram_sisa +20. Cetak: <i>\"[Bonus] Enkripsi tembus! Skor +50, RAM +20\"</i>.", "<b>[If ke-2]</b> Jika <code>injeksi > 70</code>: skor_hack +60, ram_sisa -40. Cetak: <i>\"[Bonus] Injeksi sukses! Skor +60, RAM -40\"</i>.", "<b>[If ke-3]</b> Jika <code>anonimitas < 50</code>: skor_hack -40. Cetak: <i>\"[Penalti] Terlacak admin! Skor -40\"</i>.", "Cetak hasil akhir <code>skor_hack</code> dan <code>ram_sisa</code>.", "<b>[If/Else Akhir]</b> Jika <code>skor_hack >= 100</code> <b>DAN</b> <code>ram_sisa > 0</code>, cetak <i>\"Selamat [nama], data berhasil dicuri!\"</i>. Jika tidak, cetak <i>\"Maaf [nama], komputer crash.\"</i>"], "output": "Masukkan Nama: Neo\nMasukkan Kriptografi: 90\nMasukkan Injeksi: 75\nMasukkan Anonimitas: 60\n\n--- PROSES ---\n[Bonus] Enkripsi tembus! Skor +50, RAM +20\n[Bonus] Injeksi sukses! Skor +60, RAM -40\n\n--- HASIL ---\nTotal Skor: 110\nSisa RAM: 80\nSelamat Neo, data berhasil dicuri!"}, {"id": 8, "title": "Soal 8: Manajer Tim Esport", "cerita": "Manajer mengevaluasi tim dari Taktik, Pelatihan, dan Disiplin. Membuka menu Pelatihan khusus sangat menguras Dana tim. Disiplin pemain yang buruk akan memberikan penalti skor turnamen.", "alur": ["Buat variabel <code>dana_tim = 100</code> dan <code>skor_tim = 0</code>.", "Minta input <code>nama_manajer</code>, lalu <code>taktik</code>, <code>pelatihan</code>, dan <code>disiplin</code>.", "<b>[If ke-1]</b> Jika <code>taktik > 80</code>: skor_tim +50, dana_tim +20. Cetak: <i>\"[Bonus] Strategi jitu! Skor +50, Dana +20\"</i>.", "<b>[If ke-2]</b> Jika <code>pelatihan > 70</code>: skor_tim +60, dana_tim -40. Cetak: <i>\"[Bonus] Latihan keras! Skor +60, Dana -40\"</i>.", "<b>[If ke-3]</b> Jika <code>disiplin < 50</code>: skor_tim -40. Cetak: <i>\"[Penalti] Pemain toxic! Skor -40\"</i>.", "Cetak hasil akhir <code>skor_tim</code> dan <code>dana_tim</code>.", "<b>[If/Else Akhir]</b> Jika <code>skor_tim >= 100</code> <b>DAN</b> <code>dana_tim > 0</code>, cetak <i>\"Selamat Manajer [nama], tim lolos final!\"</i>. Jika tidak, cetak <i>\"Maaf Manajer [nama], tim bangkrut/kalah.\"</i>"], "output": "Masukkan Nama: N0tail\nMasukkan Taktik: 85\nMasukkan Pelatihan: 80\nMasukkan Disiplin: 30\n\n--- PROSES ---\n[Bonus] Strategi jitu! Skor +50, Dana +20\n[Bonus] Latihan keras! Skor +60, Dana -40\n[Penalti] Pemain toxic! Skor -40\n\n--- HASIL ---\nTotal Skor: 70\nSisa Dana: 80\nMaaf Manajer N0tail, tim bangkrut/kalah."}, {"id": 9, "title": "Soal 9: Ekspedisi Penyelam Palung", "cerita": "Penyelam diuji dari Daya Tahan, Eksplorasi, dan Ketenangan. Eksplorasi dalam menguras sangat banyak Oksigen. Ketenangan yang kurang memicu panik dan mengurangi skor keseluruhan.", "alur": ["Buat variabel <code>oksigen = 100</code> dan <code>skor_selam = 0</code>.", "Minta input <code>nama_penyelam</code>, lalu <code>daya_tahan</code>, <code>eksplorasi</code>, dan <code>ketenangan</code>.", "<b>[If ke-1]</b> Jika <code>daya_tahan > 80</code>: skor_selam +50, oksigen +20. Cetak: <i>\"[Bonus] Paru-paru kuat! Skor +50, Oksigen +20\"</i>.", "<b>[If ke-2]</b> Jika <code>eksplorasi > 70</code>: skor_selam +60, oksigen -40. Cetak: <i>\"[Bonus] Harta ditemukan! Skor +60, Oksigen -40\"</i>.", "<b>[If ke-3]</b> Jika <code>ketenangan < 50</code>: skor_selam -40. Cetak: <i>\"[Penalti] Penyelam panik! Skor -40\"</i>.", "Cetak hasil akhir <code>skor_selam</code> dan <code>oksigen</code>.", "<b>[If/Else Akhir]</b> Jika <code>skor_selam >= 100</code> <b>DAN</b> <code>oksigen > 0</code>, cetak <i>\"Selamat [nama], kembali dengan selamat!\"</i>. Jika tidak, cetak <i>\"Maaf [nama], misi gagal.\"</i>"], "output": "Masukkan Nama: Cousteau\nMasukkan Daya Tahan: 90\nMasukkan Eksplorasi: 85\nMasukkan Ketenangan: 70\n\n--- PROSES ---\n[Bonus] Paru-paru kuat! Skor +50, Oksigen +20\n[Bonus] Harta ditemukan! Skor +60, Oksigen -40\n\n--- HASIL ---\nTotal Skor: 110\nSisa Oksigen: 80\nSelamat Cousteau, kembali dengan selamat!"}];
+    let currentSoal = null;
+    let editor = null;
+    
+    // Inisialisasi State dari LocalStorage
+    let userAnswers = JSON.parse(localStorage.getItem('cppPraktikAnswersCond')) || {};
+    let dataKelompok = JSON.parse(localStorage.getItem('cppPraktikDataCond')) || { kelompok: '', kelas: '' };
+
+    // DOM Elements
+    const navContainer = document.getElementById('nav-container');
+    const soalContainer = document.getElementById('soal-container');
+    const hasilContainer = document.getElementById('hasil-container');
+    
+    const inputKelompok = document.getElementById('input-kelompok');
+    const inputKelas = document.getElementById('input-kelas');
+
+    function init() {
+        editor = CodeMirror.fromTextArea(document.getElementById('code-editor'), {
+            mode: "text/x-c++src",
+            theme: "monokai",
+            lineNumbers: true,
+            indentUnit: 4,
+            matchBrackets: true
+        });
+
+        inputKelompok.value = dataKelompok.kelompok;
+        inputKelas.value = dataKelompok.kelas;
+
+        soalData.forEach(s => {
+            const btn = document.createElement('button');
+            btn.className = 'btn-nav';
+            if (userAnswers[s.id]) btn.classList.add('done');
+            btn.innerText = `Soal ${s.id}`;
+            btn.onclick = () => renderSoal(s.id);
+            btn.id = `nav-btn-${s.id}`;
+            navContainer.appendChild(btn);
+        });
+
+        renderSoal(1);
+    }
+
+    function saveDataKelompok() {
+        dataKelompok = {
+            kelompok: inputKelompok.value,
+            kelas: inputKelas.value
+        };
+        localStorage.setItem('cppPraktikDataCond', JSON.stringify(dataKelompok));
+    }
+
+    function renderSoal(id) {
+        if (currentSoal) {
+            userAnswers[currentSoal.id] = editor.getValue();
+            localStorage.setItem('cppPraktikAnswersCond', JSON.stringify(userAnswers));
+        }
+
+        currentSoal = soalData.find(s => s.id === id);
+        
+        document.querySelectorAll('.btn-nav').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(`nav-btn-${id}`).classList.add('active');
+
+        document.getElementById('soal-title').innerText = currentSoal.title;
+        document.getElementById('soal-cerita').innerText = currentSoal.cerita;
+        
+        const ulAlur = document.getElementById('soal-alur');
+        ulAlur.innerHTML = '';
+        currentSoal.alur.forEach(langkah => {
+            const li = document.createElement('li');
+            li.innerHTML = langkah;
+            ulAlur.appendChild(li);
+        });
+
+        document.getElementById('soal-output').innerText = currentSoal.output;
+        
+        const defaultCode = "#include <iostream>\n#include <string>\n\nusing namespace std;\n\nint main() {\n    // Tulis kodemu disini...\n    \n    return 0;\n}";
+        editor.setValue(userAnswers[id] || defaultCode);
+        
+        setTimeout(() => editor.refresh(), 10);
+        document.getElementById('save-notif').style.display = 'none';
+    }
+
+    function simpanJawaban() {
+        if (!currentSoal) return;
+        
+        const code = editor.getValue();
+        userAnswers[currentSoal.id] = code;
+        localStorage.setItem('cppPraktikAnswersCond', JSON.stringify(userAnswers));
+        
+        if(code.length > 120) {
+            document.getElementById(`nav-btn-${currentSoal.id}`).classList.add('done');
+        }
+
+        const notif = document.getElementById('save-notif');
+        notif.style.display = 'block';
+        setTimeout(() => notif.style.display = 'none', 3000);
+    }
+
+    function tampilkanHasil() {
+        simpanJawaban();
+        saveDataKelompok();
+
+        soalContainer.style.display = 'none';
+        navContainer.style.display = 'none';
+        document.getElementById('form-kelompok').style.display = 'none';
+        document.querySelector('.info-box').style.display = 'none'; // hide cheatsheet
+        hasilContainer.style.display = 'block';
+
+        document.getElementById('cetak-kelompok').innerText = `Kelompok: ${dataKelompok.kelompok || '-'}`;
+        document.getElementById('cetak-kelas').innerText = `Kelas: ${dataKelompok.kelas || '-'}`;
+
+        const listHtml = document.getElementById('hasil-detail-soal');
+        const kode = userAnswers[currentSoal.id] || "// Kode masih kosong";
+        
+        listHtml.innerHTML = `
+            <div style="margin-bottom: 15px;">
+                <h3 style="color: var(--primary);">${currentSoal.title}</h3>
+                <p style="color: var(--text-light); font-size: 14px; margin-top: 5px;">${currentSoal.cerita}</p>
+            </div>
+            <h4 style="margin-bottom: 10px;">Source Code:</h4>
+            <div class="hasil-kode">${kode.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</div>
+        `;
+    }
+
+    function kembaliKeSoal() {
+        soalContainer.style.display = 'block';
+        navContainer.style.display = 'flex';
+        document.getElementById('form-kelompok').style.display = 'block';
+        document.querySelector('.info-box').style.display = 'block';
+        hasilContainer.style.display = 'none';
+        editor.refresh(); 
+    }
+
+    init();
+</script>
+</body>
+</html>
