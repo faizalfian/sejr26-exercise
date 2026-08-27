@@ -183,26 +183,30 @@
         
         <div class="flex-between">
             <button class="btn btn-primary" onclick="simpanJawaban()">💾 Simpan Kode</button>
-            <button class="btn btn-success" onclick="tampilkanHasil()">Lihat Hasil Soal Ini ➔</button>
+            <button class="btn btn-success" onclick="tampilkanHasil()">Selesai & Unduh Laporan ➔</button>
         </div>
         <div id="save-notif" style="color: var(--success); font-weight: bold; font-size: 14px; margin-top: 10px; display: none;">✅ Kode berhasil disimpan di browser!</div>
     </div>
 
     <!-- Halaman Hasil / Review -->
     <div class="card" id="hasil-container">
-        <div class="no-print" style="margin-bottom: 20px; display: flex; justify-content: space-between;">
-            <button class="btn btn-outline" onclick="kembaliKeSoal()">← Kembali Edit</button>
-            <button class="btn btn-primary" onclick="window.print()">🖨️ Cetak Hasil Ini</button>
+        <div style="margin-bottom: 20px; display: flex; justify-content: space-between;">
+            <button class="btn btn-outline" onclick="kembaliKeSoal()">← Kembali Edit Kode</button>
+            <button class="btn btn-primary" onclick="downloadLaporan()">📥 Download Laporan (HTML)</button>
         </div>
         
         <div style="text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid var(--border);">
             <h2>Laporan Praktik Pemrograman C++ (Advance)</h2>
-            <h3 style="color: var(--text-light); margin-top: 5px;" id="cetak-kelompok">Kelompok: -</h3>
-            <p id="cetak-kelas">Kelas: -</p>
+            <p style="color: var(--text-light); margin-top: 5px;">Pastikan Anda mendownload laporan ini dan mengumpulkannya ke Guru.</p>
         </div>
 
-        <div id="hasil-detail-soal">
-            <!-- Injected by JS -->
+        <div style="text-align: center;">
+            <h3 id="cetak-kelompok">Kelompok: -</h3>
+            <p id="cetak-kelas" style="margin-bottom: 20px;">Kelas: -</p>
+            <div style="background: #f1f5f9; padding: 20px; border-radius: 8px; display: inline-block;">
+                <p>Silakan klik tombol <b>Download Laporan (HTML)</b> di sudut kanan atas.</p>
+                <p style="font-size: 14px; color: var(--text-light); margin-top: 5px;">File HTML yang diunduh sudah berisi source code yang siap disalin (copy) oleh Guru.</p>
+            </div>
         </div>
     </div>
 </div>
@@ -318,20 +322,61 @@
         document.querySelector('.info-box').style.display = 'none'; // hide cheatsheet
         hasilContainer.style.display = 'block';
 
-        document.getElementById('cetak-kelompok').innerText = `Kelompok: ${dataKelompok.kelompok || '-'}`;
-        document.getElementById('cetak-kelas').innerText = `Kelas: ${dataKelompok.kelas || '-'}`;
+        document.getElementById('cetak-kelompok').innerText = `Kelompok: ${dataKelompok.kelompok || 'Belum Diisi'}`;
+        document.getElementById('cetak-kelas').innerText = `Kelas: ${dataKelompok.kelas || 'Belum Diisi'}`;
+    }
 
-        const listHtml = document.getElementById('hasil-detail-soal');
+    function downloadLaporan() {
         const kode = userAnswers[currentSoal.id] || "// Kode masih kosong";
+        const namaKelompok = dataKelompok.kelompok || 'Siswa';
+        const namaKelas = dataKelompok.kelas || '-';
         
-        listHtml.innerHTML = `
-            <div style="margin-bottom: 15px;">
-                <h3 style="color: var(--primary);">${currentSoal.title}</h3>
-                <p style="color: var(--text-light); font-size: 14px; margin-top: 5px;">${currentSoal.cerita}</p>
-            </div>
-            <h4 style="margin-bottom: 10px;">Source Code:</h4>
-            <div class="hasil-kode">${kode.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</div>
-        `;
+        const namaFile = `Laporan_${namaKelompok}_Soal_${currentSoal.id}.html`.replace(/\s+/g, "_");
+        
+        const htmlContent = `<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Laporan - ${namaKelompok}</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 30px; max-width: 800px; margin: auto; color: #334155; line-height: 1.6; }
+        .header { text-align: center; border-bottom: 2px solid #cbd5e1; padding-bottom: 20px; margin-bottom: 20px; }
+        .header h2 { color: #8b5cf6; margin-bottom: 5px; }
+        .story-box { background: #fdf4ff; padding: 15px; border-left: 4px solid #8b5cf6; border-radius: 0 8px 8px 0; margin-bottom: 20px; }
+        .kode-area { background: #1e1e1e; color: #d4d4d4; padding: 20px; border-radius: 8px; white-space: pre-wrap; font-family: 'Courier New', Courier, monospace; font-size: 14px; overflow-x: auto; }
+        .btn-copy { background: #10b981; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 6px; font-weight: 600; margin-bottom: 10px; font-size: 14px; }
+        .btn-copy:hover { background: #059669; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>Laporan Praktik Pemrograman C++ (Advance)</h2>
+        <p><strong>Kelompok/Siswa:</strong> ${namaKelompok} | <strong>Kelas:</strong> ${namaKelas}</p>
+    </div>
+    
+    <h3>${currentSoal.title}</h3>
+    <div class="story-box">${currentSoal.cerita}</div>
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <h4 style="margin: 0;">Source Code Jawaban:</h4>
+        <button class="btn-copy" onclick="navigator.clipboard.writeText(document.getElementById('kode').innerText).then(()=>alert('✅ Source Code berhasil disalin ke Clipboard!'))">
+            📋 Salin Kode ke Compiler
+        </button>
+    </div>
+    
+    <div class="kode-area" id="kode">${kode.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</div>
+</body>
+</html>`;
+
+        const blob = new Blob([htmlContent], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = namaFile;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
     }
 
     function kembaliKeSoal() {

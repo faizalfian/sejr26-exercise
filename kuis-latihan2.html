@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Pemrograman Dasar C++</title>
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-hover: #4338ca;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        body { background-color: var(--bg-color); color: var(--text-main); line-height: 1.6; padding: 20px; }
+        
+        .container { max-width: 900px; margin: 0 auto; }
+        
+        header { text-align: center; margin-bottom: 30px; }
+        header h1 { color: var(--primary); margin-bottom: 5px; }
+        
+        .card {
+            background: var(--card-bg); border-radius: 12px; padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; border: 1px solid var(--border);
+        }
+        
+        /* Form Identitas */
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 14px; }
+        .form-control { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 15px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        
+        /* Layout Kuis */
+        .quiz-layout { display: grid; grid-template-columns: 1fr 3fr; gap: 20px; }
+        @media (max-width: 768px) { .quiz-layout { grid-template-columns: 1fr; } }
+        
+        /* Navigasi */
+        .nav-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+        .btn-nav {
+            background: white; border: 1px solid var(--border); padding: 10px 5px;
+            border-radius: 6px; cursor: pointer; font-weight: 600; font-size: 14px; transition: all 0.2s;
+            text-align: center;
+        }
+        .btn-nav:hover { background: #f1f5f9; }
+        .btn-nav.active { background: var(--primary); color: white; border-color: var(--primary); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2); }
+        .btn-nav.answered { background: #e0e7ff; color: var(--primary); border-color: #c7d2fe; }
+        .btn-nav.active.answered { background: var(--primary); color: white; }
+        
+        /* Area Soal */
+        .topik-badge { display: inline-block; background: #e0e7ff; color: var(--primary); padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: bold; margin-bottom: 15px; }
+        .soal-teks { font-size: 18px; font-weight: 500; margin-bottom: 20px; }
+        pre { background: #1e1e1e; color: #d4d4d4; padding: 15px; border-radius: 8px; margin: 10px 0; font-family: monospace; font-size: 14px; overflow-x: auto; }
+        code { font-family: monospace; color: #d946ef; font-weight: bold; }
+        
+        /* Opsi Jawaban */
+        .opsi-container { display: flex; flex-direction: column; gap: 10px; margin-bottom: 25px; }
+        .opsi-label {
+            display: flex; align-items: center; padding: 12px 15px; border: 2px solid var(--border);
+            border-radius: 8px; cursor: pointer; transition: all 0.2s;
+        }
+        .opsi-label:hover { border-color: #cbd5e1; background: #f8fafc; }
+        .opsi-label input { margin-right: 15px; transform: scale(1.2); }
+        .opsi-label.selected { border-color: var(--primary); background: #f5f3ff; }
+        
+        /* Kontrol Bawah */
+        .controls { display: flex; justify-content: space-between; align-items: center; margin-top: 20px; border-top: 1px solid var(--border); padding-top: 20px; }
+        .btn { padding: 10px 20px; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; font-size: 15px; transition: all 0.2s; }
+        .btn-outline { background: white; border: 1px solid var(--border); color: var(--text-main); }
+        .btn-outline:hover { background: #f1f5f9; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-success { background: var(--success); color: white; width: 100%; margin-top: 20px; font-size: 16px; padding: 15px; }
+        .btn-success:hover { background: #059669; }
+
+        /* Halaman Hasil */
+        #hasil-container { display: none; }
+        .score-board { text-align: center; padding: 30px; background: #f5f3ff; border-radius: 12px; margin-bottom: 30px; border: 2px solid #ddd6fe; }
+        .score-number { font-size: 60px; font-weight: 900; color: var(--primary); line-height: 1; margin: 10px 0; }
+        
+        .result-item { padding: 15px; border: 1px solid var(--border); border-radius: 8px; margin-bottom: 15px; background: white; }
+        .result-item.benar { border-left: 5px solid var(--success); }
+        .result-item.salah { border-left: 5px solid var(--danger); background: #fef2f2; }
+        .result-q { font-weight: 600; margin-bottom: 10px; }
+        .result-ans { font-size: 14px; margin-bottom: 5px; }
+        .status-badge { display: inline-block; padding: 3px 8px; border-radius: 4px; font-size: 12px; font-weight: bold; color: white; }
+        .bg-benar { background-color: var(--success); }
+        .bg-salah { background-color: var(--danger); }
+        
+        .progress-text { text-align: center; font-size: 14px; color: var(--text-muted); margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Kuis Pemrograman C++</h1>
+        <p style="color: var(--text-muted);">Materi: Variabel, Tipe Data, Operator & Percabangan</p>
+    </header>
+
+    <div id="setup-container">
+        <div class="card">
+            <h3 style="margin-bottom: 15px;">Data Siswa</h3>
+            <div class="grid-2">
+                <div class="form-group">
+                    <label>Nama Lengkap</label>
+                    <input type="text" id="input-nama" class="form-control" placeholder="Masukkan nama..." onchange="saveStudentData()">
+                </div>
+                <div class="form-group">
+                    <label>Kelas</label>
+                    <input type="text" id="input-kelas" class="form-control" placeholder="Contoh: XI RPL 1" onchange="saveStudentData()">
+                </div>
+            </div>
+        </div>
+
+        <div class="quiz-layout">
+            <!-- Navigasi -->
+            <div class="card" style="align-self: start;">
+                <h4 style="margin-bottom: 15px; text-align: center;">Navigasi Soal</h4>
+                <div class="nav-grid" id="nav-grid">
+                    <!-- Digenerate oleh JS -->
+                </div>
+                <div class="progress-text" id="progress-text">0 / 20 Terjawab</div>
+                
+                <button class="btn btn-success" onclick="selesaiKuis()" style="padding: 10px; margin-top: 15px; width: 100%;">Selesai & Koreksi</button>
+            </div>
+
+            <!-- Area Soal -->
+            <div class="card" style="min-height: 400px; display: flex; flex-direction: column;">
+                <div id="soal-content" style="flex-grow: 1;">
+                    <div class="topik-badge" id="soal-topik">Topik</div>
+                    <div class="soal-teks" id="soal-teks">Teks soal akan muncul di sini...</div>
+                    <div class="opsi-container" id="opsi-container">
+                        <!-- Digenerate oleh JS -->
+                    </div>
+                </div>
+                
+                <div class="controls">
+                    <button class="btn btn-outline" id="btn-prev" onclick="prevSoal()">← Sebelumnya</button>
+                    <button class="btn btn-primary" id="btn-next" onclick="nextSoal()">Selanjutnya →</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Halaman Hasil / Koreksi -->
+    <div id="hasil-container">
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <button class="btn btn-outline" onclick="kembaliKeKuis()">← Kembali Uji Ulang</button>
+                <button class="btn btn-primary" onclick="downloadHasil()">📥 Download Laporan (HTML)</button>
+            </div>
+            
+            <div class="score-board">
+                <h2 style="color: var(--text-main);">Hasil Kuis C++</h2>
+                <p style="font-size: 18px; margin-top: 5px;"><b id="hasil-nama">-</b> | <span id="hasil-kelas">-</span></p>
+                <div class="score-number" id="hasil-skor">0</div>
+                <p style="color: var(--text-muted); font-size: 16px;">Benar: <b id="hasil-benar" style="color: var(--success);">0</b> | Salah: <b id="hasil-salah" style="color: var(--danger);">0</b> | Kosong: <b id="hasil-kosong" style="color: var(--warning);">0</b></p>
+            </div>
+
+            <h3 style="margin-bottom: 20px; border-bottom: 2px solid var(--border); padding-bottom: 10px;">Detail Koreksi Jawaban</h3>
+            <div id="koreksi-list">
+                <!-- Digenerate oleh JS -->
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const soalData = [{"id": 1, "topik": "Variabel", "soal": "Manakah aturan penamaan variabel yang <b>valid</b> (benar) di dalam C++?", "opsi": {"A": "1nama_siswa", "B": "nama siswa", "C": "nama_siswa", "D": "nama-siswa"}, "jawaban": "C"}, {"id": 2, "topik": "Variabel", "soal": "Bagaimana cara mendeklarasikan sebuah variabel penyimpan umur berupa angka bulat di C++?", "opsi": {"A": "var umur = 16;", "B": "umur int;", "C": "integer umur;", "D": "int umur;"}, "jawaban": "D"}, {"id": 3, "topik": "Variabel", "soal": "C++ bersifat <i>Case-Sensitive</i>. Apa arti dari sifat tersebut terkait variabel?", "opsi": {"A": "Variabel 'Nilai' dan 'nilai' dianggap sebagai variabel yang sama.", "B": "Variabel 'Nilai' dan 'nilai' dianggap sebagai dua variabel yang berbeda.", "C": "Nama variabel harus selalu menggunakan huruf kapital.", "D": "Nama variabel tidak boleh menggunakan huruf kapital sama sekali."}, "jawaban": "B"}, {"id": 4, "topik": "Variabel", "soal": "Perhatikan potongan kode berikut:<br><pre>int stok = 10;\nstok = 15;\nstok = 5;</pre>Berapakah nilai variabel <code>stok</code> pada akhir eksekusi?", "opsi": {"A": "10", "B": "15", "C": "5", "D": "30"}, "jawaban": "C"}, {"id": 5, "topik": "Variabel", "soal": "Jika kita memiliki nilai yang bersifat tetap dan tidak boleh diubah (misalnya nilai Pi = 3.14), kata kunci (<i>keyword</i>) apa yang harus ditambahkan saat deklarasi variabel?", "opsi": {"A": "fixed", "B": "constant", "C": "const", "D": "static"}, "jawaban": "C"}, {"id": 6, "topik": "Data Type", "soal": "Tipe data yang paling tepat digunakan untuk menyimpan nilai IPK mahasiswa (misal: 3.75) adalah...", "opsi": {"A": "int", "B": "char", "C": "float", "D": "bool"}, "jawaban": "C"}, {"id": 7, "topik": "Data Type", "soal": "Penulisan nilai (value) untuk tipe data <code>char</code> yang benar di C++ adalah menggunakan...", "opsi": {"A": "Tanda kutip tunggal ('A')", "B": "Tanda kutip ganda (\"A\")", "C": "Tanpa tanda kutip (A)", "D": "Kurung siku ([A])"}, "jawaban": "A"}, {"id": 8, "topik": "Data Type", "soal": "Untuk menggunakan tipe data <code>string</code> (teks panjang) secara optimal di C++, <i>header file</i> apa yang wajib di-include di awal program?", "opsi": {"A": "<iostream>", "B": "<math.h>", "C": "<text>", "D": "<string>"}, "jawaban": "D"}, {"id": 9, "topik": "Data Type", "soal": "Tipe data <code>bool</code> (Boolean) hanya bisa menyimpan dua buah nilai, yaitu...", "opsi": {"A": "0 sampai 9", "B": "true dan false", "C": "Bilangan positif dan negatif", "D": "Angka dan huruf"}, "jawaban": "B"}, {"id": 10, "topik": "Data Type", "soal": "Perhatikan baris kode berikut:<br><pre>int hasil = 9 / 2;</pre>Karena menggunakan tipe data <code>int</code>, berapakah nilai <code>hasil</code> yang tersimpan di memori?", "opsi": {"A": "4.5", "B": "4", "C": "5", "D": "Error"}, "jawaban": "B"}, {"id": 11, "topik": "Operators", "soal": "Operator yang digunakan untuk mencari <b>sisa hasil bagi</b> dari dua buah bilangan adalah...", "opsi": {"A": "/", "B": "*", "C": "%", "D": "^"}, "jawaban": "C"}, {"id": 12, "topik": "Operators", "soal": "Berapakah hasil dari operasi aritmetika <code>2 + 3 * 4</code> di C++?", "opsi": {"A": "20", "B": "14", "C": "24", "D": "9"}, "jawaban": "B"}, {"id": 13, "topik": "Operators", "soal": "Pernyataan <i>assignment</i> <code>skor += 10;</code> memiliki fungsi yang persis sama dengan...", "opsi": {"A": "skor = 10;", "B": "skor = skor + 10;", "C": "skor = 10 + 10;", "D": "skor == 10;"}, "jawaban": "B"}, {"id": 14, "topik": "Operators", "soal": "Operator penyisipan atau operator asignment (penugasan) dasar untuk <b>memasukkan</b> sebuah nilai ke dalam variabel di C++ adalah simbol...", "opsi": {"A": "==", "B": "=>", "C": ":=", "D": "="}, "jawaban": "D"}, {"id": 15, "topik": "Operators", "soal": "Operator <i>Increment</i> (<code>++</code>) berfungsi untuk...", "opsi": {"A": "Menggandakan nilai variabel", "B": "Menambahkan nilai variabel sebanyak 1", "C": "Menambahkan nilai variabel sebanyak 2", "D": "Membuat nilai variabel menjadi positif"}, "jawaban": "B"}, {"id": 16, "topik": "Conditional", "soal": "Blok kode di dalam kurung kurawal <code>{ }</code> pada sebuah struktur <code>if (kondisi)</code> hanya akan dieksekusi apabila kondisi tersebut bernilai...", "opsi": {"A": "false", "B": "true", "C": "0", "D": "Berbeda-beda (bebas)"}, "jawaban": "B"}, {"id": 17, "topik": "Conditional", "soal": "Kapan blok kode <code>else</code> akan dijalankan oleh sistem?", "opsi": {"A": "Saat program pertama kali dijalankan.", "B": "Bersamaan dengan blok if.", "C": "Saat semua kondisi if dan else if di atasnya bernilai salah (false).", "D": "Hanya jika ada error pada program."}, "jawaban": "C"}, {"id": 18, "topik": "Conditional", "soal": "Operator logika <b>AND</b> yang mengharuskan <i>kedua syarat terpenuhi</i> sekaligus, disimbolkan dalam C++ dengan...", "opsi": {"A": "||", "B": "&&", "C": "AND", "D": "<>"}, "jawaban": "B"}, {"id": 19, "topik": "Conditional", "soal": "Pada pengecekan kondisi <code>if (nilai > 80 || sikap == 'A')</code>, blok kode akan dijalankan apabila...", "opsi": {"A": "Keduanya (nilai dan sikap) wajib memenuhi syarat.", "B": "Salah satu saja dari kedua syarat tersebut terpenuhi.", "C": "Kedua syarat tersebut tidak terpenuhi.", "D": "Terjadi error pada tipe data."}, "jawaban": "B"}, {"id": 20, "topik": "Conditional", "soal": "Jika kita memiliki 3 buah kondisi pemeriksaan yang berbeda secara berurutan, keyword apa yang digunakan untuk mengecek <b>kondisi kedua</b> setelah <code>if</code> yang pertama?", "opsi": {"A": "else if", "B": "then if", "C": "elif", "D": "else"}, "jawaban": "A"}];
+    let currentSoalIndex = 0;
+    
+    // State Management via LocalStorage
+    let userAnswers = JSON.parse(localStorage.getItem('kuisCppAnswers')) || {};
+    let studentData = JSON.parse(localStorage.getItem('kuisCppStudent')) || { nama: '', kelas: '' };
+
+    // DOM Elements
+    const inputNama = document.getElementById('input-nama');
+    const inputKelas = document.getElementById('input-kelas');
+    const navGrid = document.getElementById('nav-grid');
+    
+    const soalTopik = document.getElementById('soal-topik');
+    const soalTeks = document.getElementById('soal-teks');
+    const opsiContainer = document.getElementById('opsi-container');
+    const progressText = document.getElementById('progress-text');
+
+    function init() {
+        inputNama.value = studentData.nama;
+        inputKelas.value = studentData.kelas;
+
+        // Build Nav
+        soalData.forEach((s, index) => {
+            const btn = document.createElement('button');
+            btn.className = 'btn-nav';
+            if (userAnswers[s.id]) btn.classList.add('answered');
+            btn.innerText = s.id;
+            btn.onclick = () => renderSoal(index);
+            btn.id = `nav-btn-${s.id}`;
+            navGrid.appendChild(btn);
+        });
+
+        renderSoal(0);
+        updateProgress();
+    }
+
+    function saveStudentData() {
+        studentData = { nama: inputNama.value, kelas: inputKelas.value };
+        localStorage.setItem('kuisCppStudent', JSON.stringify(studentData));
+    }
+
+    function updateProgress() {
+        const terjawab = Object.keys(userAnswers).length;
+        progressText.innerText = `${terjawab} / ${soalData.length} Terjawab`;
+    }
+
+    function renderSoal(index) {
+        currentSoalIndex = index;
+        const soal = soalData[index];
+        
+        // Update Nav UI
+        document.querySelectorAll('.btn-nav').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(`nav-btn-${soal.id}`).classList.add('active');
+
+        // Render Content
+        soalTopik.innerText = soal.topik;
+        soalTeks.innerHTML = `<b>${soal.id}.</b> ${soal.soal}`;
+        
+        opsiContainer.innerHTML = '';
+        for (const [key, text] of Object.entries(soal.opsi)) {
+            const isSelected = userAnswers[soal.id] === key;
+            
+            const label = document.createElement('label');
+            label.className = `opsi-label ${isSelected ? 'selected' : ''}`;
+            label.onclick = () => selectOption(soal.id, key, label);
+            
+            const input = document.createElement('input');
+            input.type = 'radio';
+            input.name = `soal_${soal.id}`;
+            input.value = key;
+            if (isSelected) input.checked = true;
+            
+            label.appendChild(input);
+            
+            const span = document.createElement('span');
+            span.innerHTML = `<b>${key}.</b> ${text.replace(/</g, "&lt;").replace(/>/g, "&gt;")}`;
+            label.appendChild(span);
+            
+            opsiContainer.appendChild(label);
+        }
+
+        // Button states
+        document.getElementById('btn-prev').disabled = index === 0;
+        document.getElementById('btn-prev').style.opacity = index === 0 ? '0.5' : '1';
+        
+        const btnNext = document.getElementById('btn-next');
+        if (index === soalData.length - 1) {
+            btnNext.innerText = "Selesai ✓";
+            btnNext.onclick = selesaiKuis;
+            btnNext.classList.replace('btn-primary', 'btn-success');
+        } else {
+            btnNext.innerText = "Selanjutnya →";
+            btnNext.onclick = nextSoal;
+            btnNext.classList.replace('btn-success', 'btn-primary');
+        }
+    }
+
+    function selectOption(soalId, optionKey, labelElement) {
+        // Update State
+        userAnswers[soalId] = optionKey;
+        localStorage.setItem('kuisCppAnswers', JSON.stringify(userAnswers));
+        
+        // Update UI Opsi
+        document.querySelectorAll('.opsi-label').forEach(el => el.classList.remove('selected'));
+        labelElement.classList.add('selected');
+        
+        // Update UI Nav
+        document.getElementById(`nav-btn-${soalId}`).classList.add('answered');
+        updateProgress();
+    }
+
+    function prevSoal() {
+        if (currentSoalIndex > 0) renderSoal(currentSoalIndex - 1);
+    }
+
+    function nextSoal() {
+        if (currentSoalIndex < soalData.length - 1) renderSoal(currentSoalIndex + 1);
+    }
+
+    function selesaiKuis() {
+        saveStudentData();
+        
+        const terjawab = Object.keys(userAnswers).length;
+        if (terjawab < soalData.length) {
+            const confirmFinish = confirm(`Anda baru menjawab ${terjawab} dari ${soalData.length} soal. Yakin ingin mengakhiri kuis?`);
+            if (!confirmFinish) return;
+        }
+
+        document.getElementById('setup-container').style.display = 'none';
+        document.getElementById('hasil-container').style.display = 'block';
+        
+        kalkulasiHasil();
+    }
+
+    function kembaliKeKuis() {
+        document.getElementById('setup-container').style.display = 'block';
+        document.getElementById('hasil-container').style.display = 'none';
+        renderSoal(currentSoalIndex); // refresh tampilan
+    }
+
+    function kalkulasiHasil() {
+        document.getElementById('hasil-nama').innerText = studentData.nama || 'Tanpa Nama';
+        document.getElementById('hasil-kelas').innerText = studentData.kelas || '-';
+
+        let benar = 0;
+        let salah = 0;
+        let kosong = 0;
+        
+        const listContainer = document.getElementById('koreksi-list');
+        listContainer.innerHTML = '';
+
+        soalData.forEach(soal => {
+            const jwbUser = userAnswers[soal.id];
+            const isCorrect = jwbUser === soal.jawaban;
+            
+            if (!jwbUser) kosong++;
+            else if (isCorrect) benar++;
+            else salah++;
+
+            // Render detail
+            const div = document.createElement('div');
+            div.className = `result-item ${isCorrect ? 'benar' : (!jwbUser ? '' : 'salah')}`;
+            
+            const statusHtml = !jwbUser ? 
+                `<span class="status-badge" style="background:#f59e0b;">KOSONG</span>` : 
+                (isCorrect ? `<span class="status-badge bg-benar">BENAR</span>` : `<span class="status-badge bg-salah">SALAH</span>`);
+            
+            let html = `
+                <div class="result-q">${soal.id}. ${soal.soal}</div>
+                <div class="result-ans" style="color: var(--text-muted);">
+                    Jawaban Kamu: <b>${jwbUser ? jwbUser + '. ' + soal.opsi[jwbUser].replace(/</g, "&lt;").replace(/>/g, "&gt;") : '-'}</b> ${statusHtml}
+                </div>
+            `;
+            
+            if (!isCorrect) {
+                html += `<div class="result-ans" style="color: var(--success);">
+                    Kunci Jawaban: <b>${soal.jawaban}. ${soal.opsi[soal.jawaban].replace(/</g, "&lt;").replace(/>/g, "&gt;")}</b>
+                </div>`;
+            }
+            
+            div.innerHTML = html;
+            listContainer.appendChild(div);
+        });
+
+        // Skor = (Benar / Total) * 100
+        const skor = (benar / soalData.length) * 100;
+        
+        document.getElementById('hasil-skor').innerText = Math.round(skor);
+        document.getElementById('hasil-benar').innerText = benar;
+        document.getElementById('hasil-salah').innerText = salah;
+        document.getElementById('hasil-kosong').innerText = kosong;
+    }
+
+    function downloadHasil() {
+        const namaFile = `Hasil_Kuis_${studentData.nama || 'Siswa'}_${studentData.kelas || ''}.html`.replace(/\s+/g, "_");
+        const htmlContent = `<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Hasil Kuis - ${studentData.nama}</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 30px; max-width: 800px; margin: auto; color: #1e293b; line-height: 1.6; }
+        .header { text-align: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 20px; margin-bottom: 20px; }
+        .score-box { text-align: center; background: #f5f3ff; padding: 20px; border-radius: 10px; margin-bottom: 30px; border: 2px solid #ddd6fe;}
+        .item { border: 1px solid #e2e8f0; padding: 15px; border-radius: 8px; margin-bottom: 15px; }
+        .benar { border-left: 5px solid #10b981; }
+        .salah { border-left: 5px solid #ef4444; background: #fef2f2; }
+        .kosong { border-left: 5px solid #f59e0b; }
+        pre { background: #1e1e1e; color: #d4d4d4; padding: 10px; border-radius: 4px; overflow-x: auto;}
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>Laporan Hasil Kuis Pemrograman C++</h2>
+        <p><strong>Nama:</strong> ${studentData.nama || '-'} | <strong>Kelas:</strong> ${studentData.kelas || '-'}</p>
+    </div>
+    
+    <div class="score-box">
+        <h1 style="font-size: 50px; color: #4f46e5; margin: 0;">${document.getElementById('hasil-skor').innerText}</h1>
+        <p>Benar: ${document.getElementById('hasil-benar').innerText} | Salah: ${document.getElementById('hasil-salah').innerText} | Kosong: ${document.getElementById('hasil-kosong').innerText}</p>
+    </div>
+    
+    <h3>Detail Jawaban:</h3>
+    ${document.getElementById('koreksi-list').innerHTML}
+</body>
+</html>`;
+
+        const blob = new Blob([htmlContent], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = namaFile;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
+    init();
+</script>
+</body>
+</html>
