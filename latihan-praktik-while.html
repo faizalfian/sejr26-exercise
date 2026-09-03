@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LKS Pemrograman: Perulangan While C++</title>
+    
+    <!-- CodeMirror CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/monokai.min.css">
+    
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --secondary: #f8fafc;
+            --border: #e2e8f0;
+            --text-dark: #1e293b;
+            --text-light: #64748b;
+            --success: #10b981;
+            --code-bg: #1e1e1e;
+            --code-text: #d4d4d4;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        
+        body { background-color: #f1f5f9; color: var(--text-dark); line-height: 1.6; padding: 20px; }
+        
+        .container { max-width: 1000px; margin: 0 auto; }
+        
+        header { text-align: center; margin-bottom: 30px; }
+        header h1 { color: var(--primary); margin-bottom: 5px; }
+        
+        .card {
+            background: white; border-radius: 10px; padding: 25px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); margin-bottom: 20px; border: 1px solid var(--border);
+        }
+        
+        /* Form Identitas */
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 5px; font-size: 14px; }
+        .form-control { width: 100%; padding: 10px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        
+        /* Navigasi Soal */
+        .nav-soal { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px; justify-content: center; }
+        .btn-nav {
+            background: white; border: 1px solid var(--border); padding: 10px 20px;
+            border-radius: 8px; cursor: pointer; font-weight: 600; transition: all 0.2s; color: var(--primary);
+        }
+        .btn-nav:hover { background: var(--secondary); }
+        .btn-nav.active { background: var(--primary); color: white; border-color: var(--primary); }
+        .btn-nav.done { border-bottom: 4px solid var(--success); }
+        
+        /* Area Soal */
+        .story-box { background: #eff6ff; padding: 15px; border-left: 4px solid var(--primary); border-radius: 0 8px 8px 0; margin-bottom: 20px; }
+        
+        .instructions ul { padding-left: 20px; margin-bottom: 20px; }
+        .instructions li { margin-bottom: 8px; font-size: 14.5px; }
+        
+        .terminal {
+            background: var(--code-bg); color: var(--code-text);
+            padding: 15px; border-radius: 8px; font-family: 'Courier New', Courier, monospace;
+            white-space: pre-wrap; font-size: 13px; margin-bottom: 20px;
+        }
+        .terminal-header { color: #888; font-size: 12px; margin-bottom: 10px; border-bottom: 1px solid #444; padding-bottom: 5px; }
+        
+        /* CodeMirror custom adjustments */
+        .CodeMirror {
+            height: 350px; border-radius: 8px; font-family: 'Courier New', Courier, monospace;
+            font-size: 14px; margin-bottom: 15px; border: 1px solid var(--border);
+        }
+        
+        /* Buttons */
+        .btn { padding: 10px 20px; border: none; border-radius: 6px; font-weight: 600; cursor: pointer; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover { background: var(--primary-hover); }
+        .btn-success { background: var(--success); color: white; }
+        .btn-outline { background: white; border: 1px solid var(--border); color: var(--text-dark); }
+        .btn-outline:hover { background: var(--secondary); }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; }
+        
+        /* Hasil Pengerjaan */
+        #hasil-container { display: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Praktik C++: Perulangan While</h1>
+        <p style="color: var(--text-light);">Latihan penerapan logika akumulasi dan iterasi berdasarkan kondisi.</p>
+    </header>
+
+    <!-- Data Kelompok -->
+    <div class="card" id="form-kelompok">
+        <h3 style="margin-bottom: 15px; border-bottom: 1px solid var(--border); padding-bottom: 10px;">Data Praktikan (SMK Kelas XI)</h3>
+        <div class="grid-2">
+            <div class="form-group">
+                <label>Nama Kelompok / Siswa</label>
+                <input type="text" id="input-kelompok" class="form-control" placeholder="Contoh: Kelompok 1" onchange="saveDataKelompok()">
+            </div>
+            <div class="form-group">
+                <label>Kelas</label>
+                <input type="text" id="input-kelas" class="form-control" placeholder="Contoh: XI RPL 1" onchange="saveDataKelompok()">
+            </div>
+        </div>
+        <div class="form-group" style="margin-bottom: 0;">
+            <label>Anggota Kelompok (pisahkan dengan koma)</label>
+            <input type="text" id="input-anggota" class="form-control" placeholder="Contoh: Andi, Budi, Citra" onchange="saveDataKelompok()">
+        </div>
+    </div>
+
+    <!-- Navigasi Soal -->
+    <div class="nav-soal" id="nav-container">
+        <!-- Buttons injected by JS -->
+    </div>
+
+    <!-- Area Pengerjaan Soal -->
+    <div class="card" id="soal-container">
+        <h2 id="soal-title" style="margin-bottom: 15px;">Pilih Soal</h2>
+        
+        <div class="story-box" id="soal-cerita">Silakan pilih nomor soal di atas.</div>
+        
+        <div class="grid-2">
+            <div>
+                <h4 style="margin-bottom: 10px;">Alur Program:</h4>
+                <div class="instructions"><ul id="soal-alur"></ul></div>
+            </div>
+            <div>
+                <h4 style="margin-bottom: 10px;">Contoh Output di Terminal:</h4>
+                <div class="terminal">
+                    <div class="terminal-header">Terminal / Console</div>
+                    <div id="soal-output"></div>
+                </div>
+            </div>
+        </div>
+
+        <h4 style="margin-top: 20px; margin-bottom: 10px;">Workspace C++:</h4>
+        <textarea id="code-editor"></textarea>
+        
+        <div class="flex-between">
+            <button class="btn btn-primary" onclick="simpanJawaban()">💾 Simpan Kode</button>
+            <button class="btn btn-success" onclick="tampilkanHasil()">Selesai & Unduh Laporan ➔</button>
+        </div>
+        <div id="save-notif" style="color: var(--success); font-weight: bold; font-size: 14px; margin-top: 10px; display: none;">✅ Kode berhasil disimpan di browser!</div>
+    </div>
+
+    <!-- Halaman Hasil / Review -->
+    <div class="card" id="hasil-container">
+        <div style="margin-bottom: 20px; display: flex; justify-content: space-between;">
+            <button class="btn btn-outline" onclick="kembaliKeSoal()">← Kembali Edit Kode</button>
+            <button class="btn btn-primary" onclick="downloadLaporan()">📥 Download Laporan (HTML)</button>
+        </div>
+        
+        <div style="text-align: center; margin-bottom: 30px; padding-bottom: 20px; border-bottom: 2px solid var(--border);">
+            <h2>Laporan Praktik Pemrograman C++ (While Loop)</h2>
+            <p style="color: var(--text-light); margin-top: 5px;">Pastikan Anda mendownload laporan ini dan mengumpulkannya ke Guru.</p>
+        </div>
+
+        <div style="text-align: center;">
+            <h3 id="cetak-kelompok">Kelompok: -</h3>
+            <p id="cetak-kelas">Kelas: -</p>
+            <p id="cetak-anggota" style="font-style: italic; margin-bottom: 20px;">Anggota: -</p>
+            <div style="background: #f1f5f9; padding: 20px; border-radius: 8px; display: inline-block;">
+                <p>Silakan klik tombol <b>Download Laporan (HTML)</b> di sudut kanan atas.</p>
+                <p style="font-size: 14px; color: var(--text-light); margin-top: 5px;">File HTML yang diunduh sudah berisi source code yang siap disalin (copy) oleh Guru.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CodeMirror JS dependencies -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/clike/clike.min.js"></script>
+
+<script>
+    // Soal Data di-inject dari Python
+    const soalData = [{"id": 1, "title": "Soal 1: Koki Roti Ajaib", "cerita": "Koki Juna sedang bereksperimen membuat roti ajaib. Pada hari pertama, ia berhasil memanggang roti seberat 100 gram. Karena ragi ajaibnya terus bereaksi, pada hari-hari berikutnya ia selalu membuat roti yang beratnya 50 gram lebih berat dari roti buatan hari sebelumnya. Jika ia terus memanggang 1 roti setiap hari selama 7 hari berturut-turut, berapakah total berat seluruh roti yang dipanggang?", "alur": ["Deklarasikan variabel <code>total_berat = 0</code>, <code>berat_roti = 100</code>, dan <code>hari = 1</code>.", "Buat struktur perulangan <code>while (hari <= 7)</code>.", "Di dalam perulangan, tambahkan nilai <code>total_berat</code> dengan <code>berat_roti</code>.", "Tambahkan <code>berat_roti</code> sebanyak 50 (persiapan untuk hari esok).", "Lakukan increment pada variabel <code>hari</code> (tambah 1).", "Setelah loop selesai, cetak hasil akhir <code>total_berat</code>."], "output": "Total berat seluruh roti setelah 7 hari: 1750 gram"}, {"id": 2, "title": "Soal 2: Invasi Pasukan Slime", "cerita": "Raja Iblis memanggil Slime. Hari pertama 5 ekor. Setiap hari jumlah yang dipanggil menjadi 2 kali lipat dari hari sebelumnya. Setelah 6 hari berlalu, berapakah total pasukan Slime?", "alur": ["Deklarasikan variabel <code>total_slime = 0</code>, <code>slime_harian = 5</code>, dan <code>hari = 1</code>.", "Buat struktur <code>while (hari <= 6)</code>.", "Di dalam loop, tambahkan <code>total_slime</code> dengan <code>slime_harian</code>.", "Kalikan variabel <code>slime_harian</code> dengan 2.", "Lakukan increment pada variabel <code>hari</code>.", "Di luar loop, cetak <code>total_slime</code>."], "output": "Total pasukan Slime setelah 6 hari: 315 ekor"}, {"id": 3, "title": "Soal 3: Roket Penjelajah Galaksi", "cerita": "Sebuah roket berangkat dengan 2500 liter bahan bakar. Pada jam pertama, roket mengonsumsi 100 liter. Karena gaya gravitasi, setiap jam berikutnya konsumsinya bertambah 20 liter dari sebelumnya (jam kedua 120, dll). Berapa sisa bahan bakar setelah 8 jam?", "alur": ["Deklarasikan <code>sisa_bbm = 2500</code>, <code>konsumsi = 100</code>, dan <code>jam = 1</code>.", "Gunakan loop <code>while (jam <= 8)</code>.", "Di dalam loop, kurangi <code>sisa_bbm</code> dengan <code>konsumsi</code>.", "Tambahkan <code>konsumsi</code> sebanyak 20.", "Tambahkan <code>jam</code> sebanyak 1.", "Cetak hasil akhir <code>sisa_bbm</code>."], "output": "Sisa bahan bakar roket setelah 8 jam: 1140 liter"}, {"id": 4, "title": "Soal 4: Latihan Fisik Ksatria", "cerita": "Ksatria Arthur berlatih push-up. Hari pertama 15 kali. Ia menambah porsinya sebanyak 5 kali push-up lebih banyak dari hari sebelumnya. Berapa jumlah porsi push-up yang dilakukan Arthur khusus pada hari ke-14?", "alur": ["Deklarasikan <code>porsi = 15</code> dan <code>hari = 1</code>.", "Gunakan loop <code>while (hari < 14)</code> (Ingat: berhenti TEPAT SEBELUM mencapai hari ke-15, atau gunakan <code>hari < 14</code> jika increment di akhir).", "Di dalam loop, tambahkan <code>porsi</code> sebanyak 5.", "Tambahkan <code>hari</code> dengan 1.", "Cetak porsi Arthur saat program keluar dari perulangan."], "output": "Porsi push-up Arthur pada hari ke-14 adalah: 80 kali"}, {"id": 5, "title": "Soal 5: Tambang Permata Dwarf", "cerita": "Gimli membutuhkan minimal 100 bongkah permata. Ayunan kapak pertama mendapat 3 bongkah. Ayunan selanjutnya bertambah 2 bongkah dari sebelumnya. Pada ayunan ke berapakah ia berhasil mencapai (atau melewati) total 100 bongkah?", "alur": ["Deklarasikan <code>total_permata = 0</code>, <code>dapat_permata = 3</code>, dan <code>ayunan = 0</code>.", "Gunakan loop yang mengevaluasi target: <code>while (total_permata < 100)</code>.", "Di dalam loop, tambahkan <code>ayunan</code> dengan 1.", "Tambahkan <code>total_permata</code> dengan <code>dapat_permata</code>.", "Tambahkan <code>dapat_permata</code> sebanyak 2.", "Di luar loop, cetak variabel <code>ayunan</code>."], "output": "Gimli berhasil mengumpulkan 100 bongkah permata pada ayunan ke- 10"}, {"id": 6, "title": "Soal 6: Kapal Selam Penjelajah Palung", "cerita": "Menit pertama turun sejauh 30 meter. Karena tekanan air, jarak turun setiap menitnya berkurang 2 meter (menit kedua turun 28 meter, dst). Berapa kedalaman total kapal selam setelah 12 menit?", "alur": ["Deklarasikan <code>kedalaman = 0</code>, <code>turun = 30</code>, dan <code>menit = 1</code>.", "Loop dengan batas waktu: <code>while (menit <= 12)</code>.", "Tambahkan <code>kedalaman</code> dengan nilai <code>turun</code> saat ini.", "Kurangi nilai <code>turun</code> sebanyak 2.", "Lakukan increment pada <code>menit</code>.", "Cetak hasil akumulasi <code>kedalaman</code>."], "output": "Kedalaman total kapal selam setelah 12 menit: 228 meter"}, {"id": 7, "title": "Soal 7: Ramuan Alkimia Berbahaya", "cerita": "Kuali maksimal menampung 200 ml cairan. Tetesan pertama bervolume 5 ml, dan tetesan berikutnya selalu bertambah 3 ml. Berapa kali alkemis bisa meneteskan cairan SEBELUM tetesan berikutnya membuat kuali melebihi 200 ml dan meledak?", "alur": ["Buat variabel <code>volume_kuali = 0</code>, <code>volume_tetes = 5</code>, dan <code>jumlah_tetesan = 0</code>.", "Gunakan evaluasi prediktif di While: <code>while (volume_kuali + volume_tetes <= 200)</code>.", "Tambahkan <code>volume_kuali</code> dengan <code>volume_tetes</code>.", "Tambahkan <code>volume_tetes</code> dengan 3.", "Lakukan increment pada <code>jumlah_tetesan</code>.", "Cetak nilai <code>jumlah_tetesan</code> di akhir."], "output": "Banyaknya tetesan aman sebelum kuali meledak: 10 tetesan"}, {"id": 8, "title": "Soal 8: Turnamen E-Sports", "cerita": "Pada pertandingan (match) pertama, tim mendapat skor dasar 50 poin. Setiap lanjut ke pertandingan berikutnya, perolehan poin bertambah 15 dari match sebelumnya. Jika bertanding 10 kali (10 match), berapa total akumulasi poin mereka?", "alur": ["Deklarasikan <code>total_poin = 0</code>, <code>poin_match = 50</code>, dan <code>match = 1</code>.", "Gunakan batasan pertandingan: <code>while (match <= 10)</code>.", "Tambahkan <code>total_poin</code> dengan <code>poin_match</code>.", "Tambahkan <code>poin_match</code> sebanyak 15.", "Lakukan increment pada variabel <code>match</code>.", "Cetak variabel <code>total_poin</code>."], "output": "Total poin E-Sports Harimau Putih setelah 10 match: 1175 poin"}, {"id": 9, "title": "Soal 9: Wabah Virus Zombie", "cerita": "Hari pertama ada 2 zombie. Setiap harinya, setiap 1 zombie menularkan virus tepat kepada 3 orang sehat (Total zombie besok = zombie hari ini + tambahan infeksi). Pada hari ke berapakah total zombie mencapai (atau melewati) 5.000 orang?", "alur": ["Deklarasikan <code>zombie = 2</code> dan <code>hari = 1</code>.", "Gunakan kondisi pencapaian populasi: <code>while (zombie < 5000)</code>.", "Buat variabel bantuan di dalam loop: <code>int infeksi_baru = zombie * 3;</code>", "Tambahkan populasi <code>zombie</code> dengan <code>infeksi_baru</code>.", "Tambahkan waktu <code>hari</code> sebanyak 1.", "Di luar loop, cetak variabel <code>hari</code>."], "output": "Setengah populasi kota menjadi zombie pada hari ke- 7"}];
+    
+    let currentSoal = null;
+    let editor = null;
+    
+    // Key localStorage yang unik untuk LKS While
+    let userAnswers = JSON.parse(localStorage.getItem('cppPraktikAnswersWhileV1')) || {};
+    let dataKelompok = JSON.parse(localStorage.getItem('cppPraktikDataWhileV1')) || { kelompok: '', kelas: '', anggota: '' };
+
+    // DOM Elements
+    const navContainer = document.getElementById('nav-container');
+    const soalContainer = document.getElementById('soal-container');
+    const hasilContainer = document.getElementById('hasil-container');
+    
+    const inputKelompok = document.getElementById('input-kelompok');
+    const inputKelas = document.getElementById('input-kelas');
+    const inputAnggota = document.getElementById('input-anggota');
+
+    function init() {
+        editor = CodeMirror.fromTextArea(document.getElementById('code-editor'), {
+            mode: "text/x-c++src",
+            theme: "monokai",
+            lineNumbers: true,
+            indentUnit: 4,
+            matchBrackets: true
+        });
+
+        inputKelompok.value = dataKelompok.kelompok;
+        inputKelas.value = dataKelompok.kelas;
+        inputAnggota.value = dataKelompok.anggota;
+
+        soalData.forEach(s => {
+            const btn = document.createElement('button');
+            btn.className = 'btn-nav';
+            if (userAnswers[s.id]) btn.classList.add('done');
+            btn.innerText = `Soal ${s.id}`;
+            btn.onclick = () => renderSoal(s.id);
+            btn.id = `nav-btn-${s.id}`;
+            navContainer.appendChild(btn);
+        });
+
+        renderSoal(1);
+    }
+
+    function saveDataKelompok() {
+        dataKelompok = {
+            kelompok: inputKelompok.value,
+            kelas: inputKelas.value,
+            anggota: inputAnggota.value
+        };
+        localStorage.setItem('cppPraktikDataWhileV1', JSON.stringify(dataKelompok));
+    }
+
+    function renderSoal(id) {
+        if (currentSoal) {
+            userAnswers[currentSoal.id] = editor.getValue();
+            localStorage.setItem('cppPraktikAnswersWhileV1', JSON.stringify(userAnswers));
+        }
+
+        currentSoal = soalData.find(s => s.id === id);
+        
+        document.querySelectorAll('.btn-nav').forEach(btn => btn.classList.remove('active'));
+        document.getElementById(`nav-btn-${id}`).classList.add('active');
+
+        document.getElementById('soal-title').innerText = currentSoal.title;
+        document.getElementById('soal-cerita').innerText = currentSoal.cerita;
+        
+        const ulAlur = document.getElementById('soal-alur');
+        ulAlur.innerHTML = '';
+        currentSoal.alur.forEach(langkah => {
+            const li = document.createElement('li');
+            li.innerHTML = langkah;
+            ulAlur.appendChild(li);
+        });
+
+        document.getElementById('soal-output').innerText = currentSoal.output;
+        
+        const defaultCode = "#include <iostream>\nusing namespace std;\n\nint main() {\n    // Tulis kodemu disini...\n    \n    return 0;\n}";
+        editor.setValue(userAnswers[id] || defaultCode);
+        
+        setTimeout(() => editor.refresh(), 10);
+        document.getElementById('save-notif').style.display = 'none';
+    }
+
+    function simpanJawaban() {
+        if (!currentSoal) return;
+        
+        const code = editor.getValue();
+        userAnswers[currentSoal.id] = code;
+        localStorage.setItem('cppPraktikAnswersWhileV1', JSON.stringify(userAnswers));
+        
+        if(code.length > 80) {
+            document.getElementById(`nav-btn-${currentSoal.id}`).classList.add('done');
+        }
+
+        const notif = document.getElementById('save-notif');
+        notif.style.display = 'block';
+        setTimeout(() => notif.style.display = 'none', 3000);
+    }
+
+    function tampilkanHasil() {
+        simpanJawaban();
+        saveDataKelompok();
+
+        soalContainer.style.display = 'none';
+        navContainer.style.display = 'none';
+        document.getElementById('form-kelompok').style.display = 'none';
+        hasilContainer.style.display = 'block';
+
+        document.getElementById('cetak-kelompok').innerText = `Kelompok: ${dataKelompok.kelompok || 'Belum Diisi'}`;
+        document.getElementById('cetak-kelas').innerText = `Kelas: ${dataKelompok.kelas || 'Belum Diisi'}`;
+        document.getElementById('cetak-anggota').innerText = `Anggota: ${dataKelompok.anggota || 'Belum Diisi'}`;
+    }
+
+    function kembaliKeSoal() {
+        soalContainer.style.display = 'block';
+        navContainer.style.display = 'flex';
+        document.getElementById('form-kelompok').style.display = 'block';
+        hasilContainer.style.display = 'none';
+        editor.refresh(); 
+    }
+
+    function downloadLaporan() {
+        const kode = userAnswers[currentSoal.id] || "// Kode masih kosong";
+        const namaKelompok = dataKelompok.kelompok || 'Siswa';
+        const namaKelas = dataKelompok.kelas || '-';
+        const namaAnggota = dataKelompok.anggota || '-';
+        
+        const namaFile = `Laporan_While_${namaKelompok}_Soal_${currentSoal.id}.html`.replace(/\s+/g, "_");
+        
+        const htmlContent = `<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <title>Laporan - ${namaKelompok}</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; padding: 30px; max-width: 800px; margin: auto; color: #334155; line-height: 1.6; }
+        .header { text-align: center; border-bottom: 2px solid #cbd5e1; padding-bottom: 20px; margin-bottom: 20px; }
+        .header h2 { color: #2563eb; margin-bottom: 5px; }
+        .story-box { background: #f8fafc; padding: 15px; border-left: 4px solid #2563eb; border-radius: 0 8px 8px 0; margin-bottom: 20px; }
+        .kode-area { background: #1e1e1e; color: #d4d4d4; padding: 20px; border-radius: 8px; white-space: pre-wrap; font-family: 'Courier New', Courier, monospace; font-size: 14px; overflow-x: auto; }
+        .btn-copy { background: #10b981; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 6px; font-weight: 600; margin-bottom: 10px; font-size: 14px; }
+        .btn-copy:hover { background: #059669; }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h2>Laporan Praktik Pemrograman C++ (While Loop)</h2>
+        <p><strong>Kelompok/Siswa:</strong> ${namaKelompok} | <strong>Kelas:</strong> ${namaKelas}</p>
+        <p><strong>Anggota:</strong> ${namaAnggota}</p>
+    </div>
+    
+    <h3>${currentSoal.title}</h3>
+    <div class="story-box">${currentSoal.cerita}</div>
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <h4 style="margin: 0;">Source Code Jawaban:</h4>
+        <button class="btn-copy" onclick="navigator.clipboard.writeText(document.getElementById('kode').innerText).then(()=>alert('✅ Source Code berhasil disalin ke Clipboard!'))">
+            📋 Salin Kode ke Compiler
+        </button>
+    </div>
+    
+    <div class="kode-area" id="kode">${kode.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</div>
+</body>
+</html>`;
+
+        const blob = new Blob([htmlContent], { type: 'text/html' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = namaFile;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+
+    init();
+</script>
+</body>
+</html>
