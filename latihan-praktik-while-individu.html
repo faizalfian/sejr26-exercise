@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LKS Praktik C++ Tiga Tahap</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/monokai.min.css">
+    <style>
+        :root { --primary:#2563eb; --primary-hover:#1d4ed8; --secondary:#f8fafc; --border:#e2e8f0; --text:#1e293b; --muted:#64748b; --success:#10b981; --code:#1e1e1e; }
+        * { box-sizing:border-box; margin:0; padding:0; font-family:"Segoe UI",Tahoma,Geneva,Verdana,sans-serif; }
+        body { padding:20px; color:var(--text); background:#f1f5f9; line-height:1.6; }
+        .container { max-width:1000px; margin:auto; }
+        header { margin-bottom:28px; text-align:center; }
+        header h1 { color:var(--primary); font-size:32px; line-height:1.2; }
+        header p { color:var(--muted); }
+        h2 { font-size:26px; line-height:1.3; }
+        h3 { font-size:20px; line-height:1.35; }
+        .card { margin-bottom:20px; padding:25px; background:#fff; border:1px solid var(--border); border-radius:10px; box-shadow:0 4px 6px rgba(0,0,0,.05); }
+        .grid-2 { display:grid; grid-template-columns:1fr 1fr; gap:15px; }
+        .form-group { margin-bottom:15px; }
+        .form-group label { display:block; margin-bottom:5px; font-size:14px; font-weight:600; }
+        .form-control { width:100%; padding:10px; border:1px solid var(--border); border-radius:6px; font-size:14px; }
+        .identity-actions { display:flex; justify-content:flex-end; gap:10px; }
+        .onboarding-bar { display:grid; gap:12px; margin-bottom:20px; }
+        .onboarding-stepper { position:relative; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); width:100%; padding-bottom:14px; }
+        .onboarding-stepper::after { position:absolute; right:0; bottom:0; left:0; height:2px; background:var(--border); content:""; }
+        .step-item { position:relative; display:flex; align-items:center; gap:8px; color:var(--muted); font-size:13px; font-weight:700; }
+        .step-item:nth-child(2), .step-item:nth-child(3) { justify-self:center; }
+        .step-item:last-child { justify-self:end; }
+        .step-number { position:relative; z-index:1; display:grid; width:32px; height:32px; place-items:center; flex:0 0 32px; background:#fff; border:2px solid var(--border); border-radius:50%; }
+        .step-item.active { color:var(--primary); }
+        .step-item.active .step-number { color:#fff; background:var(--primary); border-color:var(--primary); }
+        .step-item.completed .step-number { color:#fff; background:var(--success); border-color:var(--success); }
+        #reset-button { display:none; justify-self:end; }
+        #rules-screen, #worked-example, #screen-exercise { display:none; }
+        .screen-kicker { margin-bottom:8px; color:var(--primary); font-size:13px; font-weight:800; letter-spacing:.05em; text-transform:uppercase; }
+        .screen-lead { max-width:720px; margin:8px 0 22px; color:var(--muted); }
+        .journey-box { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin:18px 0 24px; }
+        .journey-item { padding:16px; background:var(--secondary); border:1px solid var(--border); border-radius:8px; }
+        .journey-item strong { display:block; margin-bottom:4px; color:var(--primary); }
+        .rules-list { margin:14px 0 22px 24px; }
+        .rules-list li { margin-bottom:9px; padding-left:4px; }
+        .agreement { display:flex; align-items:flex-start; gap:10px; margin:18px 0; padding:16px; background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; cursor:pointer; }
+        .agreement input { width:18px; height:18px; margin-top:3px; flex:0 0 auto; }
+        .modal-backdrop { position:fixed; z-index:1000; inset:0; display:none; align-items:center; justify-content:center; padding:20px; background:rgba(15,23,42,.62); }
+        .modal-card { width:min(100%,500px); padding:24px; background:#fff; border-radius:10px; box-shadow:0 20px 50px rgba(15,23,42,.24); }
+        .modal-card h2 { margin-bottom:10px; }
+        .modal-card p { margin-bottom:22px; color:var(--muted); }
+        .modal-actions { display:flex; justify-content:flex-end; gap:10px; }
+        .btn-danger { color:#fff; background:#b91c1c; }
+        .btn-danger:hover { background:#991b1b; }
+        .exercise-progress { display:none; margin-bottom:20px; padding:20px; background:#fff; border:1px solid var(--border); border-radius:10px; }
+        .exercise-progress-header { display:flex; justify-content:space-between; align-items:flex-end; gap:16px; margin-bottom:14px; }
+        .exercise-progress-header h2 { font-size:20px; }
+        .exercise-progress-header p { color:var(--muted); font-weight:700; }
+        .nav-soal { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:10px; }
+        .btn-nav { min-height:64px; padding:10px 16px; color:var(--primary); background:#fff; border:1px solid #bfdbfe; border-radius:8px; cursor:pointer; font-weight:700; line-height:1.5; white-space:pre-line; }
+        .btn-nav.active { color:#fff; background:var(--primary); border-color:var(--primary); }
+        .btn-nav.done:not(.active) { color:#047857; background:#ecfdf5; border-color:#6ee7b7; }
+        #soal-container, #hasil-container { display:none; }
+        .badge { display:inline-block; margin-bottom:12px; padding:5px 10px; color:#1d4ed8; background:#dbeafe; border-radius:999px; font-size:12px; font-weight:700; }
+        .story-box { margin:15px 0 20px; padding:18px; background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px; }
+        .planning-box { padding:18px; background:#fffbeb; border:1px solid #fde68a; border-radius:8px; }
+        .planning-box h4 { margin-bottom:4px; }
+        .planning-intro { margin-bottom:14px; color:#92400e; font-size:14px; }
+        .planning-input { width:100%; min-height:76px; margin-bottom:14px; padding:10px; border:1px solid #fcd34d; border-radius:6px; resize:vertical; font-family:inherit; }
+        .terminal { min-height:150px; padding:15px; color:#d4d4d4; background:var(--code); border-radius:8px; font:13px/1.6 "Courier New",monospace; white-space:pre-wrap; }
+        .terminal-header { margin-bottom:10px; padding-bottom:5px; color:#888; border-bottom:1px solid #444; font-size:12px; }
+        .CodeMirror { height:350px; margin:15px 0; border:1px solid var(--border); border-radius:8px; font:14px "Courier New",monospace; }
+        .btn { padding:10px 20px; border:0; border-radius:6px; cursor:pointer; font-weight:700; }
+        .btn-primary { color:#fff; background:var(--primary); }
+        .btn-primary:hover { background:var(--primary-hover); }
+        .btn:focus-visible,.btn-nav:focus-visible,.form-control:focus-visible,.planning-input:focus-visible { outline:3px solid #93c5fd; outline-offset:2px; }
+        .btn:disabled { cursor:not-allowed; opacity:.5; }
+        .btn-success { color:#fff; background:var(--success); }
+        .btn-outline { color:var(--text); background:#fff; border:1px solid var(--border); }
+        .flex-between { display:flex; justify-content:space-between; align-items:center; gap:12px; }
+        #save-notif { display:none; margin-top:10px; color:var(--success); font-size:14px; font-weight:700; }
+        .assignment-summary { margin:20px auto; padding:18px; max-width:620px; background:#f8fafc; border-radius:8px; text-align:left; }
+        .worked-example summary { color:var(--primary); cursor:pointer; font-size:1.1rem; font-weight:700; }
+        .example-content { margin-top:20px; }
+        .example-content h3 { margin:24px 0 8px; }
+        .example-content p { margin-bottom:10px; }
+        .example-content ul,.example-content ol { margin:8px 0 14px 24px; }
+        .example-content table { width:100%; margin:12px 0 18px; border-collapse:collapse; }
+        .example-content th,.example-content td { padding:9px; border:1px solid var(--border); text-align:left; }
+        .example-content th { background:#eff6ff; }
+        .example-content pre { padding:16px; overflow:auto; color:#d4d4d4; background:var(--code); border-radius:8px; font:13px/1.6 "Courier New",monospace; white-space:pre-wrap; }
+        .thinking-step { margin:12px 0; padding:14px; background:#f8fafc; border:1px solid var(--border); border-radius:8px; }
+        @media (max-width:720px) { body{padding:12px}.card{padding:18px}.grid-2,.journey-box{grid-template-columns:1fr}.flex-between,.identity-actions,.exercise-progress-header{align-items:stretch;flex-direction:column}.step-item,.step-item:nth-child(2),.step-item:nth-child(3),.step-item:last-child{justify-self:center;flex-direction:column;gap:4px;font-size:12px}.nav-soal{grid-template-columns:1fr}.btn{width:100%}#reset-button{justify-self:stretch} }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header>
+        <h1>Praktik C++: Tiga Tahap Kemandirian</h1>
+        <p>Variabel, tipe data, operator aritmetika, dan perulangan while.</p>
+    </header>
+
+    <div class="onboarding-bar">
+        <nav class="onboarding-stepper" id="onboarding-stepper" aria-label="Progres onboarding">
+            <div class="step-item active" data-screen="welcome"><span class="step-number">1</span><span>Data</span></div>
+            <div class="step-item" data-screen="rules"><span class="step-number">2</span><span>Persiapan</span></div>
+            <div class="step-item" data-screen="example"><span class="step-number">3</span><span>Contoh</span></div>
+            <div class="step-item" data-screen="exercise"><span class="step-number">4</span><span>Latihan</span></div>
+        </nav>
+        <button class="btn btn-outline" id="reset-button" type="button" onclick="mulaiDariAwal()">Mulai dari Awal</button>
+    </div>
+
+    <section class="card worked-example" id="worked-example">
+        <p class="screen-kicker">Langkah 3 dari 4 · Pelajari contoh</p>
+        <h2>Satu contoh sebelum kamu mulai</h2>
+        <p class="screen-lead">Baca cara berpikirnya pelan-pelan. Perhatikan bagaimana cerita diubah menjadi variabel, operasi, dan kondisi <code>while</code>. Soalmu nanti berbeda, jadi pahami polanya—jangan sekadar menyalin kode.</p>
+        <details open>
+            <summary>Contoh Terbimbing: Misi Daur Ulang GreenTech</summary>
+            <div class="example-content">
+                <h3>Cerita</h3>
+                <p>Klub GreenTech SMK Nusantara mengumpulkan sampah elektronik untuk diserahkan ke pusat daur ulang setelah jumlahnya mencapai minimal <strong>100 kilogram</strong>. Pada hari pertama terkumpul <strong>12 kilogram</strong>. Setelah kampanye dipublikasikan, jumlah yang dikumpulkan setiap hari bertambah <strong>3 kilogram</strong>. Pusat daur ulang memberikan penghargaan <strong>Rp2.500 per kilogram</strong>.</p>
+                <p>Buat program C++ menggunakan <code>while</code> untuk mencari jumlah hari yang diperlukan, total sampah ketika target tercapai atau terlewati, dan nilai penghargaan.</p>
+
+                <h3>1. Apa yang diminta?</h3>
+                <div class="thinking-step"><p>Jumlah hari belum diketahui ketika program dimulai. Karena itu, jumlah hari tidak dapat langsung dijadikan batas tetap. Kita perlu mencari keadaan yang menentukan apakah pengumpulan masih harus dilanjutkan.</p></div>
+
+                <h3>2. Informasi yang sudah diketahui</h3>
+                <table><thead><tr><th>Informasi</th><th>Nilai</th></tr></thead><tbody><tr><td>Target</td><td>100 kg</td></tr><tr><td>Pengumpulan hari pertama</td><td>12 kg</td></tr><tr><td>Penambahan harian</td><td>3 kg</td></tr><tr><td>Penghargaan per kilogram</td><td>Rp2.500</td></tr></tbody></table>
+
+                <h3>3. Menentukan pengendali perulangan</h3>
+                <div class="thinking-step"><p>Kegiatan berlanjut selama total sampah masih kurang dari target. Kondisi yang mewakili masalah adalah <code>totalSampah &lt; target</code>. Pengendalinya adalah keadaan total sampah, bukan jumlah hari.</p></div>
+
+                <h3>4. Variabel dan tipe data</h3>
+                <table><thead><tr><th>Variabel</th><th>Tipe</th><th>Kegunaan</th></tr></thead><tbody><tr><td><code>target</code></td><td><code>const int</code></td><td>Target yang tidak berubah</td></tr><tr><td><code>sampahHarian</code></td><td><code>int</code></td><td>Pengumpulan hari ini</td></tr><tr><td><code>totalSampah</code></td><td><code>int</code></td><td>Akumulasi sampah</td></tr><tr><td><code>hari</code></td><td><code>int</code></td><td>Jumlah hari yang sudah diproses</td></tr><tr><td><code>hargaPerKg</code></td><td><code>const long long</code></td><td>Penghargaan per kilogram</td></tr></tbody></table>
+
+                <h3>5. Keadaan awal dan satu iterasi</h3>
+                <pre>hari = 0&#10;totalSampah = 0&#10;sampahHarian = 12&#10;&#10;Dalam satu iterasi:&#10;1. hari bertambah 1&#10;2. totalSampah ditambah sampahHarian&#10;3. sampahHarian bertambah 3 untuk hari berikutnya</pre>
+                <div class="thinking-step"><p>Perulangan pasti berhenti karena <code>totalSampah</code> terus bertambah dan akhirnya mencapai atau melewati target.</p></div>
+
+                <h3>6. Penelusuran Perulangan</h3>
+                <table><thead><tr><th>Hari</th><th>Sampah hari ini</th><th>Total</th><th>Persiapan berikutnya</th></tr></thead><tbody><tr><td>1</td><td>12 kg</td><td>12 kg</td><td>15 kg</td></tr><tr><td>2</td><td>15 kg</td><td>27 kg</td><td>18 kg</td></tr><tr><td>3</td><td>18 kg</td><td>45 kg</td><td>21 kg</td></tr><tr><td>4</td><td>21 kg</td><td>66 kg</td><td>24 kg</td></tr><tr><td>5</td><td>24 kg</td><td>90 kg</td><td>27 kg</td></tr><tr><td>6</td><td>27 kg</td><td>117 kg</td><td>30 kg</td></tr></tbody></table>
+                <p>Setelah iterasi keenam, pemeriksaan berikutnya menghasilkan <code>117 &lt; 100</code>, yaitu salah. Dari proses inilah diketahui bahwa target tercapai pada hari keenam.</p>
+
+                <h3>7. Pseudocode</h3>
+                <pre>SET target = 100&#10;SET penambahanHarian = 3&#10;SET hargaPerKg = 2500&#10;SET hari = 0&#10;SET sampahHarian = 12&#10;SET totalSampah = 0&#10;&#10;WHILE totalSampah kurang dari target&#10;    TAMBAH hari dengan 1&#10;    TAMBAH totalSampah dengan sampahHarian&#10;    TAMBAH sampahHarian dengan penambahanHarian&#10;END WHILE&#10;&#10;SET totalPenghargaan = totalSampah dikali hargaPerKg&#10;TAMPILKAN hari, totalSampah, dan totalPenghargaan</pre>
+
+                <h3>8. Jawaban C++</h3>
+                <pre>#include &lt;iostream&gt;&#10;using namespace std;&#10;&#10;int main() {&#10;    const int target = 100;&#10;    const int penambahanHarian = 3;&#10;    const long long hargaPerKg = 2500;&#10;    int hari = 0;&#10;    int sampahHarian = 12;&#10;    int totalSampah = 0;&#10;&#10;    while (totalSampah &lt; target) {&#10;        hari++;&#10;        totalSampah += sampahHarian;&#10;        sampahHarian += penambahanHarian;&#10;    }&#10;&#10;    long long totalPenghargaan = totalSampah * hargaPerKg;&#10;    cout &lt;&lt; "Target tercapai dalam: " &lt;&lt; hari &lt;&lt; " hari" &lt;&lt; endl;&#10;    cout &lt;&lt; "Total sampah: " &lt;&lt; totalSampah &lt;&lt; " kg" &lt;&lt; endl;&#10;    cout &lt;&lt; "Total penghargaan: Rp" &lt;&lt; totalPenghargaan &lt;&lt; endl;&#10;    return 0;&#10;}</pre>
+
+                <h3>9. Output</h3>
+                <pre>Target tercapai dalam: 6 hari&#10;Total sampah: 117 kg&#10;Total penghargaan: Rp292500</pre>
+
+                <h3>Pola berpikir yang digunakan kembali</h3>
+                <ol><li>Apa keadaan awal program?</li><li>Apa yang menentukan proses masih dilanjutkan?</li><li>Apa yang dikerjakan dalam satu iterasi?</li><li>Nilai apa yang berubah setelah satu iterasi?</li><li>Mengapa perubahan itu akhirnya menghentikan perulangan?</li></ol>
+            </div>
+        </details>
+        <div class="identity-actions" style="margin-top:24px"><button class="btn btn-primary" type="button" onclick="mulaiPengerjaan()">Saya memahami cara berpikirnya—mulai soal saya</button></div>
+    </section>
+
+    <div class="card" id="form-kelompok">
+        <p class="screen-kicker">Langkah 1 dari 4 · Salam kenal</p>
+        <h2>Halo! Siap melatih logika C++?</h2>
+        <p class="screen-lead">Sebelum mulai, isi datamu dengan teliti. Nomor absen menentukan tiga soal yang akan kamu kerjakan dan menyimpan progresmu di perangkat ini.</p>
+        <h3 style="margin-bottom:15px;padding-bottom:10px;border-bottom:1px solid var(--border)">Data Praktikan (SMK Kelas X)</h3>
+        <div class="grid-2">
+            <div class="form-group"><label for="input-kelompok">Nama Siswa</label><input id="input-kelompok" class="form-control" placeholder="Contoh: Nadia Putri"></div>
+            <div class="form-group"><label for="input-kelas">Kelas</label><input id="input-kelas" class="form-control" placeholder="Contoh: X PPLG 1"></div>
+            <div class="form-group"><label for="input-absen">Nomor Absen</label><input type="number" id="input-absen" class="form-control" min="1" max="36" placeholder="1–36"></div>
+            <div class="form-group"><label for="input-anggota">Catatan/Anggota (opsional)</label><input id="input-anggota" class="form-control" placeholder="Kosongkan jika individu"></div>
+        </div>
+        <div class="identity-actions"><button class="btn btn-primary" type="button" onclick="lanjutKeAturan()">Data sudah benar, lanjutkan</button></div>
+    </div>
+
+    <section class="card" id="rules-screen">
+        <p class="screen-kicker">Langkah 2 dari 4 · Persiapan</p>
+        <h2 id="rules-greeting">Selamat datang!</h2>
+        <p class="screen-lead">Kamu akan mempelajari <strong>1 soal contoh</strong> lengkap sebagai petunjuk. Setelah itu, kamu mendapat <strong>3 soal</strong> yang harus diselesaikan secara mandiri dengan bantuan yang makin sedikit.</p>
+        <div class="journey-box">
+            <div class="journey-item"><strong>Pelajari 1 contoh</strong><span>Ikuti cara mengubah cerita menjadi rancangan program.</span></div>
+            <div class="journey-item"><strong>Kerjakan 3 tahap</strong><span>Rancang solusi, tulis kode, simpan, lalu unduh laporanmu.</span></div>
+        </div>
+        <h3>Peraturan pengerjaan</h3>
+        <ol class="rules-list">
+            <li>Kerjakan setiap soal secara mandiri.</li>
+            <li>Tuliskan rencana penyelesaian sebelum mulai menulis kode.</li>
+            <li>Dilarang menyalin atau membagikan jawaban kepada teman.</li>
+            <li><strong>Dilarang menggunakan AI untuk men-generate jawaban.</strong></li>
+            <li>Simpan rencana dan kode sebelum berpindah ke soal berikutnya.</li>
+            <li>Unduh laporan HTML setelah ketiga soal selesai dikerjakan.</li>
+        </ol>
+        <label class="agreement" for="rules-checkbox">
+            <input type="checkbox" id="rules-checkbox" onchange="perbaruiTombolAturan()">
+            <span>Saya sudah membaca peraturan dan siap mengerjakan seluruh soal secara mandiri.</span>
+        </label>
+        <div class="identity-actions"><button class="btn btn-primary" id="rules-continue" type="button" onclick="lanjutKeContoh()" disabled>Saya mengerti, lihat contoh</button></div>
+    </section>
+
+    <div id="screen-exercise">
+
+    <section class="exercise-progress" id="exercise-progress">
+        <div class="exercise-progress-header">
+            <div>
+                <h2>Progres Pengerjaan</h2>
+                <p>Selesaikan ketiga tahap sebelum membuka laporan.</p>
+            </div>
+            <p id="exercise-progress-count" aria-live="polite">Soal 1 dari 3</p>
+        </div>
+        <nav class="nav-soal" id="nav-container" aria-label="Navigasi tiga soal"></nav>
+    </section>
+
+    <div class="card" id="soal-container">
+        <span class="badge" id="soal-level">C3 - Menerapkan</span>
+        <h2 id="soal-title">Soal</h2>
+        <div class="story-box" id="soal-cerita"></div>
+        <div class="grid-2">
+            <section class="planning-box">
+                <h4 id="planning-title">Ruang Perencanaan</h4>
+                <p class="planning-intro" id="planning-intro"></p>
+                <div id="planning-container"></div>
+            </section>
+            <section>
+                <h4 style="margin-bottom:10px">Format Output:</h4>
+                <div class="terminal"><div class="terminal-header">Terminal / Console</div><div id="soal-output"></div></div>
+            </section>
+        </div>
+        <h4 style="margin-top:20px">Workspace C++:</h4>
+        <textarea id="code-editor"></textarea>
+        <div class="flex-between">
+            <button class="btn btn-outline" onclick="simpanJawaban()">Simpan Draft</button>
+            <button class="btn btn-primary" id="primary-action" onclick="simpanDanLanjut()">Simpan &amp; Lanjut ke Tahap 2 →</button>
+        </div>
+        <div id="save-notif" role="status">Draft rencana dan kode berhasil disimpan.</div>
+    </div>
+
+    <div class="card" id="hasil-container">
+        <div class="flex-between" style="margin-bottom:20px">
+            <button class="btn btn-outline" onclick="kembaliKeSoal()">← Kembali Edit</button>
+            <button class="btn btn-primary" onclick="downloadLaporan()">Download Laporan HTML</button>
+        </div>
+        <div style="text-align:center">
+            <h2>Laporan Praktik Pemrograman Dasar C++</h2>
+            <h3 id="cetak-kelompok" style="margin-top:14px">Siswa: -</h3>
+            <p id="cetak-kelas">Kelas: -</p>
+            <p id="cetak-absen">Nomor Absen: -</p>
+            <p id="cetak-anggota"></p>
+            <div class="assignment-summary" id="assignment-summary"></div>
+            <p style="color:var(--muted)">Laporan memuat tiga soal, perencanaan, dan source code yang tersimpan.</p>
+        </div>
+    </div>
+    </div>
+</div>
+
+<div class="modal-backdrop" id="reset-dialog" role="dialog" aria-modal="true" aria-labelledby="reset-title" aria-describedby="reset-description">
+    <div class="modal-card">
+        <h2 id="reset-title">Mulai dari awal?</h2>
+        <p id="reset-description">Identitas, progres onboarding, rencana, dan kode jawabanmu yang tersimpan di perangkat ini akan dihapus. Tindakan ini tidak dapat dibatalkan.</p>
+        <div class="modal-actions">
+            <button class="btn btn-outline" type="button" onclick="batalkanMulaiDariAwal()">Batal</button>
+            <button class="btn btn-danger" id="confirm-reset-button" type="button" onclick="konfirmasiMulaiDariAwal()">Ya, Hapus &amp; Mulai dari Awal</button>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/clike/clike.min.js"></script>
+<script>
+    const soalData = [
+        {"id":"T1-A","stage":1,"variant":1,"pattern":"fixed-count","title":"Stan Minuman Festival Sekolah","level":"C3 - Menerapkan","cerita":"Pada Festival Karya Siswa, kelas X PPLG membuka stan minuman SegarKita selama 7 hari. Panitia menyiapkan 600 gelas dengan harga Rp8.000 per gelas. Hari pertama terjual 35 gelas dan penjualan bertambah 8 gelas setiap hari karena promosi semakin ramai. Buat program C++ dengan while untuk menghitung total gelas terjual, sisa stok, dan total pendapatan setelah festival selesai.","panduan":["Data apa saja yang harus disimpan dan tipe data apa yang sesuai?","Variabel mana yang menjadi penghitung dan mana yang menjadi akumulator?","Apa yang menentukan bahwa tujuh hari kegiatan sudah selesai diproses?","Operasi aritmetika apa yang dilakukan pada setiap hari?","Nilai apa saja yang harus diperbarui sebelum iterasi berikutnya?","Hasil akhir apa saja yang harus dicetak?"],"output":"Total minuman terjual: [hasil perhitungan] gelas\nSisa stok: [hasil perhitungan] gelas\nTotal pendapatan: Rp[hasil perhitungan]"},
+        {"id":"T1-B","stage":1,"variant":2,"pattern":"sentinel","title":"Pencatatan Belanja Kantin","level":"C3 - Menerapkan","cerita":"Kantin sekolah ingin mencatat transaksi seorang siswa tanpa mengetahui lebih dahulu berapa jenis makanan yang dibeli. Kasir memasukkan harga setiap makanan satu per satu. Setelah seluruh barang selesai dicatat, kasir memasukkan angka 0 sebagai penanda akhir. Dijamin setidaknya ada satu harga sebelum angka penanda. Buat program while untuk menghitung jumlah barang, total belanja, dan rata-rata harga barang.","panduan":["Data apa yang dimasukkan berulang kali dan tipe data apa yang sesuai?","Nilai khusus apa yang menandai bahwa input sudah selesai?","Apa yang harus dibaca sebelum perulangan pertama dimulai?","Operasi apa yang dilakukan terhadap setiap harga yang diterima?","Apa yang harus dibaca kembali sebelum iterasi berikutnya?","Hasil apa yang dihitung setelah input berakhir?"],"output":"Jumlah barang: [hasil perhitungan]\nTotal belanja: Rp[hasil perhitungan]\nRata-rata harga: Rp[hasil perhitungan]"},
+        {"id":"T1-C","stage":1,"variant":3,"pattern":"target","title":"Tabungan Laptop untuk Belajar","level":"C3 - Menerapkan","cerita":"Raka ingin membeli laptop belajar seharga Rp4.500.000. Ia sudah memiliki tabungan awal Rp750.000. Pada minggu pertama ia menabung Rp200.000 dan jumlah setoran mingguan bertambah Rp25.000 karena menerima tambahan pekerjaan desain. Jumlah minggu belum diketahui. Buat program while untuk mencari berapa minggu yang diperlukan hingga tabungan mencapai atau melewati harga laptop dan berapa saldo akhirnya.","panduan":["Informasi apa yang sudah diketahui dan hasil apa yang belum diketahui?","Variabel mana yang menyimpan saldo, setoran, target, dan jumlah minggu?","Keadaan apa yang menunjukkan bahwa proses menabung masih perlu dilanjutkan?","Operasi apa yang dilakukan pada satu minggu?","Nilai apa yang berubah untuk minggu berikutnya?","Hasil akhir apa saja yang perlu ditampilkan?"],"output":"Waktu menabung: [hasil perhitungan] minggu\nSaldo akhir: Rp[hasil perhitungan]\nKelebihan dari target: Rp[hasil perhitungan]"},
+        {"id":"T1-D","stage":1,"variant":4,"pattern":"depletion","title":"Produksi Miniatur dengan Filament","level":"C3 - Menerapkan","cerita":"Laboratorium memiliki 1.500 gram filament untuk mencetak miniatur. Cetakan pertama membutuhkan 80 gram. Karena ukuran miniatur berikutnya semakin besar, kebutuhan filament bertambah 10 gram setiap cetakan. Mesin hanya boleh mulai mencetak ketika stok masih cukup untuk menyelesaikan satu miniatur berikutnya. Buat program while untuk menghitung jumlah miniatur yang dapat dibuat, total filament terpakai, dan sisa stok.","panduan":["Variabel apa yang mewakili stok dan kebutuhan satu proses?","Keadaan apa yang harus benar sebelum mesin memulai cetakan berikutnya?","Mengapa kebutuhan cetakan berikutnya perlu diperiksa sebelum proses berjalan?","Operasi apa yang dilakukan setelah satu miniatur selesai?","Nilai apa yang berubah sebelum pemeriksaan berikutnya?","Hasil akhir apa saja yang harus dicetak?"],"output":"Miniatur selesai: [hasil perhitungan]\nFilament terpakai: [hasil perhitungan] gram\nSisa filament: [hasil perhitungan] gram"},
+        {"id":"T1-E","stage":1,"variant":5,"pattern":"validation","title":"Validasi Nilai Ujian Praktik","level":"C3 - Menerapkan","cerita":"Aplikasi nilai meminta guru memasukkan nilai ujian praktik dalam rentang 0 sampai 100. Kesalahan mengetik dapat menghasilkan nilai negatif atau lebih dari 100. Selama nilai belum berada dalam rentang yang diizinkan, program harus meminta input ulang dan menghitung berapa kali input telah dilakukan. Buat program while yang berhenti setelah memperoleh satu nilai valid, kemudian menampilkan nilai tersebut dan jumlah percobaan input.","panduan":["Data apa yang dimasukkan pengguna dan tipe apa yang sesuai?","Nilai seperti apa yang dianggap belum valid?","Bagaimana dua batas nilai digabungkan menjadi syarat pengulangan?","Apa yang harus dilakukan selama input masih salah?","Variabel apa yang menghitung jumlah percobaan?","Apa yang ditampilkan setelah nilai valid diterima?"],"output":"Nilai valid: [hasil input terakhir]\nJumlah percobaan: [hasil perhitungan]"},
+        {"id":"T1-F","stage":1,"variant":6,"pattern":"digits","title":"Pemeriksaan Kode Transaksi","level":"C3 - Menerapkan","cerita":"Sistem koperasi menerima sebuah kode transaksi berupa bilangan bulat positif, misalnya 58241. Petugas ingin mengetahui banyak digit dan jumlah seluruh digit tanpa mengubah kode menjadi string. Setiap digit harus diambil menggunakan operator modulus, lalu bilangan diperkecil menggunakan pembagian bilangan bulat. Buat program while yang memproses kode hingga tidak ada digit tersisa dan menampilkan banyak digit serta total digitnya.","panduan":["Variabel apa yang menyimpan kode asli dan salinan yang akan diproses?","Operator apa yang dapat mengambil digit paling kanan?","Bagaimana cara membuang digit yang sudah diproses?","Keadaan apa yang menunjukkan masih ada digit tersisa?","Variabel apa yang menjadi penghitung dan akumulator?","Hasil akhir apa yang harus ditampilkan?"],"output":"Jumlah digit: [hasil perhitungan]\nTotal seluruh digit: [hasil perhitungan]"},
+        {"id":"T1-G","stage":1,"variant":7,"pattern":"modulus-search","title":"Mencari Jadwal Shuttle Berikutnya","level":"C3 - Menerapkan","cerita":"Shuttle sekolah berangkat pada menit yang merupakan kelipatan 7 sejak pukul 07.00. Seorang siswa tiba pada suatu menit tertentu dan ingin mengetahui jadwal keberangkatan berikutnya setelah waktu kedatangannya. Program harus mulai memeriksa menit berikutnya, kemudian menambah satu menit selama kandidat belum habis dibagi 7. Buat program while untuk menemukan menit keberangkatan dan lama waktu tunggu siswa.","panduan":["Data apa yang dimasukkan dan nilai kandidat pertama harus dimulai dari mana?","Operator apa yang digunakan untuk memeriksa kelipatan 7?","Keadaan apa yang berarti pencarian masih harus dilanjutkan?","Bagaimana kandidat diperbarui pada setiap pemeriksaan?","Bagaimana lama menunggu dihitung dari waktu kedatangan?","Hasil akhir apa yang ditampilkan?"],"output":"Menit keberangkatan berikutnya: [hasil pencarian]\nWaktu tunggu: [hasil perhitungan] menit"},
+        {"id":"T1-H","stage":1,"variant":8,"pattern":"growth-decay","title":"Perluasan Kapasitas Server Cadangan","level":"C3 - Menerapkan","cerita":"Server cadangan sekolah memiliki kapasitas awal 32 GB, sedangkan proyek video membutuhkan sedikitnya 700 GB. Setiap kali teknisi memasang modul baru, kapasitas server menjadi dua kali kapasitas sebelumnya. Banyak pemasangan belum diketahui. Buat program while yang melakukan pertumbuhan berulang sampai kapasitas memenuhi kebutuhan, lalu menghitung jumlah pemasangan, kapasitas akhir, dan kelebihan kapasitas dari kebutuhan proyek.","panduan":["Variabel apa yang mewakili kapasitas, kebutuhan, dan jumlah pemasangan?","Keadaan apa yang menunjukkan kapasitas masih belum mencukupi?","Operasi aritmetika apa yang mengubah kapasitas setiap iterasi?","Bagaimana jumlah pemasangan dicatat?","Mengapa perubahan kapasitas akhirnya menghentikan perulangan?","Hasil akhir apa saja yang perlu dicetak?"],"output":"Jumlah pemasangan: [hasil perhitungan]\nKapasitas akhir: [hasil perhitungan] GB\nKelebihan kapasitas: [hasil perhitungan] GB"},
+        {"id":"T1-I","stage":1,"variant":9,"pattern":"convergence","title":"Pertemuan Dua Robot Koridor","level":"C3 - Menerapkan","cerita":"Robot A berada pada posisi 0 meter dan Robot B pada posisi 180 meter di koridor sekolah. Setiap detik Robot A bergerak maju 7 meter, sedangkan Robot B bergerak mendekat 5 meter dari arah berlawanan. Keduanya bergerak bersamaan sampai posisi A menyamai atau melewati posisi B. Buat program while untuk menghitung waktu yang diperlukan serta posisi kedua robot ketika mereka bertemu atau berpapasan.","panduan":["Variabel apa yang menyimpan dua posisi, dua kecepatan, dan waktu?","Hubungan seperti apa antara posisi A dan B selama keduanya belum bertemu?","Bagaimana kedua posisi berubah dalam satu detik?","Bagaimana waktu diperbarui?","Mengapa kedua nilai posisi akan bertemu atau berpapasan?","Hasil akhir apa saja yang harus ditampilkan?"],"output":"Waktu pertemuan: [hasil perhitungan] detik\nPosisi Robot A: [hasil perhitungan] meter\nPosisi Robot B: [hasil perhitungan] meter"},
+
+        {"id":"T2-A","stage":2,"variant":1,"pattern":"fixed-count","title":"Pengujian Sensor Kebun Pintar","level":"C3 - Menerapkan","cerita":"Sensor kebun pintar diuji selama 8 siklus. Siklus pertama mengirim 25 paket data dan jumlah paket bertambah 5 setiap siklus setelah lebih banyak sensor diaktifkan. Setiap paket berukuran 1,5 MB dan membutuhkan 0,25 unit energi. Baterai awal menyediakan 300 unit. Susun program C++ dengan while untuk menghitung total paket, ukuran data, energi terpakai, dan sisa energi setelah delapan siklus.","panduan":["Input/Data: tentukan variabel, tipe data, nilai awal, dan nilai tetap dari cerita.","Process: jelaskan pengendali perulangan, operasi dalam satu siklus, serta nilai yang diperbarui.","Output: tuliskan seluruh hasil akhir yang harus ditampilkan."],"output":"Total paket: [hasil perhitungan]\nUkuran data: [hasil perhitungan] MB\nEnergi terpakai: [hasil perhitungan] unit\nSisa energi: [hasil perhitungan] unit"},
+        {"id":"T2-B","stage":2,"variant":2,"pattern":"sentinel","title":"Penimbangan Paket di Gudang","level":"C3 - Menerapkan","cerita":"Petugas gudang menimbang paket yang jumlahnya tidak diketahui. Berat setiap paket dimasukkan sebagai bilangan desimal dalam kilogram. Setelah paket terakhir, petugas memasukkan -1 sebagai penanda bahwa pencatatan selesai; angka tersebut tidak termasuk data. Dijamin ada setidaknya satu paket. Susun program while untuk menghitung jumlah paket, total berat, dan rata-rata berat seluruh paket yang benar-benar dicatat.","panduan":["Input/Data: identifikasi data berulang, nilai penanda, penghitung, akumulator, dan tipe datanya.","Process: rancang urutan pembacaan pertama, pemeriksaan penanda, pengolahan berat, dan pembacaan berikutnya.","Output: tentukan nilai akhir yang perlu dicetak setelah input selesai."],"output":"Jumlah paket: [hasil perhitungan]\nTotal berat: [hasil perhitungan] kg\nRata-rata berat: [hasil perhitungan] kg"},
+        {"id":"T2-C","stage":2,"variant":3,"pattern":"target","title":"Pengisian Baterai Tenaga Surya","level":"C3 - Menerapkan","cerita":"Baterai laboratorium memiliki energi awal 120 Wh dan harus mencapai minimal 1.000 Wh. Pada periode pertama panel menambahkan 70 Wh. Karena matahari semakin terang, tambahan energi meningkat 10 Wh pada setiap periode berikutnya. Jumlah periode belum diketahui. Susun program C++ dengan while untuk mencari jumlah periode pengisian, energi akhir, dan banyak energi yang melampaui target.","panduan":["Input/Data: tentukan keadaan awal, target, perubahan energi, penghitung, dan tipe datanya.","Process: jelaskan keadaan yang membuat pengisian berlanjut serta operasi pada setiap periode.","Output: catat hasil akhir yang harus dilaporkan."],"output":"Jumlah periode: [hasil perhitungan]\nEnergi akhir: [hasil perhitungan] Wh\nKelebihan energi: [hasil perhitungan] Wh"},
+        {"id":"T2-D","stage":2,"variant":4,"pattern":"depletion","title":"Rute Drone dengan Bahan Bakar Terbatas","level":"C3 - Menerapkan","cerita":"Drone logistik membawa 1.200 unit bahan bakar. Penerbangan pertama membutuhkan 90 unit dan penerbangan berikutnya membutuhkan 15 unit lebih banyak karena muatan bertambah. Drone hanya boleh berangkat ketika bahan bakar cukup untuk menyelesaikan penerbangan berikutnya. Susun program while untuk menentukan jumlah penerbangan yang dapat dilakukan, total bahan bakar terpakai, kebutuhan penerbangan yang tidak dapat dijalankan, dan sisa bahan bakar.","panduan":["Input/Data: identifikasi stok, kebutuhan awal, perubahan kebutuhan, penghitung, dan akumulator.","Process: rancang pemeriksaan kecukupan sebelum penerbangan serta pembaruan setelah satu penerbangan selesai.","Output: tuliskan semua nilai yang dilaporkan ketika drone tidak dapat berangkat lagi."],"output":"Penerbangan selesai: [hasil perhitungan]\nBahan bakar terpakai: [hasil perhitungan] unit\nSisa bahan bakar: [hasil perhitungan] unit\nKebutuhan berikutnya: [hasil perhitungan] unit"},
+        {"id":"T2-E","stage":2,"variant":5,"pattern":"validation","title":"Kalibrasi Suhu Ruang Server","level":"C3 - Menerapkan","cerita":"Teknisi memasukkan hasil pembacaan suhu ruang server. Nilai yang diterima harus berada dari 18 sampai 26 derajat Celsius, termasuk kedua batas. Selama pembacaan berada di luar rentang aman, program meminta nilai baru dan menambah jumlah percobaan kalibrasi. Susun program while yang berhenti ketika satu suhu aman diterima, lalu menampilkan suhu tersebut dan banyak input yang telah dilakukan.","panduan":["Input/Data: tentukan variabel suhu, batas aman, serta penghitung percobaan beserta tipenya.","Process: jelaskan hubungan batas bawah dan atas yang membuat input perlu diulang serta pembaruan setiap percobaan.","Output: tuliskan informasi yang ditampilkan setelah suhu aman diperoleh."],"output":"Suhu valid: [hasil input terakhir] derajat Celsius\nJumlah percobaan: [hasil perhitungan]"},
+        {"id":"T2-F","stage":2,"variant":6,"pattern":"digits","title":"Membalik Nomor Tiket Digital","level":"C3 - Menerapkan","cerita":"Sistem acara menerima nomor tiket berupa bilangan bulat positif. Untuk pemeriksaan, petugas ingin menampilkan nomor tersebut dalam urutan terbalik dan sekaligus menghitung jumlah digitnya tanpa menggunakan string. Digit paling kanan dapat diambil satu per satu, kemudian disusun ke bilangan baru menggunakan perkalian dan penjumlahan. Susun program while yang berhenti setelah seluruh digit diproses.","panduan":["Input/Data: tentukan bilangan asli, salinan kerja, hasil terbalik, digit sementara, dan penghitung.","Process: rancang cara mengambil digit kanan, menambahkannya ke bilangan terbalik, lalu memperkecil bilangan kerja.","Output: tentukan dua hasil akhir yang harus dicetak."],"output":"Nomor terbalik: [hasil perhitungan]\nJumlah digit: [hasil perhitungan]"},
+        {"id":"T2-G","stage":2,"variant":7,"pattern":"modulus-search","title":"Ukuran Kotak Pengiriman Berikutnya","level":"C3 - Menerapkan","cerita":"Mesin pengemasan hanya menerima jumlah produk yang merupakan kelipatan 6. Operator mempunyai sejumlah produk dan ingin mencari kapasitas kotak berikutnya yang lebih besar daripada jumlah tersebut. Program memulai dari satu angka setelah jumlah produk, lalu memeriksa kandidat secara berulang menggunakan modulus. Susun program while untuk menemukan kapasitas valid dan menghitung jumlah ruang kosong di dalam kotak.","panduan":["Input/Data: tentukan jumlah produk, kandidat awal, pembagi, dan ruang kosong.","Process: jelaskan cara memeriksa kandidat dan memperbaruinya selama belum memenuhi syarat kelipatan.","Output: tuliskan kapasitas yang ditemukan dan ruang kosong yang tersisa."],"output":"Kapasitas kotak: [hasil pencarian]\nRuang kosong: [hasil perhitungan] produk"},
+        {"id":"T2-H","stage":2,"variant":8,"pattern":"growth-decay","title":"Pertumbuhan Kultur Mikroorganisme","level":"C3 - Menerapkan","cerita":"Laboratorium mengamati kultur berisi 40 mikroorganisme dan membutuhkan sedikitnya 20.000 untuk tahap penelitian berikutnya. Pada setiap periode, populasinya menjadi tiga kali nilai sebelumnya. Banyak periode yang diperlukan belum diketahui. Susun program C++ dengan while untuk menghitung jumlah periode pertumbuhan, populasi akhir ketika kebutuhan terpenuhi, dan selisih populasi akhir terhadap kebutuhan minimum.","panduan":["Input/Data: tentukan populasi awal, faktor pertumbuhan, kebutuhan minimum, dan penghitung periode.","Process: jelaskan keadaan yang mempertahankan perulangan dan perubahan populasi setiap periode.","Output: tentukan nilai akhir yang harus dicetak."],"output":"Jumlah periode: [hasil perhitungan]\nPopulasi akhir: [hasil perhitungan]\nKelebihan populasi: [hasil perhitungan]"},
+        {"id":"T2-I","stage":2,"variant":9,"pattern":"convergence","title":"Dua Tabungan Kegiatan Kelas","level":"C3 - Menerapkan","cerita":"Tabungan kegiatan Kelas A berjumlah Rp500.000 dan bertambah Rp90.000 setiap minggu. Tabungan Kelas B sudah mencapai Rp1.400.000 tetapi hanya bertambah Rp30.000 setiap minggu. Kedua kelas mulai menabung pada waktu yang sama. Susun program while untuk mencari jumlah minggu sampai saldo Kelas A menyamai atau melewati Kelas B, kemudian tampilkan kedua saldo saat proses berhenti.","panduan":["Input/Data: tentukan dua saldo awal, dua pertambahan mingguan, serta penghitung waktu.","Process: jelaskan hubungan kedua saldo selama proses berlanjut dan perubahan keduanya setiap minggu.","Output: tuliskan waktu dan dua saldo yang perlu dicetak."],"output":"Waktu yang diperlukan: [hasil perhitungan] minggu\nSaldo Kelas A: Rp[hasil perhitungan]\nSaldo Kelas B: Rp[hasil perhitungan]"},
+
+        {"id":"T3-A","stage":3,"variant":1,"pattern":"fixed-count","title":"Pemotretan Satelit Pendidikan","level":"C3 - Menerapkan","cerita":"Satelit pendidikan melewati wilayah Indonesia sebanyak 10 orbit. Orbit pertama menghasilkan 18 gambar dan jumlah gambar bertambah 4 pada setiap orbit karena area pemindaian diperluas. Setiap gambar berukuran 22,5 MB dan memerlukan 0,8 unit energi untuk diproses. Buat program C++ memakai while untuk menghitung total gambar, total ukuran data, dan energi yang digunakan setelah seluruh orbit selesai.","panduan":["Susun sendiri variabel dan tipe data, pengendali while, proses satu iterasi, pembaruan nilai, serta output program."],"output":"Total gambar: [hasil perhitungan]\nUkuran data: [hasil perhitungan] MB\nEnergi digunakan: [hasil perhitungan] unit"},
+        {"id":"T3-B","stage":3,"variant":2,"pattern":"sentinel","title":"Rekap Donasi Acara Sosial","level":"C3 - Menerapkan","cerita":"Panitia memasukkan nominal donasi satu per satu tanpa mengetahui jumlah donatur. Angka -1 dimasukkan setelah donasi terakhir dan tidak boleh ikut dihitung. Dijamin terdapat setidaknya satu nominal donasi sebelum penanda tersebut. Buat program C++ menggunakan while untuk menghitung jumlah donatur, total donasi, dan rata-rata donasi dari seluruh data yang benar-benar dimasukkan.","panduan":["Rancang algoritma mandiri yang mencakup pembacaan data berulang, penanda berhenti, penghitung, akumulator, dan perhitungan hasil akhir."],"output":"Jumlah donatur: [hasil perhitungan]\nTotal donasi: Rp[hasil perhitungan]\nRata-rata donasi: Rp[hasil perhitungan]"},
+        {"id":"T3-C","stage":3,"variant":3,"pattern":"target","title":"Mengejar XP untuk Naik Level","level":"C3 - Menerapkan","cerita":"Karakter gim memiliki 850 XP dan membutuhkan minimal 5.000 XP untuk naik level. Misi pertama memberikan 280 XP. Karena tingkat kesulitan misi meningkat, hadiah setiap misi berikutnya bertambah 40 XP. Jumlah misi yang diperlukan belum diketahui. Buat program C++ dengan while untuk menghitung jumlah misi, XP akhir ketika target tercapai atau terlewati, dan kelebihan XP dari batas kenaikan level.","panduan":["Susun perencanaan lengkap secara mandiri: pilih variabel, tipe data, keadaan yang mengendalikan while, proses setiap misi, dan hasil akhir."],"output":"Jumlah misi: [hasil perhitungan]\nXP akhir: [hasil perhitungan]\nKelebihan XP: [hasil perhitungan]"},
+        {"id":"T3-D","stage":3,"variant":4,"pattern":"depletion","title":"Irigasi dengan Persediaan Air Terbatas","level":"C3 - Menerapkan","cerita":"Tangki kebun sekolah berisi 900 liter air. Penyiraman pertama membutuhkan 65 liter dan kebutuhan setiap penyiraman berikutnya bertambah 8 liter karena area yang disiram semakin luas. Sistem hanya boleh menjalankan satu penyiraman ketika air masih cukup untuk menyelesaikannya. Buat program while untuk menghitung jumlah penyiraman lengkap, total air terpakai, sisa air, dan kebutuhan penyiraman berikutnya yang tidak dapat dijalankan.","panduan":["Rancang sendiri keadaan awal, pemeriksaan kecukupan, operasi satu penyiraman, perubahan kebutuhan, penghitung, dan output."],"output":"Penyiraman selesai: [hasil perhitungan]\nAir terpakai: [hasil perhitungan] liter\nSisa air: [hasil perhitungan] liter\nKebutuhan berikutnya: [hasil perhitungan] liter"},
+        {"id":"T3-E","stage":3,"variant":5,"pattern":"validation","title":"Kalibrasi Sensor Keasaman Air","level":"C3 - Menerapkan","cerita":"Sensor kolam harus menghasilkan nilai pH dari 6,5 sampai 7,5 agar dinyatakan aman. Teknisi memasukkan hasil pembacaan sebagai bilangan desimal. Selama nilainya berada di bawah atau di atas rentang tersebut, program meminta pembacaan baru dan mencatat jumlah percobaan. Buat program C++ memakai while yang berhenti saat nilai valid diterima dan menampilkan pH akhir serta banyak percobaan input.","panduan":["Tentukan sendiri variabel, tipe data, hubungan batas yang mengendalikan while, proses input ulang, penghitung percobaan, dan output."],"output":"pH valid: [hasil input terakhir]\nJumlah percobaan: [hasil perhitungan]"},
+        {"id":"T3-F","stage":3,"variant":6,"pattern":"digits","title":"Checksum Nomor Perangkat","level":"C3 - Menerapkan","cerita":"Teknisi menerima nomor seri perangkat berupa bilangan bulat positif. Checksum sederhana diperoleh dengan menjumlahkan seluruh digit nomor seri, sedangkan panjang kode diperoleh dengan menghitung banyak digitnya. Nomor tidak boleh diubah menjadi string. Buat program C++ menggunakan modulus, pembagian bilangan bulat, dan while untuk memproses setiap digit hingga bilangan kerja habis.","panduan":["Susun algoritma mandiri untuk menyimpan kode, mengambil dan membuang satu digit, mengakumulasi checksum, menghitung digit, dan menentukan kapan while berhenti."],"output":"Jumlah digit: [hasil perhitungan]\nChecksum: [hasil perhitungan]"},
+        {"id":"T3-G","stage":3,"variant":7,"pattern":"modulus-search","title":"Nomor Loker Kelipatan Sembilan","level":"C3 - Menerapkan","cerita":"Panitia ingin menentukan nomor loker cadangan yang merupakan kelipatan 9. Nomor tersebut harus lebih besar daripada nomor loker terakhir yang sudah digunakan. Program mulai memeriksa angka tepat setelah nomor terakhir, kemudian bergerak satu per satu sampai syarat pembagian terpenuhi. Buat program C++ dengan while untuk menemukan nomor loker baru dan menghitung jaraknya dari nomor sebelumnya.","panduan":["Rancang sendiri data, kandidat awal, pemeriksaan modulus, pembaruan kandidat, kondisi berhenti, dan dua hasil yang ditampilkan."],"output":"Nomor loker baru: [hasil pencarian]\nJarak nomor: [hasil perhitungan]"},
+        {"id":"T3-H","stage":3,"variant":8,"pattern":"growth-decay","title":"Pendinginan Mesin Produksi","level":"C3 - Menerapkan","cerita":"Mesin produksi berhenti pada suhu 180 derajat Celsius dan baru aman digunakan kembali setelah suhunya mencapai paling tinggi 60 derajat. Dalam setiap periode pendinginan, suhu menjadi 80 persen dari suhu periode sebelumnya. Banyak periode belum diketahui. Buat program C++ memakai while untuk menghitung jumlah periode pendinginan, suhu akhir ketika mesin aman, dan penurunan suhu total sejak proses dimulai.","panduan":["Susun rencana algoritma mandiri yang menentukan tipe data, keadaan pengendali while, perubahan suhu tiap periode, penghitung, dan output."],"output":"Jumlah periode: [hasil perhitungan]\nSuhu akhir: [hasil perhitungan] derajat Celsius\nTotal penurunan: [hasil perhitungan] derajat Celsius"},
+        {"id":"T3-I","stage":3,"variant":9,"pattern":"convergence","title":"Pertemuan Volume Dua Tangki","level":"C3 - Menerapkan","cerita":"Tangki A mula-mula berisi 120 liter dan menerima tambahan 35 liter setiap menit. Tangki B mula-mula berisi 700 liter tetapi mengalirkan keluar 20 liter setiap menit. Kedua proses berlangsung bersamaan sampai volume Tangki A menyamai atau melewati volume Tangki B. Buat program while untuk mencari waktu yang diperlukan serta volume kedua tangki ketika proses berhenti.","panduan":["Rancang sendiri variabel, tipe data, hubungan dua volume yang mengendalikan while, perubahan setiap menit, penghitung waktu, dan output."],"output":"Waktu: [hasil perhitungan] menit\nVolume Tangki A: [hasil perhitungan] liter\nVolume Tangki B: [hasil perhitungan] liter"}
+    ];
+
+    let currentSoal = null;
+    let assignedQuestions = [];
+    let editor = null;
+    let userAnswers = {};
+    let userPlans = {};
+    let dataKelompok = { kelompok:'', kelas:'', anggota:'', absen:'' };
+    const defaultCode = '#include <iostream>\nusing namespace std;\n\nint main() {\n    // Tulis kodemu di sini...\n    \n    return 0;\n}';
+
+    const navContainer = document.getElementById('nav-container');
+    const soalContainer = document.getElementById('soal-container');
+    const hasilContainer = document.getElementById('hasil-container');
+    const inputKelompok = document.getElementById('input-kelompok');
+    const inputKelas = document.getElementById('input-kelas');
+    const inputAnggota = document.getElementById('input-anggota');
+    const inputAbsen = document.getElementById('input-absen');
+
+    function readStorage(key, fallback) {
+        try {
+            return JSON.parse(localStorage.getItem(key)) || fallback;
+        } catch (error) {
+            return fallback;
+        }
+    }
+
+    function escapeHtml(value) {
+        return String(value).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;');
+    }
+
+    function tentukanSoal(absen) {
+        const nomor = Number(absen);
+        if (!Number.isInteger(nomor) || nomor < 1 || nomor > 36) return [];
+        const huruf = 'ABCDEFGHI';
+        const dasar = (nomor - 1) % 9;
+        const blok = Math.floor((nomor - 1) / 9);
+        return [
+            `T1-${huruf[dasar]}`,
+            `T2-${huruf[(dasar + blok + 1) % 9]}`,
+            `T3-${huruf[(dasar + (2 * blok) + 2) % 9]}`
+        ];
+    }
+
+    function init() {
+        editor = CodeMirror.fromTextArea(document.getElementById('code-editor'), { mode:'text/x-c++src', theme:'monokai', lineNumbers:true, indentUnit:4, matchBrackets:true });
+        restoreProgress();
+    }
+
+    function isiFormIdentitas() {
+        inputKelompok.value = dataKelompok.kelompok;
+        inputKelas.value = dataKelompok.kelas;
+        inputAnggota.value = dataKelompok.anggota;
+        inputAbsen.value = dataKelompok.absen;
+    }
+
+    function progressKey(absen) {
+        return `cppTigaTahapProgressV1:${absen}`;
+    }
+
+    function saveProgress(screen, currentQuestionId = null) {
+        const absen = Number(dataKelompok.absen);
+        if (!Number.isInteger(absen) || absen < 1 || absen > 36) return;
+        localStorage.setItem(progressKey(absen), JSON.stringify({ screen, currentQuestionId }));
+    }
+
+    function showScreen(screen, persist = true) {
+        const screenIds = { welcome:'form-kelompok', rules:'rules-screen', example:'worked-example', exercise:'screen-exercise' };
+        Object.values(screenIds).forEach((id) => { document.getElementById(id).style.display = 'none'; });
+        const activeId = screenIds[screen] || screenIds.welcome;
+        document.getElementById(activeId).style.display = 'block';
+        document.getElementById('onboarding-stepper').style.display = screen === 'exercise' ? 'none' : 'grid';
+        document.getElementById('reset-button').style.display = screen === 'welcome' ? 'none' : 'inline-block';
+
+        const order = ['welcome','rules','example','exercise'];
+        const activeIndex = order.indexOf(screen);
+        document.querySelectorAll('.step-item').forEach((item, index) => {
+            item.classList.toggle('active', index === activeIndex);
+            item.classList.toggle('completed', index < activeIndex);
+        });
+        if (persist) saveProgress(screen, currentSoal ? currentSoal.id : null);
+    }
+
+    function saveDataKelompok() {
+        dataKelompok = { kelompok:inputKelompok.value.trim(), kelas:inputKelas.value.trim(), anggota:inputAnggota.value.trim(), absen:inputAbsen.value.trim() };
+        localStorage.setItem('cppTigaTahapIdentityV1', JSON.stringify(dataKelompok));
+    }
+
+    function dataKelompokValid() {
+        const absen = Number(dataKelompok.absen);
+        return Boolean(dataKelompok.kelompok) && Number.isInteger(absen) && absen >= 1 && absen <= 36;
+    }
+
+    function lanjutKeAturan() {
+        saveDataKelompok();
+        if (!dataKelompokValid()) {
+            alert('Isi nama siswa dan nomor absen 1 sampai 36 terlebih dahulu.');
+            return;
+        }
+        document.getElementById('rules-greeting').innerText = `Halo, ${dataKelompok.kelompok}! Baca sebentar sebelum mulai.`;
+        document.getElementById('rules-checkbox').checked = false;
+        perbaruiTombolAturan();
+        showScreen('rules');
+    }
+
+    function perbaruiTombolAturan() {
+        document.getElementById('rules-continue').disabled = !document.getElementById('rules-checkbox').checked;
+    }
+
+    function lanjutKeContoh() {
+        if (!document.getElementById('rules-checkbox').checked) {
+            alert('Centang pernyataan kesiapan setelah kamu benar-benar membaca semua peraturan.');
+            return;
+        }
+        showScreen('example');
+    }
+
+    function mulaiPengerjaan(preferredQuestionId = null) {
+        saveDataKelompok();
+        const absen = Number(dataKelompok.absen);
+        if (!dataKelompokValid()) {
+            alert('Isi nama siswa dan nomor absen 1 sampai 36 terlebih dahulu.');
+            showScreen('welcome', false);
+            return;
+        }
+        userAnswers = readStorage(`cppTigaTahapAnswersV1:${absen}`, {});
+        userPlans = readStorage(`cppTigaTahapPlansV1:${absen}`, {});
+        const ids = tentukanSoal(absen);
+        assignedQuestions = ids.map((id) => soalData.find((soal) => soal.id === id));
+        navContainer.innerHTML = '';
+        assignedQuestions.forEach((soal) => {
+            const button = document.createElement('button');
+            button.className = 'btn-nav';
+            button.innerText = `Tahap ${soal.stage}\nBelum dikerjakan`;
+            button.id = `nav-btn-${soal.id}`;
+            button.onclick = () => renderSoal(soal.id);
+            navContainer.appendChild(button);
+        });
+        navContainer.style.display = 'grid';
+        document.getElementById('exercise-progress').style.display = 'block';
+        soalContainer.style.display = 'block';
+        hasilContainer.style.display = 'none';
+        currentSoal = null;
+        showScreen('exercise', false);
+        renderSoal(ids.includes(preferredQuestionId) ? preferredQuestionId : ids[0]);
+    }
+
+    function restoreProgress() {
+        dataKelompok = readStorage('cppTigaTahapIdentityV1', { kelompok:'', kelas:'', anggota:'', absen:'' });
+        isiFormIdentitas();
+        if (!dataKelompokValid()) {
+            showScreen('welcome', false);
+            return;
+        }
+        const progress = readStorage(progressKey(dataKelompok.absen), { screen:'welcome', currentQuestionId:null });
+        if (progress.screen === 'rules') {
+            document.getElementById('rules-greeting').innerText = `Halo, ${dataKelompok.kelompok}! Baca sebentar sebelum mulai.`;
+            document.getElementById('rules-checkbox').checked = false;
+            perbaruiTombolAturan();
+            showScreen('rules', false);
+            return;
+        }
+        if (progress.screen === 'example') {
+            document.getElementById('rules-checkbox').checked = true;
+            perbaruiTombolAturan();
+            showScreen('example', false);
+            return;
+        }
+        if (progress.screen === 'exercise') {
+            mulaiPengerjaan(progress.currentQuestionId);
+            return;
+        }
+        showScreen('welcome', false);
+    }
+
+    function mulaiDariAwal() {
+        document.getElementById('reset-dialog').style.display = 'flex';
+        const confirmButton = document.getElementById('confirm-reset-button');
+        if (confirmButton.focus) confirmButton.focus();
+    }
+
+    function batalkanMulaiDariAwal() {
+        document.getElementById('reset-dialog').style.display = 'none';
+    }
+
+    function konfirmasiMulaiDariAwal() {
+        const absen = Number(dataKelompok.absen || inputAbsen.value);
+        if (Number.isInteger(absen) && absen >= 1 && absen <= 36) {
+            localStorage.removeItem(`cppTigaTahapAnswersV1:${absen}`);
+            localStorage.removeItem(`cppTigaTahapPlansV1:${absen}`);
+            localStorage.removeItem(progressKey(absen));
+        }
+        localStorage.removeItem('cppTigaTahapIdentityV1');
+        dataKelompok = { kelompok:'', kelas:'', anggota:'', absen:'' };
+        assignedQuestions = [];
+        currentSoal = null;
+        userAnswers = {};
+        userPlans = {};
+        isiFormIdentitas();
+        document.getElementById('rules-checkbox').checked = false;
+        perbaruiTombolAturan();
+        navContainer.innerHTML = '';
+        soalContainer.style.display = 'none';
+        hasilContainer.style.display = 'none';
+        editor.setValue(defaultCode);
+        document.getElementById('reset-dialog').style.display = 'none';
+        showScreen('welcome', false);
+    }
+
+    function saveCurrentWork() {
+        if (!currentSoal) return;
+        userAnswers[currentSoal.id] = editor.getValue();
+        userPlans[currentSoal.id] = Array.from(document.querySelectorAll('.planning-input')).map((input) => input.value.trim());
+        localStorage.setItem(`cppTigaTahapAnswersV1:${dataKelompok.absen}`, JSON.stringify(userAnswers));
+        localStorage.setItem(`cppTigaTahapPlansV1:${dataKelompok.absen}`, JSON.stringify(userPlans));
+    }
+
+    function isSoalComplete(soal) {
+        const plans = userPlans[soal.id] || [];
+        const code = userAnswers[soal.id] || '';
+        const semuaRencanaTerisi = plans.length >= soal.panduan.length && soal.panduan.every((prompt, index) => Boolean((plans[index] || '').trim()));
+        return semuaRencanaTerisi && /\bwhile\s*\(/i.test(code);
+    }
+
+    function perbaruiProgresLatihan() {
+        if (!currentSoal || assignedQuestions.length !== 3) return;
+        const currentIndex = assignedQuestions.findIndex((soal) => soal.id === currentSoal.id);
+        document.getElementById('exercise-progress-count').innerText = `Soal ${currentIndex + 1} dari 3`;
+
+        assignedQuestions.forEach((soal) => {
+            const button = document.getElementById(`nav-btn-${soal.id}`);
+            const selesai = isSoalComplete(soal);
+            const aktif = soal.id === currentSoal.id;
+            const status = selesai ? 'Selesai' : aktif ? 'Sedang dikerjakan' : 'Belum dikerjakan';
+            button.innerText = `Tahap ${soal.stage}\n${status}`;
+            button.classList.toggle('done', selesai);
+            button.classList.toggle('active', aktif);
+        });
+
+        const primaryAction = document.getElementById('primary-action');
+        primaryAction.classList.remove('btn-primary', 'btn-success');
+        if (currentIndex < assignedQuestions.length - 1) {
+            primaryAction.innerText = `Simpan & Lanjut ke Tahap ${assignedQuestions[currentIndex + 1].stage} →`;
+            primaryAction.classList.add('btn-primary');
+            return;
+        }
+
+        const tahapBelumLengkap = assignedQuestions.find((soal) => !isSoalComplete(soal));
+        if (tahapBelumLengkap && tahapBelumLengkap.id !== currentSoal.id) {
+            primaryAction.innerText = `Simpan & Lengkapi Tahap ${tahapBelumLengkap.stage} →`;
+            primaryAction.classList.add('btn-primary');
+        } else {
+            primaryAction.innerText = 'Selesai & Lihat Laporan →';
+            primaryAction.classList.add('btn-success');
+        }
+    }
+
+    function renderSoal(id) {
+        saveCurrentWork();
+        currentSoal = assignedQuestions.find((soal) => soal.id === id);
+        if (!currentSoal) return;
+        document.getElementById('soal-level').innerText = `${currentSoal.level} • Tahap ${currentSoal.stage} • Kode ${currentSoal.id}`;
+        document.getElementById('soal-title').innerText = currentSoal.title;
+        document.getElementById('soal-cerita').innerText = currentSoal.cerita;
+        document.getElementById('soal-output').innerText = currentSoal.output;
+        document.getElementById('planning-title').innerText = currentSoal.stage === 1 ? 'Pertanyaan Perencanaan' : currentSoal.stage === 2 ? 'Kerangka Input–Process–Output' : 'Rancangan Mandiri';
+        document.getElementById('planning-intro').innerText = currentSoal.stage === 1 ? 'Jawab pertanyaan berikut sebelum mulai menulis kode.' : currentSoal.stage === 2 ? 'Susun bagian utama algoritma tanpa petunjuk sintaks.' : 'Tuliskan strategimu sendiri sebelum membuka editor kode.';
+        const planningContainer = document.getElementById('planning-container');
+        planningContainer.innerHTML = '';
+        const savedPlans = userPlans[currentSoal.id] || [];
+        currentSoal.panduan.forEach((prompt, index) => {
+            const label = document.createElement('label');
+            label.innerText = prompt;
+            const textarea = document.createElement('textarea');
+            textarea.className = 'planning-input';
+            textarea.value = savedPlans[index] || '';
+            textarea.placeholder = 'Tuliskan jawaban atau rencanamu...';
+            planningContainer.appendChild(label);
+            planningContainer.appendChild(textarea);
+        });
+        editor.setValue(userAnswers[id] || defaultCode);
+        setTimeout(() => editor.refresh(), 10);
+        document.getElementById('save-notif').style.display = 'none';
+        saveProgress('exercise', currentSoal.id);
+        perbaruiProgresLatihan();
+    }
+
+    function simpanJawaban() {
+        if (!currentSoal) return;
+        saveCurrentWork();
+        perbaruiProgresLatihan();
+        const notif = document.getElementById('save-notif');
+        notif.style.display = 'block';
+        setTimeout(() => { notif.style.display = 'none'; }, 3000);
+    }
+
+    function simpanDanLanjut() {
+        if (!currentSoal) return;
+        saveCurrentWork();
+        if (!isSoalComplete(currentSoal)) {
+            perbaruiProgresLatihan();
+            alert('Lengkapi semua bagian rencana dan pastikan kode C++ menggunakan while sebelum melanjutkan.');
+            return;
+        }
+
+        const currentIndex = assignedQuestions.findIndex((soal) => soal.id === currentSoal.id);
+        if (currentIndex < assignedQuestions.length - 1) {
+            renderSoal(assignedQuestions[currentIndex + 1].id);
+            return;
+        }
+        tampilkanHasil();
+    }
+
+    function tampilkanHasil() {
+        if (!currentSoal) return;
+        saveCurrentWork();
+        perbaruiProgresLatihan();
+        const tahapBelumLengkap = assignedQuestions.find((soal) => !isSoalComplete(soal));
+        if (tahapBelumLengkap) {
+            alert(`Tahap ${tahapBelumLengkap.stage} belum lengkap. Isi seluruh rencana dan sertakan perulangan while pada kode sebelum membuka laporan.`);
+            renderSoal(tahapBelumLengkap.id);
+            return;
+        }
+        saveDataKelompok();
+        soalContainer.style.display = 'none';
+        navContainer.style.display = 'none';
+        document.getElementById('exercise-progress').style.display = 'none';
+        document.getElementById('form-kelompok').style.display = 'none';
+        hasilContainer.style.display = 'block';
+        document.getElementById('cetak-kelompok').innerText = `Siswa: ${dataKelompok.kelompok}`;
+        document.getElementById('cetak-kelas').innerText = `Kelas: ${dataKelompok.kelas || '-'}`;
+        document.getElementById('cetak-absen').innerText = `Nomor Absen: ${dataKelompok.absen}`;
+        document.getElementById('cetak-anggota').innerText = dataKelompok.anggota ? `Catatan: ${dataKelompok.anggota}` : '';
+        document.getElementById('assignment-summary').innerHTML = assignedQuestions.map((soal) => `<div><strong>Tahap ${soal.stage}:</strong> ${soal.id} — ${escapeHtml(soal.title)}</div>`).join('');
+    }
+
+    function kembaliKeSoal() {
+        soalContainer.style.display = 'block';
+        navContainer.style.display = 'grid';
+        document.getElementById('exercise-progress').style.display = 'block';
+        hasilContainer.style.display = 'none';
+        perbaruiProgresLatihan();
+        editor.refresh();
+    }
+
+    function downloadLaporan() {
+        if (!currentSoal || assignedQuestions.length !== 3) return;
+        saveCurrentWork();
+        saveDataKelompok();
+        const sections = assignedQuestions.map((soal) => {
+            const plans = userPlans[soal.id] || [];
+            const planHtml = soal.panduan.map((prompt, index) => `<div class="plan"><strong>${escapeHtml(prompt)}</strong><p>${escapeHtml(plans[index] || 'Belum diisi')}</p></div>`).join('');
+            return `<section><span class="badge">Tahap ${soal.stage} • ${soal.id}</span><h2>${escapeHtml(soal.title)}</h2><div class="story">${escapeHtml(soal.cerita)}</div><h3>Perencanaan</h3>${planHtml}<h3>Source Code</h3><pre>${escapeHtml(userAnswers[soal.id] || '// Kode belum diisi')}</pre></section>`;
+        }).join('');
+        const htmlContent = `<!DOCTYPE html><html lang="id"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Laporan Praktik ${escapeHtml(dataKelompok.kelompok)}</title><style>body{max-width:900px;margin:auto;padding:30px;color:#334155;font-family:"Segoe UI",Arial,sans-serif;line-height:1.6}.header{text-align:center;border-bottom:2px solid #cbd5e1;padding-bottom:20px}section{margin:28px 0;padding:22px;border:1px solid #e2e8f0;border-radius:10px}.badge{display:inline-block;padding:4px 9px;color:#1d4ed8;background:#dbeafe;border-radius:999px;font-size:12px;font-weight:700}.story,.plan{margin:12px 0;padding:14px;background:#f8fafc;border:1px solid #cbd5e1;border-radius:8px}.plan p{margin-bottom:0}pre{padding:18px;overflow:auto;color:#d4d4d4;background:#1e1e1e;border-radius:8px;white-space:pre-wrap}@media print{body{padding:0}section{break-inside:avoid}}</style></head><body><div class="header"><h1>Laporan Praktik Pemrograman Dasar C++</h1><p><strong>Siswa:</strong> ${escapeHtml(dataKelompok.kelompok)} | <strong>Kelas:</strong> ${escapeHtml(dataKelompok.kelas || '-')}</p><p><strong>Nomor Absen:</strong> ${escapeHtml(dataKelompok.absen)} | <strong>Catatan:</strong> ${escapeHtml(dataKelompok.anggota || '-')}</p></div>${sections}</body></html>`;
+        const namaAman = dataKelompok.kelompok.replace(/[^a-zA-Z0-9]+/g,'-').replace(/^-|-$/g,'') || 'Siswa';
+        const blob = new Blob([htmlContent], { type:'text/html;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `Laporan_Praktik_${namaAman}_Absen_${dataKelompok.absen}.html`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    }
+
+    init();
+</script>
+</body>
+</html>
