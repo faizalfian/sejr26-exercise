@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latihan Soal Pilihan Ganda: C++</title>
+    <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --border: #e2e8f0;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: var(--bg); color: var(--text-main); line-height: 1.6; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; }
+        
+        header { text-align: center; margin-bottom: 30px; background: var(--card-bg); padding: 30px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); border-top: 5px solid var(--primary); }
+        h1 { color: var(--text-main); font-size: 1.8rem; margin-bottom: 5px; }
+        .subtitle { color: #64748b; font-size: 1rem; }
+        
+        .card { background: var(--card-bg); padding: 25px; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05); margin-bottom: 20px; border: 1px solid var(--border); }
+        
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.95rem; }
+        .form-group input { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 1rem; }
+        .form-group input:focus { outline: none; border-color: var(--primary); }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        
+        .question-box { margin-bottom: 30px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+        .question-text { font-weight: 600; font-size: 1.1rem; margin-bottom: 15px; }
+        .question-text pre { background: #1e1e1e; color: #d4d4d4; padding: 10px; border-radius: 6px; margin-top: 10px; font-family: 'Courier New', Courier, monospace; font-size: 0.95rem; font-weight: normal; overflow-x: auto; }
+        
+        .options { display: flex; flex-direction: column; gap: 10px; }
+        .option-label { display: flex; align-items: center; padding: 12px 15px; background: var(--bg); border: 1px solid var(--border); border-radius: 8px; cursor: pointer; transition: all 0.2s; }
+        .option-label:hover { background: #eff6ff; border-color: #bfdbfe; }
+        .option-label input { margin-right: 15px; transform: scale(1.2); cursor: pointer; }
+        
+        .btn { padding: 15px 30px; border: none; border-radius: 8px; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: background-color 0.3s; width: 100%; color: white; }
+        .btn-primary { background-color: var(--primary); }
+        .btn-primary:hover { background-color: var(--primary-hover); }
+        
+        #result-container { display: none; text-align: center; }
+        
+        .rekap-box { background: #f1f5f9; padding: 20px; border-radius: 8px; text-align: left; max-width: 600px; margin: 20px auto; border: 1px solid var(--border); }
+        .rekap-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 10px; margin-top: 15px; }
+        .rekap-item { background: white; padding: 8px; border-radius: 6px; border: 1px solid #cbd5e1; text-align: center; font-weight: bold; font-size: 0.9rem; }
+        
+        .footer { text-align: center; margin-top: 40px; color: #64748b; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <h1>Lembar Kerja Siswa: Pilihan Ganda C++</h1>
+        <div class="subtitle">Materi: Variabel, Tipe Data & While Loop (40 Soal)</div>
+    </header>
+
+    <div class="card" id="identitas">
+        <h3 style="margin-bottom: 15px;">Data Siswa</h3>
+        <div class="grid-2">
+            <div class="form-group">
+                <label>Nama Lengkap</label>
+                <input type="text" id="nama" placeholder="Masukkan nama">
+            </div>
+            <div class="form-group">
+                <label>Kelas</label>
+                <input type="text" id="kelas" placeholder="Contoh: XI PPLG 1">
+            </div>
+        </div>
+    </div>
+
+    <div class="card" id="quiz-container">
+        <!-- Pertanyaan akan di-generate oleh JS -->
+    </div>
+
+    <div class="card" id="action-container">
+        <button class="btn btn-primary" onclick="kumpulkanJawaban()">✅ Kumpulkan Jawaban</button>
+    </div>
+
+    <div class="card" id="result-container">
+        <h2 style="color: var(--primary); margin-bottom: 10px;">Laporan Jawaban Tersimpan</h2>
+        <p>Nama: <strong id="res-nama">-</strong> | Kelas: <strong id="res-kelas">-</strong></p>
+        
+        <div class="rekap-box">
+            <h4 style="text-align: center; margin-bottom: 10px; color: #475569;">Rekap Pilihan Ganda:</h4>
+            <div class="rekap-grid" id="res-detail">
+                <!-- Grid rekap jawaban -->
+            </div>
+        </div>
+        
+        <p style="color: #64748b; margin-bottom: 20px; font-size: 0.9rem;">Unduh rekap jawaban dalam format HTML untuk diserahkan kepada Guru.</p>
+        <button class="btn btn-primary" style="width: auto; padding: 10px 30px;" onclick="unduhJawabanHtml()">⬇️ Unduh Jawaban HTML</button>
+    </div>
+    
+    <div class="footer">
+        Pemrograman Dasar C++ &copy; 2026
+    </div>
+</div>
+
+<script>
+    const questions = [{"q": "Apa yang dimaksud dengan variabel dalam pemrograman C++?", "opts": ["Sebuah nilai yang tidak bisa diubah", "Tempat untuk menyimpan data di dalam memori", "Sebuah fungsi bawaan C++", "Perintah untuk mencetak teks"]}, {"q": "Manakah dari nama variabel berikut yang VALID (benar) di C++?", "opts": ["1_nilai", "nilai pertama", "nilai_1", "int"]}, {"q": "Manakah dari nama variabel berikut yang TIDAK valid di C++?", "opts": ["_nama", "nama_Siswa", "namaSiswa", "nama-siswa"]}, {"q": "Simbol apa yang digunakan untuk memberikan nilai (assignment) ke dalam variabel?", "opts": ["==", ":", "=", "=>"]}, {"q": "Apa fungsi dari tanda titik koma (;) pada akhir baris deklarasi variabel?", "opts": ["Menandai awal blok kode", "Menandai akhir dari sebuah pernyataan (statement)", "Menjadikan baris tersebut sebagai komentar", "Memulai perulangan"]}, {"q": "Deklarasi variabel yang benar untuk menyimpan umur adalah...", "opts": ["umur int;", "int umur;", "integer umur;", "dim umur as int;"]}, {"q": "C++ bersifat 'case-sensitive', artinya...", "opts": ["Huruf besar dan kecil dianggap sama", "Huruf besar dan kecil dianggap berbeda", "Tidak boleh menggunakan huruf besar", "Hanya boleh menggunakan huruf kecil"]}, {"q": "Jika kita mendeklarasikan: <code>int a = 5; a = 10;</code>, berapakah nilai akhir <code>a</code>?", "opts": ["5", "10", "15", "Error"]}, {"q": "Kata kunci (keyword) bawaan C++ yang tidak boleh dijadikan nama variabel disebut...", "opts": ["Identifier", "Reserved words", "String", "Operator"]}, {"q": "Manakah cara mendeklarasikan beberapa variabel dengan tipe data yang sama dalam satu baris?", "opts": ["int a, b, c;", "int a; b; c;", "int a b c;", "int a & b & c;"]}, {"q": "Tipe data yang digunakan untuk menyimpan bilangan bulat adalah...", "opts": ["float", "string", "int", "char"]}, {"q": "Tipe data yang tepat untuk menyimpan nilai pecahan (desimal) seperti 3.14 adalah...", "opts": ["int", "float", "char", "bool"]}, {"q": "Tipe data <code>char</code> digunakan untuk menyimpan...", "opts": ["Teks panjang", "Satu karakter saja", "Bilangan bulat positif", "Nilai true/false"]}, {"q": "Tipe data boolean (<code>bool</code>) hanya bisa memiliki dua nilai, yaitu...", "opts": ["0 dan 10", "true dan false", "positif dan negatif", "huruf dan angka"]}, {"q": "Tipe data apa yang paling cocok untuk menyimpan nama lengkap siswa?", "opts": ["char", "int", "string", "bool"]}, {"q": "Jika variabel <code>bool lulus = 1;</code>, maka artinya...", "opts": ["lulus bernilai false", "lulus bernilai true", "lulus bernilai 1 string", "error tipe data"]}, {"q": "Penulisan nilai (value) untuk tipe data <code>string</code> harus diapit dengan tanda...", "opts": ["Kutip tunggal (' ')", "Kutip ganda (\" \")", "Kurung siku ([ ])", "Kurung kurawal ({ })"]}, {"q": "Penulisan nilai (value) untuk tipe data <code>char</code> harus diapit dengan tanda...", "opts": ["Kutip ganda (\" \")", "Kutip tunggal (' ')", "Garis miring (/ /)", "Tidak perlu tanda kutip"]}, {"q": "Berapakah nilai dari operasi <code>5 / 2</code> jika keduanya bertipe <code>int</code>?", "opts": ["2.5", "2", "3", "Error"]}, {"q": "Manakah inisialisasi string yang benar di bawah ini?", "opts": ["string nama = 'Budi';", "string nama = Budi;", "string nama = \"Budi\";", "string nama == \"Budi\";"]}, {"q": "Perulangan <code>while</code> akan terus berjalan selama kondisinya bernilai...", "opts": ["false", "true", "0", "negatif"]}, {"q": "Kapan pengecekan kondisi dilakukan pada perulangan <code>while</code>?", "opts": ["Di awal sebelum blok perulangan dieksekusi", "Di akhir setelah blok perulangan dieksekusi", "Di tengah-tengah proses eksekusi", "Hanya jika terjadi error"]}, {"q": "Apa yang terjadi jika kondisi pada <code>while</code> selalu bernilai <code>true</code> dan tidak pernah diubah menjadi <code>false</code>?", "opts": ["Program berjalan lebih cepat", "Terjadi <i>infinite loop</i> (perulangan tanpa henti)", "Program akan langsung berhenti", "Kondisi akan otomatis menjadi false"]}, {"q": "Manakah sintaks penulisan <code>while</code> yang benar di C++?", "opts": ["while (kondisi) { }", "while kondisi { }", "loop while (kondisi) { }", "while { kondisi }"]}, {"q": "Operator yang sering digunakan dalam perulangan untuk menambah nilai variabel sebesar 1 (increment) adalah...", "opts": ["--", "+=", "++", "**"]}, {"q": "Perintah <code>i--;</code> memiliki arti yang sama dengan...", "opts": ["i = i + 1;", "i = i - 1;", "i = i * 1;", "i = i / 1;"]}, {"q": "Perintah <code>x += 5;</code> memiliki arti yang sama dengan...", "opts": ["x = x + 5;", "x = 5;", "x = x * 5;", "x = 5 + 5;"]}, {"q": "Dalam merancang perulangan <code>while</code>, kita memerlukan 3 bagian utama: inisialisasi, kondisi batas, dan...", "opts": ["Tipe data baru", "Perubahan nilai (increment/decrement)", "Fungsi utama", "Perintah cetak"]}, {"q": "Berapa kali perulangan ini dieksekusi? <code>int i = 0; while(i < 5) { i++; }</code>", "opts": ["4 kali", "5 kali", "6 kali", "Tidak pernah"]}, {"q": "Berapa kali perulangan ini dieksekusi? <code>int i = 5; while(i < 3) { i++; }</code>", "opts": ["5 kali", "3 kali", "1 kali", "0 kali (Tidak pernah)"]}, {"q": "Apa output dari kode berikut?<br><pre><code>int x = 2;\nwhile(x <= 4) {\n  cout << x;\n  x++;\n}</code></pre>", "opts": ["234", "2345", "345", "2"]}, {"q": "Apa output akhir dari <code>total</code> pada kode berikut?<br><pre><code>int total = 0;\nint i = 1;\nwhile(i <= 3) {\n  total += i;\n  i++;\n}</code></pre>", "opts": ["3", "5", "6", "9"]}, {"q": "Jika kita ingin perulangan berjalan mundur dari 10 sampai 1, maka kita menggunakan operator...", "opts": ["Increment (++)", "Decrement (--)", "Modulus (%)", "Assignment (=)"]}, {"q": "Apa nilai akhir variabel <code>a</code>?<br><pre><code>int a = 10;\nwhile(a > 5) {\n  a -= 2;\n}</code></pre>", "opts": ["6", "5", "4", "3"]}, {"q": "Perhatikan kode berikut:<br><pre><code>int n = 1;\nwhile(n <= 5) {\n  cout << n << \" \";\n  n += 2;\n}</code></pre><br>Berapa banyak angka yang tercetak di layar?", "opts": ["5 angka", "3 angka", "2 angka", "1 angka"]}, {"q": "Untuk menghitung total saldo dari setoran harian selama sebulan, algoritma yang tepat adalah...", "opts": ["Mendeklarasikan total saldo di dalam perulangan", "Mengatur total saldo = 0 sebelum perulangan, lalu menambahkannya di dalam perulangan", "Mengatur saldo = 0 di akhir perulangan", "Tidak menggunakan perulangan"]}, {"q": "Apa kesalahan utama pada kode perulangan berikut?<br><pre><code>int i = 0;\nwhile(i < 5) {\n  cout << i;\n}</code></pre>", "opts": ["Kurang tipe data", "Tidak ada perubahan nilai (increment), menyebabkan infinite loop", "Kondisi harusnya i <= 5", "Tanda kurung kurawal salah"]}, {"q": "Apa output dari kode berikut?<br><pre><code>int y = 5;\nwhile(y == 5) {\n  cout << \"A\";\n  y = 10;\n}</code></pre>", "opts": ["A tercetak berkali-kali tanpa henti", "A tercetak 5 kali", "A tercetak 1 kali", "Tidak ada output"]}, {"q": "Bagaimana cara membaca ekspresi <code>x != 10</code> dalam perulangan while?", "opts": ["Selama x sama dengan 10", "Selama x lebih besar dari 10", "Selama x tidak sama dengan 10", "Selama x kurang dari 10"]}, {"q": "Variabel yang digunakan untuk menghitung sudah berapa kali perulangan berjalan biasanya disebut sebagai...", "opts": ["Accumulator (Akumulator)", "Counter (Penghitung)", "String", "Boolean"]}];
+    const quizContainer = document.getElementById('quiz-container');
+
+    // Render questions
+    function renderQuiz() {
+        let html = '';
+        questions.forEach((q, index) => {
+            html += `<div class="question-box" id="qbox-${index}">`;
+            html += `<div class="question-text">${index + 1}. ${q.q}</div>`;
+            html += `<div class="options">`;
+            
+            q.opts.forEach((opt, optIndex) => {
+                html += `
+                <label class="option-label" id="label-${index}-${optIndex}">
+                    <input type="radio" name="q${index}" value="${optIndex}">
+                    ${opt.replace(/</g, "&lt;").replace(/>/g, "&gt;")}
+                </label>`;
+            });
+            
+            html += `</div></div>`;
+        });
+        quizContainer.innerHTML = html;
+    }
+
+    function kumpulkanJawaban() {
+        let nama = document.getElementById('nama').value;
+        let kelas = document.getElementById('kelas').value;
+        
+        if(!nama) { alert("Silakan isi nama terlebih dahulu!"); return; }
+        
+        let htmlRekap = '';
+        let abjad = ['A', 'B', 'C', 'D'];
+        let belumTerjawab = [];
+        
+        questions.forEach((q, index) => {
+            const selected = document.querySelector(`input[name="q${index}"]:checked`);
+            let jawabanSiswa = "-";
+            
+            if (selected) {
+                jawabanSiswa = abjad[parseInt(selected.value)];
+            } else {
+                belumTerjawab.push(index + 1);
+            }
+            
+            htmlRekap += `<div class="rekap-item">Soal ${index + 1}: <span style="color:var(--primary);">${jawabanSiswa}</span></div>`;
+        });
+        
+        if(belumTerjawab.length > 0) {
+            let konfirm = confirm(`Terdapat ${belumTerjawab.length} soal yang belum dijawab (No: ${belumTerjawab.join(", ")}).\nYakin ingin tetap mengumpulkan?`);
+            if(!konfirm) return;
+        }
+        
+        // Kunci semua radio button
+        questions.forEach((q, index) => {
+            const radios = document.querySelectorAll(`input[name="q${index}"]`);
+            radios.forEach(r => r.disabled = true);
+        });
+        
+        // Tampilkan hasil
+        document.getElementById('action-container').style.display = 'none';
+        document.getElementById('identitas').style.display = 'none';
+        
+        const resContainer = document.getElementById('result-container');
+        resContainer.style.display = 'block';
+        
+        document.getElementById('res-nama').innerText = nama;
+        document.getElementById('res-kelas').innerText = kelas || "-";
+        document.getElementById('res-detail').innerHTML = htmlRekap;
+        
+        window.scrollTo(0, 0);
+    }
+
+    function unduhJawabanHtml() {
+        const nama = document.getElementById('nama').value.trim();
+        const kelas = document.getElementById('kelas').value.trim() || '-';
+        const abjad = ['A', 'B', 'C', 'D'];
+        const escapeHtml = (value) => value
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#039;');
+
+        const daftarJawaban = questions.map((q, index) => {
+            const selected = document.querySelector(`input[name="q${index}"]:checked`);
+            const jawaban = selected ? abjad[parseInt(selected.value)] : '-';
+            return `<div class="jawaban"><span>Soal ${index + 1}</span><strong>${jawaban}</strong></div>`;
+        }).join('');
+
+        const dokumenHtml = `<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jawaban ${escapeHtml(nama)}</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { margin: 0; padding: 32px 20px; background: #f8fafc; color: #1e293b; font-family: "Segoe UI", Arial, sans-serif; }
+        main { max-width: 760px; margin: auto; padding: 28px; background: white; border: 1px solid #e2e8f0; border-radius: 12px; }
+        h1 { margin: 0 0 8px; font-size: 1.6rem; }
+        .identitas { margin: 24px 0; padding: 16px; background: #eff6ff; border-radius: 8px; line-height: 1.8; }
+        .rekap { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); gap: 10px; }
+        .jawaban { display: flex; justify-content: space-between; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 6px; }
+        .jawaban strong { color: #2563eb; }
+        @media print { body { padding: 0; background: white; } main { border: 0; } }
+    </style>
+</head>
+<body>
+    <main>
+        <h1>Rekap Jawaban Pilihan Ganda C++</h1>
+        <p>Dokumen jawaban siswa</p>
+        <section class="identitas">
+            <div><strong>Nama:</strong> ${escapeHtml(nama)}</div>
+            <div><strong>Kelas:</strong> ${escapeHtml(kelas)}</div>
+        </section>
+        <section class="rekap">${daftarJawaban}</section>
+    </main>
+</body>
+</html>`;
+
+        const slug = `${nama}-${kelas}`
+            .toLowerCase()
+            .replace(/[^a-z0-9]+/g, '-')
+            .replace(/^-|-$/g, '') || 'siswa';
+        const blob = new Blob([dokumenHtml], { type: 'text/html;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+
+        link.href = url;
+        link.download = `jawaban-${slug}.html`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    }
+
+    // Initialize
+    renderQuiz();
+</script>
+</body>
+</html>
