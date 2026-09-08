@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rekap Koreksi Pilihan Ganda</title>
+    <style>
+        :root {
+            --ink: #172033;
+            --muted: #697386;
+            --paper: #f7f5ef;
+            --card: #fffdf8;
+            --line: #e6e0d5;
+            --navy: #1e3557;
+            --orange: #d97735;
+            --green: #27745b;
+            --red: #a94a45;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            background: var(--paper);
+            color: var(--ink);
+            font-family: Georgia, "Times New Roman", serif;
+        }
+        main { width: min(1180px, calc(100% - 32px)); margin: 0 auto; padding: 42px 0 64px; }
+        .eyebrow { margin: 0 0 12px; color: var(--orange); font: 700 0.75rem/1.2 Arial, sans-serif; letter-spacing: 0.14em; text-transform: uppercase; }
+        h1 { max-width: 720px; margin: 0; color: var(--navy); font-size: clamp(2rem, 5vw, 4.3rem); line-height: 0.98; letter-spacing: -0.045em; }
+        .intro { max-width: 700px; margin: 18px 0 32px; color: var(--muted); font: 1rem/1.65 Arial, sans-serif; }
+        .summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 28px; }
+        .metric { padding: 20px; border: 1px solid var(--line); border-radius: 16px; background: var(--card); }
+        .metric-label { color: var(--muted); font: 0.72rem/1.2 Arial, sans-serif; letter-spacing: 0.11em; text-transform: uppercase; }
+        .metric-value { margin-top: 10px; color: var(--navy); font-size: 2rem; font-weight: 700; }
+        .analysis { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; margin: 0 0 28px; }
+        .analysis-card:first-child { grid-column: 1 / -1; }
+        .analysis-card { padding: 20px; border: 1px solid var(--line); border-radius: 16px; background: var(--card); }
+        .analysis-card h2 { margin: 0 0 16px; color: var(--navy); font-size: 1.15rem; }
+        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+        .stat { padding: 12px; border-radius: 10px; background: #f0ece3; }
+        .stat-label { color: var(--muted); font: 0.68rem Arial, sans-serif; text-transform: uppercase; letter-spacing: 0.08em; }
+        .stat-value { margin-top: 6px; color: var(--navy); font: 700 1.35rem Georgia, serif; }
+        .question-list { display: grid; gap: 9px; }
+        .question-row { display: grid; grid-template-columns: 70px 1fr 48px; align-items: center; gap: 10px; font: 0.84rem Arial, sans-serif; }
+        .question-row strong { color: var(--navy); }
+        .bar { height: 8px; overflow: hidden; border-radius: 999px; background: #eee8dc; }
+        .bar span { display: block; height: 100%; border-radius: inherit; background: var(--orange); }
+        .bar.correct span { background: var(--green); }
+        .question-count { color: var(--muted); text-align: right; }
+        .workspace { overflow: hidden; border: 1px solid var(--line); border-radius: 18px; background: var(--card); box-shadow: 0 18px 40px rgba(30, 53, 87, 0.07); }
+        .toolbar { display: flex; flex-wrap: wrap; gap: 10px; padding: 16px; border-bottom: 1px solid var(--line); background: #f0ece3; }
+        input, select, button { min-height: 42px; border: 1px solid #d8d1c5; border-radius: 9px; background: var(--card); color: var(--ink); font: 0.9rem Arial, sans-serif; }
+        input { flex: 1 1 260px; padding: 0 13px; }
+        select, button { padding: 0 13px; cursor: pointer; }
+        button { border-color: var(--navy); background: var(--navy); color: white; font-weight: 700; }
+        button:hover { background: #294a78; }
+        .table-wrap { overflow-x: auto; }
+        table { width: 100%; min-width: 760px; border-collapse: collapse; font: 0.9rem Arial, sans-serif; }
+        th, td { padding: 14px 16px; border-bottom: 1px solid var(--line); text-align: left; vertical-align: top; }
+        th { color: var(--muted); background: #fbfaf6; font-size: 0.72rem; letter-spacing: 0.09em; text-transform: uppercase; white-space: nowrap; }
+        tbody tr:hover { background: #fff8ed; }
+        td:first-child, th:first-child { width: 56px; text-align: center; }
+        .name { font-weight: 700; }
+        .score { display: inline-block; min-width: 58px; padding: 5px 8px; border-radius: 999px; text-align: center; font-weight: 700; }
+        .excellent { background: #dcefe5; color: var(--green); }
+        .good { background: #fff0d8; color: #9a5b1e; }
+        .needs-work { background: #f8dddd; color: var(--red); }
+        .wrong { color: var(--muted); line-height: 1.5; }
+        .empty { display: none; padding: 34px 16px; color: var(--muted); text-align: center; font: 0.95rem Arial, sans-serif; }
+        footer { margin-top: 18px; color: var(--muted); font: 0.78rem Arial, sans-serif; }
+        @media (max-width: 680px) {
+            main { width: min(100% - 22px, 1180px); padding-top: 28px; }
+            .summary { grid-template-columns: 1fr; }
+            .analysis { grid-template-columns: 1fr; }
+            .stat-grid { grid-template-columns: repeat(2, 1fr); }
+            .metric { padding: 15px; }
+            .metric-value { margin-top: 6px; font-size: 1.65rem; }
+        }
+        @media print {
+            body { background: white; }
+            main { width: 100%; padding: 0; }
+            .toolbar { display: none; }
+            .workspace { border: 0; box-shadow: none; }
+            .summary { grid-template-columns: repeat(3, 1fr); }
+            h1 { font-size: 2.2rem; }
+        }
+    </style>
+</head>
+<body>
+<main>
+    <p class="eyebrow">Pemrograman Dasar C++ / X PPLG 1</p>
+    <h1>Rekap koreksi pilihan ganda</h1>
+    <p class="intro">Ringkasan hasil koreksi 40 soal. Kiriman Fatur Rahman Ar Razzaq yang digunakan adalah kiriman kedua karena berisi file HTML jawaban yang valid.</p>
+
+    <section class="summary" aria-label="Ringkasan nilai">
+        <div class="metric"><div class="metric-label">Siswa dikoreksi</div><div class="metric-value" id="student-count">32</div></div>
+        <div class="metric"><div class="metric-label">Rata-rata nilai</div><div class="metric-value">86,25</div></div>
+        <div class="metric"><div class="metric-label">Soal per siswa</div><div class="metric-value">40</div></div>
+    </section>
+
+    <section class="analysis" aria-label="Statistik deskriptif dan analisis soal">
+        <article class="analysis-card">
+            <h2>Statistik deskriptif nilai</h2>
+            <div class="stat-grid">
+                <div class="stat"><div class="stat-label">Jumlah siswa</div><div class="stat-value" id="stat-n">32</div></div>
+                <div class="stat"><div class="stat-label">Rata-rata</div><div class="stat-value" id="stat-mean">86,25</div></div>
+                <div class="stat"><div class="stat-label">Median</div><div class="stat-value" id="stat-median">88,75</div></div>
+                <div class="stat"><div class="stat-label">Simpangan baku</div><div class="stat-value" id="stat-stddev">12,10</div></div>
+                <div class="stat"><div class="stat-label">Minimum</div><div class="stat-value" id="stat-min">42,5</div></div>
+                <div class="stat"><div class="stat-label">Maksimum</div><div class="stat-value" id="stat-max">100,0</div></div>
+            </div>
+        </article>
+        <article class="analysis-card">
+            <h2>Soal sering salah</h2>
+            <div class="question-list" id="most-wrong"></div>
+        </article>
+        <article class="analysis-card">
+            <h2>Soal paling banyak benar</h2>
+            <div class="question-list" id="most-correct"></div>
+        </article>
+    </section>
+
+    <section class="workspace">
+        <div class="toolbar">
+            <input id="search" type="search" placeholder="Cari nama siswa..." aria-label="Cari nama siswa">
+            <select id="filter" aria-label="Filter nilai">
+                <option value="all">Semua nilai</option>
+                <option value="excellent">90 - 100</option>
+                <option value="good">80 - 89,9</option>
+                <option value="needs-work">Di bawah 80</option>
+            </select>
+            <button type="button" onclick="window.print()">Cetak rekap</button>
+        </div>
+        <div class="table-wrap">
+            <table>
+                <thead>
+                    <tr><th>No.</th><th>Nama siswa</th><th>Terjawab</th><th>Benar</th><th>Nilai</th><th>Soal salah</th></tr>
+                </thead>
+                <tbody id="student-rows">
+                    <tr><td>1</td><td class="name">ADHAM AL IKHLAS</td><td>40</td><td>37</td><td><span class="score good">92,5</span></td><td class="wrong">9, 25, 32</td></tr>
+                    <tr><td>2</td><td class="name">ADSILA AZALIA NATA</td><td>40</td><td>30</td><td><span class="score needs-work">75,0</span></td><td class="wrong">9, 16, 19, 25, 31, 32, 34, 36, 39, 40</td></tr>
+                    <tr><td>3</td><td class="name">ANANTA RIFQI MUSDARYANTO</td><td>40</td><td>39</td><td><span class="score excellent">97,5</span></td><td class="wrong">32</td></tr>
+                    <tr><td>4</td><td class="name">ARYA CANDRA WIBOWO</td><td>40</td><td>34</td><td><span class="score good">85,0</span></td><td class="wrong">9, 10, 19, 25, 29, 32</td></tr>
+                    <tr><td>5</td><td class="name">ARYA SATYA RADITYA TANAYA</td><td>40</td><td>33</td><td><span class="score good">82,5</span></td><td class="wrong">3, 10, 20, 24, 30, 37, 38</td></tr>
+                    <tr><td>6</td><td class="name">BENNATA BAGUZ</td><td>40</td><td>39</td><td><span class="score excellent">97,5</span></td><td class="wrong">32</td></tr>
+                    <tr><td>7</td><td class="name">DAVIN PUTRA LESMONO</td><td>40</td><td>30</td><td><span class="score needs-work">75,0</span></td><td class="wrong">1, 3, 8, 19, 24, 25, 30, 33, 35, 38</td></tr>
+                    <tr><td>8</td><td class="name">DESTY ANGGUN LESTARI</td><td>40</td><td>35</td><td><span class="score good">87,5</span></td><td class="wrong">3, 26, 30, 35, 38</td></tr>
+                    <tr><td>9</td><td class="name">FAKHRI TSAKIB ALFINO</td><td>40</td><td>29</td><td><span class="score needs-work">72,5</span></td><td class="wrong">2, 9, 11, 12, 18, 19, 25, 30, 32, 34, 38</td></tr>
+                    <tr><td>10</td><td class="name">FATUR RAHMAN AR RAZZAQ</td><td>40</td><td>40</td><td><span class="score excellent">100,0</span></td><td class="wrong">-</td></tr>
+                    <tr><td>11</td><td class="name">FITRI ANGGRAENI</td><td>40</td><td>34</td><td><span class="score good">85,0</span></td><td class="wrong">8, 15, 18, 23, 24, 28</td></tr>
+                    <tr><td>12</td><td class="name">IKRAR SYAHDAN NUSA BHAKTI</td><td>40</td><td>17</td><td><span class="score needs-work">42,5</span></td><td class="wrong">2, 3, 7, 8, 9, 10, 11, 12, 13, 15, 16, 17, 18, 19, 25, 27, 29, 30, 31, 32, 34, 38, 39</td></tr>
+                    <tr><td>13</td><td class="name">IZZA UTAMI</td><td>40</td><td>29</td><td><span class="score needs-work">72,5</span></td><td class="wrong">9, 10, 15, 19, 20, 24, 27, 36, 37, 39, 40</td></tr>
+                    <tr><td>14</td><td class="name">MAULANA DENDY PRASETIA</td><td>40</td><td>36</td><td><span class="score excellent">90,0</span></td><td class="wrong">9, 22, 31, 32</td></tr>
+                    <tr><td>15</td><td class="name">MIRA AYU EKA AZZAHRA</td><td>40</td><td>40</td><td><span class="score excellent">100,0</span></td><td class="wrong">-</td></tr>
+                    <tr><td>16</td><td class="name">MUHAMAD AL FAHRI</td><td>40</td><td>38</td><td><span class="score excellent">95,0</span></td><td class="wrong">9, 32</td></tr>
+                    <tr><td>17</td><td class="name">NAYLATUL ZULFA</td><td>40</td><td>38</td><td><span class="score excellent">95,0</span></td><td class="wrong">3, 20</td></tr>
+                    <tr><td>18</td><td class="name">PUSPA LUTFIANI SUKMA</td><td>40</td><td>36</td><td><span class="score excellent">90,0</span></td><td class="wrong">15, 21, 34, 35</td></tr>
+                    <tr><td>19</td><td class="name">QHOROTUAYUN KARIMA</td><td>40</td><td>30</td><td><span class="score needs-work">75,0</span></td><td class="wrong">9, 16, 19, 25, 31, 32, 34, 36, 39, 40</td></tr>
+                    <tr><td>20</td><td class="name">RIKZA DZA SILVA</td><td>40</td><td>35</td><td><span class="score good">87,5</span></td><td class="wrong">22, 25, 32, 38, 39</td></tr>
+                    <tr><td>21</td><td class="name">SATIA QOTHRU NADA</td><td>40</td><td>40</td><td><span class="score excellent">100,0</span></td><td class="wrong">-</td></tr>
+                    <tr><td>22</td><td class="name">AYATULLISA RACHMA FITRIANI</td><td>40</td><td>36</td><td><span class="score excellent">90,0</span></td><td class="wrong">10, 22, 25, 34</td></tr>
+                    <tr><td>23</td><td class="name">M. ZAKI AIMANSYAH</td><td>40</td><td>39</td><td><span class="score excellent">97,5</span></td><td class="wrong">32</td></tr>
+                    <tr><td>24</td><td class="name">DEWI ANISAH OKTAVIANI</td><td>40</td><td>33</td><td><span class="score good">82,5</span></td><td class="wrong">3, 19, 25, 26, 32, 34, 38</td></tr>
+                    <tr><td>25</td><td class="name">ALEXANDRA KHADIJAH GUSMAN</td><td>40</td><td>30</td><td><span class="score needs-work">75,0</span></td><td class="wrong">11, 19, 22, 25, 30, 31, 34, 36, 38, 39</td></tr>
+                    <tr><td>26</td><td class="name">HERLINA AGUSTIN GEMA RAMADHANI</td><td>40</td><td>40</td><td><span class="score excellent">100,0</span></td><td class="wrong">-</td></tr>
+                    <tr><td>27</td><td class="name">ASYIFA AYYU NABILA MASCHUN</td><td>40</td><td>36</td><td><span class="score excellent">90,0</span></td><td class="wrong">25, 26, 28, 34</td></tr>
+                    <tr><td>28</td><td class="name">SALWA ZUHAEROTUL ULA</td><td>40</td><td>29</td><td><span class="score needs-work">72,5</span></td><td class="wrong">8, 9, 12, 19, 22, 26, 27, 29, 36, 38, 39</td></tr>
+                    <tr><td>29</td><td class="name">ANINDIA PUTRI SAFIRA</td><td>40</td><td>38</td><td><span class="score excellent">95,0</span></td><td class="wrong">19, 25</td></tr>
+                    <tr><td>30</td><td class="name">MUHAMMAD ILHAM ARYA WIBAWA</td><td>40</td><td>39</td><td><span class="score excellent">97,5</span></td><td class="wrong">38</td></tr>
+                    <tr><td>31</td><td class="name">RAIHAN TRI PAMUNGKAS</td><td>40</td><td>34</td><td><span class="score good">85,0</span></td><td class="wrong">11, 16, 19, 21, 22, 37</td></tr>
+                    <tr><td>32</td><td class="name">DIAN ZULAIKHA</td><td>40</td><td>31</td><td><span class="score needs-work">77,5</span></td><td class="wrong">3, 4, 9, 19, 25, 28, 29, 30, 31</td></tr>
+                </tbody>
+            </table>
+            <div id="empty" class="empty">Tidak ada siswa yang sesuai dengan filter.</div>
+        </div>
+    </section>
+    <footer>Data bersumber dari rekap koreksi jawaban pilihan ganda.</footer>
+</main>
+<script>
+    const search = document.getElementById('search');
+    const filter = document.getElementById('filter');
+    const rows = [...document.querySelectorAll('#student-rows tr')];
+    const empty = document.getElementById('empty');
+    const count = document.getElementById('student-count');
+
+    function formatNumber(value, digits = 2) {
+        return value.toFixed(digits).replace('.', ',');
+    }
+
+    function calculateStatistics() {
+        const scores = rows.map((row) => Number(row.children[4].textContent.replace(',', '.')));
+        const sortedScores = [...scores].sort((a, b) => a - b);
+        const average = scores.reduce((sum, score) => sum + score, 0) / scores.length;
+        const middle = Math.floor(sortedScores.length / 2);
+        const median = sortedScores.length % 2
+            ? sortedScores[middle]
+            : (sortedScores[middle - 1] + sortedScores[middle]) / 2;
+        const variance = scores.reduce((sum, score) => sum + ((score - average) ** 2), 0) / scores.length;
+
+        document.getElementById('stat-n').textContent = scores.length;
+        document.getElementById('stat-mean').textContent = formatNumber(average);
+        document.getElementById('stat-median').textContent = formatNumber(median);
+        document.getElementById('stat-stddev').textContent = formatNumber(Math.sqrt(variance));
+        document.getElementById('stat-min').textContent = formatNumber(Math.min(...scores), 1);
+        document.getElementById('stat-max').textContent = formatNumber(Math.max(...scores), 1);
+    }
+
+    function calculateQuestionDistribution() {
+        const wrongCounts = Array.from({ length: 40 }, () => 0);
+        rows.forEach((row) => {
+            const wrongQuestions = row.children[5].textContent
+                .split(',')
+                .map((value) => Number(value.trim()))
+                .filter((value) => value >= 1 && value <= 40);
+            wrongQuestions.forEach((question) => { wrongCounts[question - 1] += 1; });
+        });
+        const distribution = wrongCounts.map((wrong, index) => ({
+            question: index + 1,
+            wrong,
+            correct: rows.length - wrong,
+        }));
+
+        renderQuestionList('most-wrong', distribution.sort((a, b) => b.wrong - a.wrong || a.question - b.question).slice(0, 8), 'wrong');
+        renderQuestionList('most-correct', distribution.sort((a, b) => b.correct - a.correct || a.question - b.question).slice(0, 8), 'correct');
+    }
+
+    function renderQuestionList(elementId, questions, type) {
+        const max = type === 'wrong' ? Math.max(...questions.map((item) => item.wrong)) : rows.length;
+        document.getElementById(elementId).innerHTML = questions.map((item) => {
+            const value = type === 'wrong' ? item.wrong : item.correct;
+            const width = Math.max((value / max) * 100, 4);
+            const label = type === 'wrong' ? `${value} salah` : `${value} benar`;
+            return `<div class="question-row"><strong>Soal ${item.question}</strong><div class="bar ${type}"><span style="width:${width}%"></span></div><span class="question-count">${label}</span></div>`;
+        }).join('');
+    }
+
+    function applyFilters() {
+        const query = search.value.trim().toLowerCase();
+        const selected = filter.value;
+        let visible = 0;
+
+        rows.forEach((row) => {
+            const name = row.children[1].textContent.toLowerCase();
+            const score = Number(row.children[4].textContent.replace(',', '.'));
+            const matchesName = name.includes(query);
+            const matchesScore = selected === 'all'
+                || (selected === 'excellent' && score >= 90)
+                || (selected === 'good' && score >= 80 && score < 90)
+                || (selected === 'needs-work' && score < 80);
+            const show = matchesName && matchesScore;
+            row.style.display = show ? '' : 'none';
+            if (show) visible += 1;
+        });
+
+        count.textContent = visible;
+        empty.style.display = visible ? 'none' : 'block';
+    }
+
+    search.addEventListener('input', applyFilters);
+    filter.addEventListener('change', applyFilters);
+    calculateStatistics();
+    calculateQuestionDistribution();
+</script>
+</body>
+</html>
