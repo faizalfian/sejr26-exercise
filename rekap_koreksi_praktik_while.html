@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rekap Koreksi Praktik While - Kelas X PPLG</title>
+    <style>
+        :root { --primary:#2563eb; --border:#e2e8f0; --bg:#f8fafc; --text:#1e293b; }
+        body { font-family:'Segoe UI',sans-serif; background:var(--bg); color:var(--text); padding:30px 15px; margin:0; line-height:1.6; }
+        .container { max-width:1100px; margin:auto; background:white; padding:30px; border-radius:12px; box-shadow:0 4px 6px -1px rgba(0,0,0,0.1); }
+        h1 { color:var(--primary); margin-top:0; }
+        table { width:100%; border-collapse:collapse; margin:20px 0; font-size:14px; }
+        th, td { padding:10px 12px; border:1px solid var(--border); text-align:left; }
+        th { background:#f1f5f9; }
+        tr:nth-child(even) { background:#f8fafc; }
+        .badge { padding:4px 8px; border-radius:999px; font-weight:700; font-size:12px; display:inline-block; }
+        .badge-green { background:#dcfce7; color:#15803d; }
+        .badge-yellow { background:#fef9c3; color:#a16207; }
+        .badge-red { background:#fee2e2; color:#b91c1c; }
+        .card-review { background:#fff7ed; border-left:4px solid #ea580c; padding:15px; margin-bottom:15px; border-radius:4px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Laporan Rekapitulasi Koreksi LKS Praktik C++ (While)</h1>
+    <p>Total Siswa Terkoreksi: <strong>32 Siswa</strong> | Bobot: 70% Kode + 30% Perencanaan</p>
+
+    <h2>Tabel Peringkat Hasil Belajar</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Absen</th>
+                <th>Nama Siswa</th>
+                <th>Nilai Kode</th>
+                <th>Nilai Rencana</th>
+                <th>Nilai Akhir</th>
+                <th>Status</th>
+                <th>Catatan & Temuan</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>1</td>
+                <td>9</td>
+                <td><strong>ASYIFA AYYU NABILA MASCHUN</strong></td>
+                <td>100.0</td>
+                <td>98.0</td>
+                <td><strong>99.4</strong></td>
+                <td><span class="badge badge-green">SANGAT BAIK</span></td>
+                <td>Bagus / Tidak ada kendala kritis</td>
+            </tr>
+            <tr>
+                <td>2</td>
+                <td>26</td>
+                <td><strong>Mira Ayu Eka Azzahra</strong></td>
+                <td>98.7</td>
+                <td>100.0</td>
+                <td><strong>99.1</strong></td>
+                <td><span class="badge badge-green">SANGAT BAIK</span></td>
+                <td>Bagus / Tidak ada kendala kritis</td>
+            </tr>
+            <tr>
+                <td>3</td>
+                <td>11</td>
+                <td><strong>Bennata baguz</strong></td>
+                <td>99.7</td>
+                <td>97.3</td>
+                <td><strong>99.0</strong></td>
+                <td><span class="badge badge-green">SANGAT BAIK</span></td>
+                <td>Bagus / Tidak ada kendala kritis</td>
+            </tr>
+            <tr>
+                <td>4</td>
+                <td>1</td>
+                <td><strong>Adham Al Ikhlas</strong></td>
+                <td>100.0</td>
+                <td>96.0</td>
+                <td><strong>98.8</strong></td>
+                <td><span class="badge badge-green">SANGAT BAIK</span></td>
+                <td>Bagus / Tidak ada kendala kritis</td>
+            </tr>
+            <tr>
+                <td>5</td>
+                <td>18</td>
+                <td><strong>FATUR RAHMAN AR RAZZAQ</strong></td>
+                <td>99.7</td>
+                <td>96.3</td>
+                <td><strong>98.7</strong></td>
+                <td><span class="badge badge-green">SANGAT BAIK</span></td>
+                <td>Bagus / Tidak ada kendala kritis</td>
+            </tr>
+            <tr>
+                <td>6</td>
+                <td>22</td>
+                <td><strong>Ikrar Syahdan Nusa Bhakti</strong></td>
+                <td>99.0</td>
+                <td>96.3</td>
+                <td><strong>98.2</strong></td>
+                <td><span class="badge badge-green">SANGAT BAIK</span></td>
+                <td>Bagus / Tidak ada kendala kritis</td>
+            </tr>
+            <tr>
+                <td>7</td>
+                <td>13</td>
+                <td><strong>Desty Anggun Lestari</strong></td>
+                <td>99.7</td>
+                <td>94.3</td>
+                <td><strong>98.1</strong></td>
+                <td><span class="badge badge-green">SANGAT BAIK</span></td>
+                <td>Bagus / Tidak ada kendala kritis</td>
+            </tr>
+            <tr>
+                <td>8</td>
+                <td>24</td>
+                <td><strong>M Zaki Aimansyah</strong></td>
+                <td>100.0</td>
+                <td>91.7</td>
+                <td><strong>97.5</strong></td>
+                <td><span class="badge badge-green">SANGAT BAIK</span></td>
+                <td>Bagus / Tidak ada kendala kritis</td>
+            </tr>
+            <tr>
+                <td>9</td>
+                <td>7</td>
+                <td><strong>Arya Candra Wibowo</strong></td>
+                <td>100.0</td>
+                <td>90.7</td>
+                <td><strong>97.2</strong></td>
+                <td><span class="badge badge-green">SANGAT BAIK</span></td>
+                <td>Bagus / Tidak ada kendala kritis</td>
+            </tr>
+            <tr>
+                <td>10</td>
+                <td>21</td>
+                <td><strong>herlina agustin g.r</strong></td>
+                <td>97.0</td>
+                <td>97.0</td>
+                <td><strong>97.0</strong></td>
+                <td><span class="badge badge-green">SANGAT BAIK</span></td>
+                <td>Bagus / Tidak ada kendala kritis</td>
+            </tr>
+            <tr>
+                <td>11</td>
+                <td>10</td>
+                <td><strong>Ayatullisa Rachma Fitriani</strong></td>
+                <td>98.7</td>
+                <td>92.3</td>
+                <td><strong>96.8</strong></td>
+                <td><span class="badge badge-green">SANGAT BAIK</span></td>
+                <td>Bagus / Tidak ada kendala kritis</td>
+            </tr>
+            <tr>
+                <td>12</td>
+                <td>33</td>
+                <td><strong>Rikza Dza Silva</strong></td>
+                <td>98.7</td>
+                <td>91.0</td>
+                <td><strong>96.4</strong></td>
+                <td><span class="badge badge-green">SANGAT BAIK</span></td>
+                <td>Bagus / Tidak ada kendala kritis</td>
+            </tr>
+            <tr>
+                <td>13</td>
+                <td>4</td>
+                <td><strong>Ananta Rifqi Musdaryanto</strong></td>
+                <td>93.3</td>
+                <td>95.3</td>
+                <td><strong>93.9</strong></td>
+                <td><span class="badge badge-green">SANGAT BAIK</span></td>
+                <td>Bagus / Tidak ada kendala kritis</td>
+            </tr>
+            <tr>
+                <td>14</td>
+                <td>16</td>
+                <td><strong>fakhri tsakib alfino</strong></td>
+                <td>86.3</td>
+                <td>94.3</td>
+                <td><strong>88.7</strong></td>
+                <td><span class="badge badge-green">SANGAT BAIK</span></td>
+                <td>Bagus / Tidak ada kendala kritis</td>
+            </tr>
+            <tr>
+                <td>15</td>
+                <td>12</td>
+                <td><strong>Davin putra lesmono</strong></td>
+                <td>83.7</td>
+                <td>94.3</td>
+                <td><strong>86.9</strong></td>
+                <td><span class="badge badge-green">SANGAT BAIK</span></td>
+                <td>Bagus / Tidak ada kendala kritis</td>
+            </tr>
+            <tr>
+                <td>16</td>
+                <td>17</td>
+                <td><strong>Fanesa eka az zahra</strong></td>
+                <td>80.0</td>
+                <td>100.0</td>
+                <td><strong>86.0</strong></td>
+                <td><span class="badge badge-green">SANGAT BAIK</span></td>
+                <td>T1-H: gagal compile</td>
+            </tr>
+            <tr>
+                <td>17</td>
+                <td>25</td>
+                <td><strong>Maulana Dendy Prasetia</strong></td>
+                <td>80.0</td>
+                <td>100.0</td>
+                <td><strong>86.0</strong></td>
+                <td><span class="badge badge-green">SANGAT BAIK</span></td>
+                <td>T1-G: gagal compile</td>
+            </tr>
+            <tr>
+                <td>18</td>
+                <td>27</td>
+                <td><strong>Muhamad Al Fahri</strong></td>
+                <td>80.0</td>
+                <td>100.0</td>
+                <td><strong>86.0</strong></td>
+                <td><span class="badge badge-green">SANGAT BAIK</span></td>
+                <td>Bagus / Tidak ada kendala kritis</td>
+            </tr>
+            <tr>
+                <td>19</td>
+                <td>2</td>
+                <td><strong>Adsila Azalia Nata</strong></td>
+                <td>79.7</td>
+                <td>90.0</td>
+                <td><strong>82.8</strong></td>
+                <td><span class="badge badge-green">SANGAT BAIK</span></td>
+                <td>T1-B: gagal compile, T1-B: BUG SINTAKS: Operator &quot;! =&quot; me</td>
+            </tr>
+            <tr>
+                <td>20</td>
+                <td>32</td>
+                <td><strong>Raihan Tri Pamungkas</strong></td>
+                <td>65.7</td>
+                <td>90.3</td>
+                <td><strong>73.1</strong></td>
+                <td><span class="badge badge-green">BAIK</span></td>
+                <td>Bagus / Tidak ada kendala kritis</td>
+            </tr>
+            <tr>
+                <td>21</td>
+                <td>29</td>
+                <td><strong>Naylatul Zulfa</strong></td>
+                <td>63.3</td>
+                <td>92.7</td>
+                <td><strong>72.1</strong></td>
+                <td><span class="badge badge-green">BAIK</span></td>
+                <td>T2-F: gagal compile</td>
+            </tr>
+            <tr>
+                <td>22</td>
+                <td>8</td>
+                <td><strong>Arya Satya Raditya Tanaya</strong></td>
+                <td>58.0</td>
+                <td>94.3</td>
+                <td><strong>68.9</strong></td>
+                <td><span class="badge badge-yellow">CUKUP</span></td>
+                <td>T1-H: gagal compile, T2-I: gagal compile</td>
+            </tr>
+            <tr>
+                <td>23</td>
+                <td>15</td>
+                <td><strong>Dian Zulaikha</strong></td>
+                <td>52.3</td>
+                <td>100.0</td>
+                <td><strong>66.6</strong></td>
+                <td><span class="badge badge-yellow">CUKUP</span></td>
+                <td>T1-F: gagal compile, T3-A: gagal compile</td>
+            </tr>
+            <tr>
+                <td>24</td>
+                <td>28</td>
+                <td><strong>Muhammad ilham arya wibawa</strong></td>
+                <td>53.0</td>
+                <td>96.3</td>
+                <td><strong>66.0</strong></td>
+                <td><span class="badge badge-yellow">CUKUP</span></td>
+                <td>T1-A: gagal compile, T3-I: gagal compile</td>
+            </tr>
+            <tr>
+                <td>25</td>
+                <td>30</td>
+                <td><strong>Puspa Lutfiani Sukma</strong></td>
+                <td>53.3</td>
+                <td>90.0</td>
+                <td><strong>64.3</strong></td>
+                <td><span class="badge badge-yellow">CUKUP</span></td>
+                <td>T1-C: BUG LOGIKA: Kondisi while terb, T2-G: gagal compile</td>
+            </tr>
+            <tr>
+                <td>26</td>
+                <td>23</td>
+                <td><strong>Izza utami</strong></td>
+                <td>48.0</td>
+                <td>92.7</td>
+                <td><strong>61.4</strong></td>
+                <td><span class="badge badge-yellow">CUKUP</span></td>
+                <td>T2-H: gagal compile</td>
+            </tr>
+            <tr>
+                <td>27</td>
+                <td>6</td>
+                <td><strong>Anindia Putri Safira</strong></td>
+                <td>46.7</td>
+                <td>95.3</td>
+                <td><strong>61.3</strong></td>
+                <td><span class="badge badge-yellow">CUKUP</span></td>
+                <td>T1-F: gagal compile, T3-H: gagal compile</td>
+            </tr>
+            <tr>
+                <td>28</td>
+                <td>31</td>
+                <td><strong>Qhorotuayun Karima</strong></td>
+                <td>46.7</td>
+                <td>94.3</td>
+                <td><strong>61.0</strong></td>
+                <td><span class="badge badge-yellow">CUKUP</span></td>
+                <td>T1-D: gagal compile, T3-C: gagal compile</td>
+            </tr>
+            <tr>
+                <td>29</td>
+                <td>3</td>
+                <td><strong>Alexandra Khadijah</strong></td>
+                <td>45.3</td>
+                <td>96.3</td>
+                <td><strong>60.6</strong></td>
+                <td><span class="badge badge-yellow">CUKUP</span></td>
+                <td>T1-C: gagal compile, T2-D: gagal compile</td>
+            </tr>
+            <tr>
+                <td>30</td>
+                <td>36</td>
+                <td><strong>SATIA QOTHRU NADA</strong></td>
+                <td>40.0</td>
+                <td>99.0</td>
+                <td><strong>57.7</strong></td>
+                <td><span class="badge badge-yellow">CUKUP</span></td>
+                <td>T1-I: gagal compile, T2-D: gagal compile</td>
+            </tr>
+            <tr>
+                <td>31</td>
+                <td>35</td>
+                <td><strong>Salwa Zuhaerotul Ula</strong></td>
+                <td>38.3</td>
+                <td>97.3</td>
+                <td><strong>56.0</strong></td>
+                <td><span class="badge badge-yellow">CUKUP</span></td>
+                <td>T1-H: gagal compile, T2-C: gagal compile</td>
+            </tr>
+            <tr>
+                <td>32</td>
+                <td>14</td>
+                <td><strong>DEWI ANISAH OKTAVIANI</strong></td>
+                <td>38.3</td>
+                <td>92.3</td>
+                <td><strong>54.5</strong></td>
+                <td><span class="badge badge-red">PERLU REVIEW</span></td>
+                <td>T1-E: gagal compile, T2-G: gagal compile</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h2>Siswa Memerlukan Remedial</h2>
+    <div class="card-review">
+        <h3>🔍 Fanesa eka az zahra (Absen 17) — Nilai: 86.0</h3>
+        <p><strong>Tahap 1 (T1-H - Perluasan Kapasitas Server Cadangan):</strong> Kode 40/100, Rencana 100/100</p>
+        <ul>
+            <li>GAGAL KOMPILASI: C:\Users\Al\AppData\Local\Temp\tmpafoqqvlg\prog.cpp: In function &#x27;int main()&#x27;:</li>
+        </ul>
+        <p><strong>Tahap 2 (T2-A - Pengujian Sensor Kebun Pintar):</strong> Kode 100/100, Rencana 100/100</p>
+        <p><strong>Tahap 3 (T3-C - Mengejar XP untuk Naik Level):</strong> Kode 100/100, Rencana 100/100</p>
+    </div>
+    <div class="card-review">
+        <h3>🔍 Maulana Dendy Prasetia (Absen 25) — Nilai: 86.0</h3>
+        <p><strong>Tahap 1 (T1-G - Mencari Jadwal Shuttle Berikutnya):</strong> Kode 40/100, Rencana 100/100</p>
+        <ul>
+            <li>GAGAL KOMPILASI: C:\Users\Al\AppData\Local\Temp\tmpzkxd4dkd\prog.cpp: In function &#x27;int main()&#x27;:</li>
+        </ul>
+        <p><strong>Tahap 2 (T2-A - Pengujian Sensor Kebun Pintar):</strong> Kode 100/100, Rencana 100/100</p>
+        <p><strong>Tahap 3 (T3-D - Irigasi dengan Persediaan Air Terbatas):</strong> Kode 100/100, Rencana 100/100</p>
+    </div>
+    <div class="card-review">
+        <h3>🔍 Adsila Azalia Nata (Absen 2) — Nilai: 82.8</h3>
+        <p><strong>Tahap 1 (T1-B - Pencatatan Belanja Kantin):</strong> Kode 39/100, Rencana 81/100</p>
+        <ul>
+            <li>BUG SINTAKS: Operator &quot;! =&quot; memiliki spasi, seharusnya &quot;!=&quot;</li>
+            <li>GAGAL KOMPILASI: C:\Users\Al\AppData\Local\Temp\tmpde6uyl68\prog.cpp: In function &#x27;int main()&#x27;:</li>
+        </ul>
+        <p><strong>Tahap 2 (T2-C - Pengisian Baterai Tenaga Surya):</strong> Kode 100/100, Rencana 89/100</p>
+        <p><strong>Tahap 3 (T3-D - Irigasi dengan Persediaan Air Terbatas):</strong> Kode 100/100, Rencana 100/100</p>
+    </div>
+    <div class="card-review">
+        <h3>🔍 Naylatul Zulfa (Absen 29) — Nilai: 72.1</h3>
+        <p><strong>Tahap 1 (T1-B - Pencatatan Belanja Kantin):</strong> Kode 100/100, Rencana 78/100</p>
+        <p><strong>Tahap 2 (T2-F - Membalik Nomor Tiket Digital):</strong> Kode 31/100, Rencana 100/100</p>
+        <ul>
+            <li>GAGAL KOMPILASI: C:\Users\Al\AppData\Local\Temp\tmpbn0rano_\prog.cpp: In function &#x27;int main()&#x27;:</li>
+        </ul>
+        <p><strong>Tahap 3 (T3-A - Pemotretan Satelit Pendidikan):</strong> Kode 59/100, Rencana 100/100</p>
+        <ul>
+            <li>Output belum sesuai: 0/3 angka cocok (exp: [360, 8100, 288], got: [32764, 737190, 26211.2])</li>
+        </ul>
+    </div>
+    <div class="card-review">
+        <h3>🔍 Arya Satya Raditya Tanaya (Absen 8) — Nilai: 68.9</h3>
+        <p><strong>Tahap 1 (T1-H - Perluasan Kapasitas Server Cadangan):</strong> Kode 37/100, Rencana 83/100</p>
+        <ul>
+            <li>Tidak ada #include</li>
+            <li>GAGAL KOMPILASI: C:\Users\Al\AppData\Local\Temp\tmpwqiaxdrw\prog.cpp:1:1: error: &#x27;include&#x27; does not name a type</li>
+        </ul>
+        <p><strong>Tahap 2 (T2-I - Dua Tabungan Kegiatan Kelas):</strong> Kode 37/100, Rencana 100/100</p>
+        <ul>
+            <li>Tidak ada #include</li>
+            <li>GAGAL KOMPILASI: C:\Users\Al\AppData\Local\Temp\tmp13nyiohg\prog.cpp:1:1: error: &#x27;include&#x27; does not name a type</li>
+        </ul>
+        <p><strong>Tahap 3 (T3-A - Pemotretan Satelit Pendidikan):</strong> Kode 100/100, Rencana 100/100</p>
+    </div>
+    <div class="card-review">
+        <h3>🔍 Dian Zulaikha (Absen 15) — Nilai: 66.6</h3>
+        <p><strong>Tahap 1 (T1-F - Pemeriksaan Kode Transaksi):</strong> Kode 31/100, Rencana 100/100</p>
+        <ul>
+            <li>GAGAL KOMPILASI: C:\Users\Al\AppData\Local\Temp\tmpt09blyj7\prog.cpp: In function &#x27;int main()&#x27;:</li>
+        </ul>
+        <p><strong>Tahap 2 (T2-H - Pertumbuhan Kultur Mikroorganisme):</strong> Kode 98/100, Rencana 100/100</p>
+        <p><strong>Tahap 3 (T3-A - Pemotretan Satelit Pendidikan):</strong> Kode 28/100, Rencana 100/100</p>
+        <ul>
+            <li>GAGAL KOMPILASI: C:\Users\Al\AppData\Local\Temp\tmp4xag1ur6\prog.cpp: In function &#x27;int main()&#x27;:</li>
+        </ul>
+    </div>
+    <div class="card-review">
+        <h3>🔍 Muhammad ilham arya wibawa (Absen 28) — Nilai: 66.0</h3>
+        <p><strong>Tahap 1 (T1-A - Stan Minuman Festival Sekolah):</strong> Kode 40/100, Rencana 89/100</p>
+        <ul>
+            <li>GAGAL KOMPILASI: C:\Users\Al\AppData\Local\Temp\tmppzxjkk93\prog.cpp: In function &#x27;int main()&#x27;:</li>
+        </ul>
+        <p><strong>Tahap 2 (T2-E - Kalibrasi Suhu Ruang Server):</strong> Kode 80/100, Rencana 100/100</p>
+        <ul>
+            <li>Output belum sesuai: 1/2 angka cocok (exp: [22, 3], got: [22, 2])</li>
+        </ul>
+        <p><strong>Tahap 3 (T3-I - Pertemuan Volume Dua Tangki):</strong> Kode 39/100, Rencana 100/100</p>
+        <ul>
+            <li>GAGAL KOMPILASI: C:\Users\Al\AppData\Local\Temp\tmpefifw9_v\prog.cpp: In function &#x27;int main()&#x27;:</li>
+        </ul>
+    </div>
+    <div class="card-review">
+        <h3>🔍 Puspa Lutfiani Sukma (Absen 30) — Nilai: 64.3</h3>
+        <p><strong>Tahap 1 (T1-C - Tabungan Laptop untuk Belajar):</strong> Kode 60/100, Rencana 92/100</p>
+        <ul>
+            <li>BUG LOGIKA: Kondisi while terbalik (tabungan &gt; hargaLaptop), seharusnya &lt; target</li>
+            <li>Output belum sesuai: 0/3 angka cocok (exp: [12, 4800000, 300000], got: [0, 750000, -3750000])</li>
+        </ul>
+        <p><strong>Tahap 2 (T2-G - Ukuran Kotak Pengiriman Berikutnya):</strong> Kode 40/100, Rencana 78/100</p>
+        <ul>
+            <li>BUG SINTAKS: Operator &quot;! =&quot; memiliki spasi, seharusnya &quot;!=&quot;</li>
+            <li>BUG SINTAKS: Terdapat spasi pada operator &quot;! =&quot;</li>
+            <li>GAGAL KOMPILASI: C:\Users\Al\AppData\Local\Temp\tmpxsmj4udd\prog.cpp: In function &#x27;int main()&#x27;:</li>
+        </ul>
+        <p><strong>Tahap 3 (T3-B - Rekap Donasi Acara Sosial):</strong> Kode 60/100, Rencana 100/100</p>
+        <ul>
+            <li>Output belum sesuai: 0/3 angka cocok (exp: [3, 225000, 75000], got: [4, 711158920, 1.7779, 8])</li>
+        </ul>
+    </div>
+    <div class="card-review">
+        <h3>🔍 Izza utami (Absen 23) — Nilai: 61.4</h3>
+        <p><strong>Tahap 1 (T1-E - Validasi Nilai Ujian Praktik):</strong> Kode 56/100, Rencana 78/100</p>
+        <ul>
+            <li>TIMEOUT: Program mengalami infinite loop</li>
+        </ul>
+        <p><strong>Tahap 2 (T2-H - Pertumbuhan Kultur Mikroorganisme):</strong> Kode 34/100, Rencana 100/100</p>
+        <ul>
+            <li>GAGAL KOMPILASI: C:\Users\Al\AppData\Local\Temp\tmpga7gwvr0\prog.cpp: In function &#x27;int main()&#x27;:</li>
+        </ul>
+        <p><strong>Tahap 3 (T3-B - Rekap Donasi Acara Sosial):</strong> Kode 54/100, Rencana 100/100</p>
+        <ul>
+            <li>TIMEOUT: Program mengalami infinite loop</li>
+        </ul>
+    </div>
+    <div class="card-review">
+        <h3>🔍 Anindia Putri Safira (Absen 6) — Nilai: 61.3</h3>
+        <p><strong>Tahap 1 (T1-F - Pemeriksaan Kode Transaksi):</strong> Kode 40/100, Rencana 86/100</p>
+        <ul>
+            <li>GAGAL KOMPILASI: C:\Users\Al\AppData\Local\Temp\tmprbx36l7q\prog.cpp: In function &#x27;int main()&#x27;:</li>
+        </ul>
+        <p><strong>Tahap 2 (T2-G - Ukuran Kotak Pengiriman Berikutnya):</strong> Kode 60/100, Rencana 100/100</p>
+        <ul>
+            <li>Output belum sesuai: 0/2 angka cocok (exp: [48, 1], got: [18, 6])</li>
+        </ul>
+        <p><strong>Tahap 3 (T3-H - Pendinginan Mesin Produksi):</strong> Kode 40/100, Rencana 100/100</p>
+        <ul>
+            <li>GAGAL KOMPILASI: C:\Users\Al\AppData\Local\Temp\tmp0erxqk4d\prog.cpp: In function &#x27;int main()&#x27;:</li>
+        </ul>
+    </div>
+    <div class="card-review">
+        <h3>🔍 Qhorotuayun Karima (Absen 31) — Nilai: 61.0</h3>
+        <p><strong>Tahap 1 (T1-D - Produksi Miniatur dengan Filament):</strong> Kode 40/100, Rencana 89/100</p>
+        <ul>
+            <li>GAGAL KOMPILASI: C:\Users\Al\AppData\Local\Temp\tmprpz43b82\prog.cpp:19:10: error: expected unqualified-id before &#x27;&lt;&lt;</li>
+        </ul>
+        <p><strong>Tahap 2 (T2-H - Pertumbuhan Kultur Mikroorganisme):</strong> Kode 60/100, Rencana 94/100</p>
+        <ul>
+            <li>Output belum sesuai: 0/3 angka cocok (exp: [6, 29160, 9160], got: [1])</li>
+        </ul>
+        <p><strong>Tahap 3 (T3-C - Mengejar XP untuk Naik Level):</strong> Kode 40/100, Rencana 100/100</p>
+        <ul>
+            <li>GAGAL KOMPILASI: C:\Users\Al\AppData\Local\Temp\tmpfl20gl18\prog.cpp: In function &#x27;int main()&#x27;:</li>
+        </ul>
+    </div>
+    <div class="card-review">
+        <h3>🔍 Alexandra Khadijah (Absen 3) — Nilai: 60.6</h3>
+        <p><strong>Tahap 1 (T1-C - Tabungan Laptop untuk Belajar):</strong> Kode 40/100, Rencana 89/100</p>
+        <ul>
+            <li>GAGAL KOMPILASI: C:\Users\Al\AppData\Local\Temp\tmpmurhesdx\prog.cpp: In function &#x27;int main()&#x27;:</li>
+        </ul>
+        <p><strong>Tahap 2 (T2-D - Rute Drone dengan Bahan Bakar Terbatas):</strong> Kode 40/100, Rencana 100/100</p>
+        <ul>
+            <li>GAGAL KOMPILASI: C:\Users\Al\AppData\Local\Temp\tmp6922jok7\prog.cpp: In function &#x27;int main()&#x27;:</li>
+        </ul>
+        <p><strong>Tahap 3 (T3-E - Kalibrasi Sensor Keasaman Air):</strong> Kode 56/100, Rencana 100/100</p>
+        <ul>
+            <li>TIMEOUT: Program mengalami infinite loop</li>
+        </ul>
+    </div>
+    <div class="card-review">
+        <h3>🔍 SATIA QOTHRU NADA (Absen 36) — Nilai: 57.7</h3>
+        <p><strong>Tahap 1 (T1-I - Pertemuan Dua Robot Koridor):</strong> Kode 40/100, Rencana 97/100</p>
+        <ul>
+            <li>GAGAL KOMPILASI: C:\Users\Al\AppData\Local\Temp\tmpcy544rx8\prog.cpp:17:45: warning: missing terminating &quot; character</li>
+        </ul>
+        <p><strong>Tahap 2 (T2-D - Rute Drone dengan Bahan Bakar Terbatas):</strong> Kode 40/100, Rencana 100/100</p>
+        <ul>
+            <li>GAGAL KOMPILASI: C:\Users\Al\AppData\Local\Temp\tmpk12_qqfc\prog.cpp:21:55: warning: missing terminating &quot; character</li>
+        </ul>
+        <p><strong>Tahap 3 (T3-H - Pendinginan Mesin Produksi):</strong> Kode 40/100, Rencana 100/100</p>
+        <ul>
+            <li>GAGAL KOMPILASI: C:\Users\Al\AppData\Local\Temp\tmpj1to_nl_\prog.cpp:17:39: warning: missing terminating &quot; character</li>
+        </ul>
+    </div>
+    <div class="card-review">
+        <h3>🔍 Salwa Zuhaerotul Ula (Absen 35) — Nilai: 56.0</h3>
+        <p><strong>Tahap 1 (T1-H - Perluasan Kapasitas Server Cadangan):</strong> Kode 40/100, Rencana 92/100</p>
+        <ul>
+            <li>GAGAL KOMPILASI: C:\Users\Al\AppData\Local\Temp\tmp7ilxo9co\prog.cpp: In function &#x27;int main()&#x27;:</li>
+        </ul>
+        <p><strong>Tahap 2 (T2-C - Pengisian Baterai Tenaga Surya):</strong> Kode 40/100, Rencana 100/100</p>
+        <ul>
+            <li>GAGAL KOMPILASI: C:\Users\Al\AppData\Local\Temp\tmp7qbg71rd\prog.cpp: In function &#x27;int main()&#x27;:</li>
+        </ul>
+        <p><strong>Tahap 3 (T3-G - Nomor Loker Kelipatan Sembilan):</strong> Kode 35/100, Rencana 100/100</p>
+        <ul>
+            <li>GAGAL KOMPILASI: C:\Users\Al\AppData\Local\Temp\tmp0k1ni6bp\prog.cpp: In function &#x27;int main()&#x27;:</li>
+        </ul>
+    </div>
+    <div class="card-review">
+        <h3>🔍 DEWI ANISAH OKTAVIANI (Absen 14) — Nilai: 54.5</h3>
+        <p><strong>Tahap 1 (T1-E - Validasi Nilai Ujian Praktik):</strong> Kode 36/100, Rencana 83/100</p>
+        <ul>
+            <li>GAGAL KOMPILASI: C:\Users\Al\AppData\Local\Temp\tmpkaso8djr\prog.cpp: In function &#x27;int main()&#x27;:</li>
+        </ul>
+        <p><strong>Tahap 2 (T2-G - Ukuran Kotak Pengiriman Berikutnya):</strong> Kode 39/100, Rencana 94/100</p>
+        <ul>
+            <li>GAGAL KOMPILASI: C:\Users\Al\AppData\Local\Temp\tmp6rmh524i\prog.cpp: In function &#x27;int main()&#x27;:</li>
+        </ul>
+        <p><strong>Tahap 3 (T3-I - Pertemuan Volume Dua Tangki):</strong> Kode 40/100, Rencana 100/100</p>
+        <ul>
+            <li>GAGAL KOMPILASI: C:\Users\Al\AppData\Local\Temp\tmprop5h3_l\prog.cpp: In function &#x27;int main()&#x27;:</li>
+        </ul>
+    </div>
+
+    <hr style="margin:40px 0; border:0; border-top:2px solid #e2e8f0;">
+    
+    <!-- CARD KUNCI KHUSUS GURU -->
+    <div id="guru-lock-box" style="background:#f8fafc; border:2px dashed #94a3b8; border-radius:12px; padding:35px 20px; text-align:center; margin:35px 0;">
+        <div style="font-size:42px; margin-bottom:12px;">🔒</div>
+        <h3 style="margin:0 0 10px; color:#1e293b; font-size:20px;">Bagian 4 & 5 Terkunci (Akses Khusus Guru)</h3>
+        <p style="color:#64748b; max-width:550px; margin:0 auto 20px; font-size:14px; line-height:1.6;">
+            Bagian ini memuat <strong>Panduan Remedial Mandiri</strong> serta <strong>Temuan Integritas Akademik (Plagiarisme & AI)</strong> yang bersifat rahasia. Silakan masukkan kata kunci untuk membuka data ini.
+        </p>
+        <div style="display:flex; justify-content:center; align-items:center; gap:10px; max-width:380px; margin:0 auto;">
+            <input type="password" id="guru-key-input" placeholder="Masukkan kata kunci guru..." style="flex:1; padding:11px 15px; border:1px solid #cbd5e1; border-radius:8px; font-size:14px; outline:none;" onkeydown="if(event.key==='Enter') verifikasiKunciGuru()">
+            <button onclick="verifikasiKunciGuru()" style="padding:11px 22px; background:#2563eb; color:white; border:none; border-radius:8px; font-weight:700; font-size:14px; cursor:pointer; transition:background 0.2s;" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">Buka Kunci</button>
+        </div>
+        <p id="guru-key-error" style="color:#dc2626; font-size:13px; font-weight:700; margin-top:14px; display:none;">⚠️ Kata kunci salah! Silakan periksa kembali.</p>
+    </div>
+
+    <!-- KONTAINER KONTEN YANG TERBUKA -->
+    <div id="guru-secret-area" style="display:none;"></div>
+
+    <script>
+        const _ENCRYPTED_BLOB = "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";
+
+        function xorDecrypt(b64, keyStr) {
+            try {
+                const binStr = atob(b64);
+                const bytes = new Uint8Array(binStr.length);
+                for (let i = 0; i < binStr.length; i++) {
+                    bytes[i] = binStr.charCodeAt(i);
+                }
+                const keyBytes = new TextEncoder().encode(keyStr);
+                const decrypted = new Uint8Array(bytes.length);
+                for (let i = 0; i < bytes.length; i++) {
+                    decrypted[i] = bytes[i] ^ keyBytes[i % keyBytes.length];
+                }
+                return new TextDecoder().decode(decrypted);
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function verifikasiKunciGuru() {
+            const inputVal = document.getElementById('guru-key-input').value.trim();
+            const errElem = document.getElementById('guru-key-error');
+            
+            // Coba dekripsi dengan kunci yang dimasukkan
+            const resultHtml = xorDecrypt(_ENCRYPTED_BLOB, inputVal);
+            
+            // Validasi apakah hasil dekripsi memuat header bagian 4
+            if (resultHtml && resultHtml.includes("4. Panduan & Kesempatan Perbaikan")) {
+                document.getElementById('guru-lock-box').style.display = 'none';
+                const secretArea = document.getElementById('guru-secret-area');
+                secretArea.innerHTML = resultHtml;
+                secretArea.style.display = 'block';
+                sessionStorage.setItem('guruAuthKey', inputVal);
+            } else {
+                errElem.style.display = 'block';
+                setTimeout(() => { errElem.style.display = 'none'; }, 3000);
+            }
+        }
+
+        // Auto-unlock jika sesi masih aktif di browser
+        window.addEventListener('DOMContentLoaded', () => {
+            const savedKey = sessionStorage.getItem('guruAuthKey');
+            if (savedKey) {
+                const resultHtml = xorDecrypt(_ENCRYPTED_BLOB, savedKey);
+                if (resultHtml && resultHtml.includes("4. Panduan & Kesempatan Perbaikan")) {
+                    document.getElementById('guru-lock-box').style.display = 'none';
+                    const secretArea = document.getElementById('guru-secret-area');
+                    secretArea.innerHTML = resultHtml;
+                    secretArea.style.display = 'block';
+                }
+            }
+        });
+    </script>
+
+</div>
+</body>
+</html>
