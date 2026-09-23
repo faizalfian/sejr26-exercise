@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latihan Soal Materi Baru C++</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 30px;
+        }
+        .question-container {
+            background: #fff;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            border-left: 5px solid #bdc3c7;
+        }
+        .question-text {
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .code-block {
+            background: #272822;
+            color: #f8f8f2;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: Consolas, monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+        .options li {
+            margin-bottom: 10px;
+        }
+        label {
+            cursor: pointer;
+            display: flex;
+            align-items: flex-start;
+        }
+        input[type="radio"] {
+            margin-top: 5px;
+            margin-right: 10px;
+        }
+        button {
+            display: block;
+            width: 100%;
+            background: #3498db;
+            color: #fff;
+            border: none;
+            padding: 15px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 20px;
+        }
+        button:hover {
+            background: #2980b9;
+        }
+        .feedback {
+            margin-top: 10px;
+            font-weight: bold;
+            display: none;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            display: block;
+        }
+        .feedback.wrong {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            display: block;
+        }
+        #result-box {
+            display: none;
+            text-align: center;
+            background: #fff;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        #score {
+            font-size: 36px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Latihan Soal Materi Baru C++</h1>
+    <p style="text-align: center; margin-bottom: 30px;">Kerjakan soal-soal di bawah ini. Setelah selesai, klik tombol <strong>Koreksi Jawaban</strong> di bagian paling bawah.</p>
+
+    <form id="quizForm">
+        
+        <!-- SOAL 1 -->
+        <div class="question-container" id="q1-container">
+            <div class="question-text">1. Perhatikan potongan kode pembacaan input bertumpuk (chained cin) berikut:</div>
+            <div class="code-block">
+int panjang, lebar;
+cin >> panjang >> lebar;
+cout << panjang * lebar;</div>
+            <div>Jika pengguna menjalankan program dan mengetikkan `5 10` (dipisah spasi) lalu menekan Enter, apa yang akan terjadi?</div>
+            <ul class="options">
+                <li><label><input type="radio" name="q1" value="A"> A. Program mengalami error karena sintaks cin tidak boleh digabung dalam satu baris</label></li>
+                <li><label><input type="radio" name="q1" value="B"> B. Program hanya membaca angka 5 untuk panjang dan program akan berhenti menunggu input lebar</label></li>
+                <li><label><input type="radio" name="q1" value="C"> C. Program berhasil membaca 5 dan 10, lalu mencetak hasil 50</label></li>
+                <li><label><input type="radio" name="q1" value="D"> D. Program mengalami error runtime karena karakter spasi tidak dikenali tipe integer</label></li>
+            </ul>
+            <div class="feedback" id="feedback-q1"></div>
+        </div>
+
+        <!-- SOAL 2 -->
+        <div class="question-container" id="q2-container">
+            <div class="question-text">2. Di C++, bagaimana cara yang paling tepat untuk mendeklarasikan nilai PI yang bernilai 3.14 agar nilainya dikunci dan tidak bisa diubah secara tidak sengaja oleh programer di baris kode selanjutnya?</div>
+            <ul class="options">
+                <li><label><input type="radio" name="q2" value="A"> A. float PI == 3.14;</label></li>
+                <li><label><input type="radio" name="q2" value="B"> B. const float PI = 3.14;</label></li>
+                <li><label><input type="radio" name="q2" value="C"> C. static float PI = 3.14;</label></li>
+                <li><label><input type="radio" name="q2" value="D"> D. lock float PI = 3.14;</label></li>
+            </ul>
+            <div class="feedback" id="feedback-q2"></div>
+        </div>
+
+        <!-- SOAL 3 -->
+        <div class="question-container" id="q3-container">
+            <div class="question-text">3. Perhatikan jebakan pembagian tipe data primitif berikut:</div>
+            <div class="code-block">
+int hasil = 7 / 2;
+cout << hasil;</div>
+            <div>Berapakah output yang akan ditampilkan di layar terminal?</div>
+            <ul class="options">
+                <li><label><input type="radio" name="q3" value="A"> A. 3.5</label></li>
+                <li><label><input type="radio" name="q3" value="B"> B. 3</label></li>
+                <li><label><input type="radio" name="q3" value="C"> C. 4 (pembulatan ke atas)</label></li>
+                <li><label><input type="radio" name="q3" value="D"> D. Error, karena hasil tidak bulat</label></li>
+            </ul>
+            <div class="feedback" id="feedback-q3"></div>
+        </div>
+
+        <!-- SOAL 4 -->
+        <div class="question-container" id="q4-container">
+            <div class="question-text">4. Agar ekspresi pembagian dua variabel bilangan bulat `int a = 7` dan `int b = 2` dapat menghasilkan bilangan pecahan yang presisi (yaitu 3.5), operasi mana yang benar menggunakan metode type casting di C++?</div>
+            <ul class="options">
+                <li><label><input type="radio" name="q4" value="A"> A. (float)a / b</label></li>
+                <li><label><input type="radio" name="q4" value="B"> B. float(a + b)</label></li>
+                <li><label><input type="radio" name="q4" value="C"> C. a / b (float)</label></li>
+                <li><label><input type="radio" name="q4" value="D"> D. cast&lt;float&gt; (a/b)</label></li>
+            </ul>
+            <div class="feedback" id="feedback-q4"></div>
+        </div>
+
+        <!-- SOAL 5 -->
+        <div class="question-container" id="q5-container">
+            <div class="question-text">5. Dalam struktur percabangan `switch-case`, kata kunci apa yang wajib digunakan pada setiap akhir blok nilai untuk menghentikan pengecekan dan keluar dari `switch` agar blok di bawahnya tidak ikut tereksekusi?</div>
+            <ul class="options">
+                <li><label><input type="radio" name="q5" value="A"> A. stop</label></li>
+                <li><label><input type="radio" name="q5" value="B"> B. exit</label></li>
+                <li><label><input type="radio" name="q5" value="C"> C. default</label></li>
+                <li><label><input type="radio" name="q5" value="D"> D. break</label></li>
+            </ul>
+            <div class="feedback" id="feedback-q5"></div>
+        </div>
+
+        <!-- SOAL 6 -->
+        <div class="question-container" id="q6-container">
+            <div class="question-text">6. Blok penampung pada struktur `switch-case` yang berfungsi menyerupai klausa `else` (yakni dieksekusi secara otomatis jika tidak ada satupun kondisi nilai `case` yang cocok) dideklarasikan dengan kata kunci...</div>
+            <ul class="options">
+                <li><label><input type="radio" name="q6" value="A"> A. case else:</label></li>
+                <li><label><input type="radio" name="q6" value="B"> B. default:</label></li>
+                <li><label><input type="radio" name="q6" value="C"> C. otherwise:</label></li>
+                <li><label><input type="radio" name="q6" value="D"> D. catch:</label></li>
+            </ul>
+            <div class="feedback" id="feedback-q6"></div>
+        </div>
+
+        <!-- SOAL 7 -->
+        <div class="question-container" id="q7-container">
+            <div class="question-text">7. Perhatikan transformasi sintaks perulangan menjadi tipe `for` berikut:</div>
+            <div class="code-block">
+for (int i = 1; i <= 5; i++) {
+    cout << i << " ";
+}</div>
+            <div>Manakah bagian dari deklarasi kurung `for` tersebut yang bertindak mengatur update nilai / increment?</div>
+            <ul class="options">
+                <li><label><input type="radio" name="q7" value="A"> A. int i = 1</label></li>
+                <li><label><input type="radio" name="q7" value="B"> B. i <= 5</label></li>
+                <li><label><input type="radio" name="q7" value="C"> C. i++</label></li>
+                <li><label><input type="radio" name="q7" value="D"> D. cout &lt;&lt; i</label></li>
+            </ul>
+            <div class="feedback" id="feedback-q7"></div>
+        </div>
+
+        <!-- SOAL 8 -->
+        <div class="question-container" id="q8-container">
+            <div class="question-text">8. Apa sifat khas yang paling membedakan perulangan `do-while` dibandingkan dengan perulangan `while`?</div>
+            <ul class="options">
+                <li><label><input type="radio" name="q8" value="A"> A. do-while hanya bisa berjalan menggunakan tipe data angka desimal</label></li>
+                <li><label><input type="radio" name="q8" value="B"> B. do-while mengevaluasi kondisi di awal sebelum blok tereksekusi</label></li>
+                <li><label><input type="radio" name="q8" value="C"> C. Blok instruksi di dalam do-while dijamin akan tereksekusi minimal satu kali meskipun kondisi awalnya bernilai salah</label></li>
+                <li><label><input type="radio" name="q8" value="D"> D. do-while tidak memerlukan pembaruan nilai (increment/decrement)</label></li>
+            </ul>
+            <div class="feedback" id="feedback-q8"></div>
+        </div>
+
+        <button type="button" onclick="koreksiJawaban()">Koreksi Jawaban</button>
+    </form>
+
+    <div id="result-box">
+        <h2>Hasil Latihan Anda</h2>
+        <div id="score">0 / 100</div>
+        <p id="score-message"></p>
+    </div>
+
+    <script>
+        const kunciJawaban = {
+            q1: "C",
+            q2: "B",
+            q3: "B",
+            q4: "A",
+            q5: "D",
+            q6: "B",
+            q7: "C",
+            q8: "C"
+        };
+
+        function koreksiJawaban() {
+            let form = document.getElementById('quizForm');
+            let totalSoal = Object.keys(kunciJawaban).length;
+            let benar = 0;
+
+            for (let q in kunciJawaban) {
+                let options = form.elements[q];
+                let userAnswer = "";
+                
+                // Cari jawaban yang dipilih
+                for (let i = 0; i < options.length; i++) {
+                    if (options[i].checked) {
+                        userAnswer = options[i].value;
+                        break;
+                    }
+                }
+
+                let feedbackEl = document.getElementById("feedback-" + q);
+                let containerEl = document.getElementById(q + "-container");
+
+                // Reset kelas
+                feedbackEl.className = "feedback";
+                containerEl.style.borderLeftColor = "#bdc3c7";
+
+                if (userAnswer === "") {
+                    feedbackEl.textContent = "⚠ Anda belum menjawab soal ini.";
+                    feedbackEl.classList.add("wrong");
+                    containerEl.style.borderLeftColor = "#f39c12"; // Orange kalau belum jawab
+                } else if (userAnswer === kunciJawaban[q]) {
+                    feedbackEl.textContent = "✔ Jawaban Anda Benar!";
+                    feedbackEl.classList.add("correct");
+                    containerEl.style.borderLeftColor = "#2ecc71"; // Hijau
+                    benar++;
+                } else {
+                    // JIKA SALAH: tampilkan salah, TAPI JANGAN beritahu jawaban benarnya
+                    feedbackEl.textContent = "❌ Jawaban Anda Salah. Silakan coba pelajari lagi materinya.";
+                    feedbackEl.classList.add("wrong");
+                    containerEl.style.borderLeftColor = "#e74c3c"; // Merah
+                }
+            }
+
+            // Hitung skor
+            let nilai = Math.round((benar / totalSoal) * 100);
+            
+            // Tampilkan hasil
+            let resultBox = document.getElementById("result-box");
+            let scoreEl = document.getElementById("score");
+            let messageEl = document.getElementById("score-message");
+
+            resultBox.style.display = "block";
+            scoreEl.textContent = nilai;
+
+            if (nilai === 100) {
+                messageEl.textContent = "Sempurna! Anda sudah memahami materi baru dengan sangat baik.";
+            } else if (nilai >= 70) {
+                messageEl.textContent = "Bagus! Hanya beberapa bagian kecil yang perlu diperbaiki.";
+            } else {
+                messageEl.textContent = "Jangan menyerah! Mari pelajari kembali materi-materi tersebut sebelum UTS berakhir.";
+            }
+
+            // Scroll ke bawah agar pengguna melihat nilai
+            window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

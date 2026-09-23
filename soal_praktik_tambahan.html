@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Soal Praktik C++ — Kasir Kantin Sekolah</title>
+  <style>
+    :root { color-scheme: light; font-family: 'Segoe UI', Arial, sans-serif; color: #25322d; background: #f1f3ef; line-height: 1.65; }
+    * { box-sizing: border-box; }
+    body { margin: 0; padding: 40px 20px; }
+    main { max-width: 900px; margin: auto; background: white; padding: 48px 56px; border-top: 6px solid #27634d; }
+    .eyebrow { color: #27634d; font-size: 12px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; }
+    h1 { font-size: clamp(28px, 5vw, 38px); line-height: 1.2; margin: 14px 0; letter-spacing: -.03em; }
+    h2 { font-size: 21px; margin-top: 34px; padding-top: 20px; border-top: 1px solid #dce3dd; }
+    h3 { font-size: 16px; margin-top: 24px; }
+    p { margin: 12px 0; }
+    .meta { color: #59675f; font-size: 14px; }
+    .rules { background: #eef5ef; border-left: 3px solid #27634d; padding: 14px 20px; margin: 24px 0; }
+    code { font-family: Consolas, 'Courier New', monospace; font-size: .92em; }
+    pre { background: #f5f6f4; padding: 16px 18px; overflow-x: auto; line-height: 1.5; border: 1px solid #e0e5df; }
+    table { border-collapse: collapse; width: 100%; margin: 18px 0; }
+    th, td { padding: 10px 14px; text-align: left; border-bottom: 1px solid #dce3dd; }
+    th { background: #eef5ef; }
+    .io { display: grid; grid-template-columns: 1fr 1.5fr; gap: 18px; }
+    .io p { margin-bottom: 6px; font-size: 14px; font-weight: 600; }
+    .io pre { margin-top: 0; }
+    footer { margin-top: 36px; font-size: 12px; color: #59675f; }
+    @media (max-width: 600px) { body { padding: 0; } main { padding: 28px 20px; } .io { grid-template-columns: 1fr; gap: 0; } th, td { padding: 8px; } }
+    @media print {
+      @page { size: A4; margin: 16mm; }
+      body { padding: 0; background: white; font-size: 11pt; }
+      main { max-width: none; padding: 0; border: 0; }
+      h1 { font-size: 25pt; } h2, h3 { break-after: avoid; }
+      pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+      .io, table, .rules { break-inside: avoid; }
+      footer { display: none; }
+    }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="eyebrow">UTS · Dasar PPLG · Soal tambahan</div>
+    <h1>Kasir Kantin Sekolah</h1>
+    <p class="meta">Praktik Pemrograman C++ · Fase E / Kelas X PPLG · Semester Gasal<br><strong>Medium — 35 Poin</strong></p>
+    <p><strong>Konsep yang diuji:</strong> perulangan <code>while</code>, percabangan <code>if – else if – else</code>, akumulator, diskon, dan penghentian perulangan dengan kode <code>0</code>.</p>
+  </header>
+
+  <aside class="rules">
+    <strong>Ketentuan pengerjaan</strong>
+    <ul>
+      <li>Gunakan <code>if</code>, <code>else if</code>, dan/atau <code>else</code> untuk seleksi; dilarang menggunakan <code>switch-case</code>.</li>
+      <li>Gunakan <code>while</code> untuk perulangan; dilarang menggunakan <code>for</code> dan <code>do-while</code>.</li>
+      <li>Tulis program C++ dengan format keluaran persis seperti spesifikasi, tanpa pesan permintaan input tambahan.</li>
+    </ul>
+  </aside>
+
+  <section>
+    <h2>Deskripsi Masalah</h2>
+    <p>Kantin sekolah membutuhkan program kasir untuk menghitung belanja seorang siswa. Program membaca nama siswa, kemudian mencatat pembelian berulang sampai kode <code>0</code> dimasukkan.</p>
+    <table>
+      <thead><tr><th scope="col">Kode</th><th scope="col">Menu</th><th scope="col">Harga satuan</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>Nasi goreng</td><td>Rp 12000</td></tr>
+        <tr><td>2</td><td>Roti isi</td><td>Rp 8000</td></tr>
+        <tr><td>3</td><td>Es teh</td><td>Rp 4000</td></tr>
+        <tr><td>0</td><td>Selesai belanja</td><td>—</td></tr>
+      </tbody>
+    </table>
+    <p>Setiap pembelian berisi kode menu dan jumlah unit. Menu yang sama boleh dibeli berkali-kali. Jumlahkan seluruh unit yang dibeli dan seluruh biaya pembelian.</p>
+    <p><strong>Ketentuan diskon:</strong> jika subtotal belanja <strong>≥ Rp 50000</strong>, siswa mendapat diskon <strong>10%</strong> dari subtotal. Jika subtotal di bawah Rp 50000, diskon bernilai Rp 0. Total bayar adalah subtotal dikurangi diskon.</p>
+    <p>Jika siswa langsung memasukkan kode <code>0</code>, jumlah item, subtotal, diskon, dan total bayar semuanya bernilai <code>0</code>.</p>
+  </section>
+
+  <section>
+    <h2>Spesifikasi I/O</h2>
+    <h3>Input (stdin)</h3>
+    <ul>
+      <li>Baris pertama: <code>nama_siswa</code> (string satu kata).</li>
+      <li>Baris pembelian: <code>kode_menu jumlah</code>, dengan kode <code>1</code>, <code>2</code>, atau <code>3</code> dan jumlah berupa bilangan bulat 1–100.</li>
+      <li>Baris terakhir: <code>0</code> saja, tanpa jumlah. Maksimal 100 baris pembelian sebelum kode <code>0</code>.</li>
+      <li>Semua input dijamin valid dan selalu diakhiri kode <code>0</code>.</li>
+    </ul>
+    <h3>Output (stdout)</h3>
+    <p>Cetak satu ringkasan setelah belanja selesai. <code>jumlah_item</code> adalah total unit yang dibeli, bukan banyaknya baris pembelian. Semua nilai uang ditulis sebagai bilangan bulat tanpa pemisah ribuan.</p>
+    <pre><code>Nama: &lt;nama&gt;
+Jumlah Item: &lt;jumlah_item&gt;
+Subtotal: Rp &lt;subtotal&gt;
+Diskon: Rp &lt;diskon&gt;
+Total Bayar: Rp &lt;total_bayar&gt;</code></pre>
+  </section>
+
+  <section>
+    <h2>Uji Kasus (Test Cases)</h2>
+    <article>
+      <h3>Test Case 1 · Public — Tanpa diskon</h3>
+      <div class="io">
+        <div><p>Input</p><pre data-case="1" data-kind="input">Ayu
+1 2
+3 2
+0</pre></div>
+        <div><p>Expected Output</p><pre data-case="1" data-kind="output">Nama: Ayu
+Jumlah Item: 4
+Subtotal: Rp 32000
+Diskon: Rp 0
+Total Bayar: Rp 32000</pre></div>
+      </div>
+    </article>
+    <article>
+      <h3>Test Case 2 · Public — Mendapat diskon</h3>
+      <div class="io">
+        <div><p>Input</p><pre data-case="2" data-kind="input">Bima
+1 3
+2 2
+3 1
+0</pre></div>
+        <div><p>Expected Output</p><pre data-case="2" data-kind="output">Nama: Bima
+Jumlah Item: 6
+Subtotal: Rp 56000
+Diskon: Rp 5600
+Total Bayar: Rp 50400</pre></div>
+      </div>
+    </article>
+  </section>
+
+  <footer>Soal tambahan · Praktik if &amp; while · Gunakan Ctrl+P untuk mencetak lembar siswa.</footer>
+</main>
+</body>
+</html>
