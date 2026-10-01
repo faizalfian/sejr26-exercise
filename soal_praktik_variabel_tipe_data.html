@@ -1,0 +1,1150 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ulangan Praktik C++ Kelas 10 — Variabel, Tipe Data & cout</title>
+    
+    <!-- CodeMirror 5 (CSS & JS) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/theme/dracula.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/codemirror.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/mode/clike/clike.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/matchbrackets.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.16/addon/edit/closebrackets.min.js"></script>
+
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #0f172a;
+            --bg-page: #f1f5f9;
+            --card-bg: #ffffff;
+            --border-color: #cbd5e1;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --success: #16a34a;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --font-mono: "Consolas", "Courier New", Courier, monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Top Navigation Header */
+        header {
+            background-color: #1e293b;
+            color: #ffffff;
+            padding: 0.85rem 1.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 50;
+        }
+
+        .brand-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .badge-cpp {
+            background: linear-gradient(135deg, #00599c, #004482);
+            color: white;
+            font-weight: 800;
+            font-size: 0.85rem;
+            padding: 4px 10px;
+            border-radius: 6px;
+            letter-spacing: 0.5px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .brand-title {
+            font-size: 1.15rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        .brand-subtitle {
+            font-size: 0.8rem;
+            color: #94a3b8;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        /* Identity Strip */
+        .identity-bar {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.75rem 1.75rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.03);
+        }
+
+        .identity-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.88rem;
+        }
+
+        .identity-group label {
+            font-weight: 600;
+            color: var(--text-muted);
+            white-space: nowrap;
+        }
+
+        .identity-group input {
+            padding: 6px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            font-size: 0.88rem;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            min-width: 170px;
+        }
+
+        .identity-group input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+        /* Main Workspace Grid */
+        .workspace {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.25rem;
+            padding: 1.25rem 1.75rem;
+            flex: 1;
+            height: calc(100vh - 125px);
+            min-height: 550px;
+        }
+
+        @media (max-width: 1024px) {
+            .workspace {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+        }
+
+        /* Left Column: Soal & Instruksi */
+        .panel-soal {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+        }
+
+        .panel-header {
+            padding: 0.9rem 1.25rem;
+            background: #f8fafc;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .panel-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .tag-info {
+            font-size: 0.75rem;
+            padding: 3px 8px;
+            border-radius: 4px;
+            background: #e0f2fe;
+            color: #0369a1;
+            font-weight: 600;
+        }
+
+        .panel-content {
+            padding: 1.25rem;
+            overflow-y: auto;
+            font-size: 0.93rem;
+            line-height: 1.6;
+            color: #334155;
+        }
+
+        .panel-content h2 {
+            font-size: 1.15rem;
+            color: #0f172a;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .scenario-box {
+            background: #f8fafc;
+            border-left: 4px solid var(--primary);
+            padding: 0.85rem 1rem;
+            border-radius: 0 6px 6px 0;
+            margin-bottom: 1rem;
+            font-size: 0.92rem;
+        }
+
+        .instruction-section {
+            margin-bottom: 1.25rem;
+        }
+
+        .instruction-section h3 {
+            font-size: 0.98rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin: 0.85rem 0 0.45rem;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+
+        .rule-list {
+            padding-left: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .rule-list li {
+            margin-bottom: 0.35rem;
+        }
+
+        /* Spec Table */
+        .spec-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0.75rem 0;
+            font-size: 0.86rem;
+        }
+
+        .spec-table th, .spec-table td {
+            border: 1px solid #e2e8f0;
+            padding: 7px 10px;
+            text-align: left;
+        }
+
+        .spec-table th {
+            background-color: #f1f5f9;
+            color: #334155;
+            font-weight: 600;
+        }
+
+        .spec-table code {
+            font-family: var(--font-mono);
+            background: #f1f5f9;
+            padding: 2px 5px;
+            border-radius: 3px;
+            color: #d946ef;
+            font-size: 0.85rem;
+        }
+
+        /* Terminal Output Box */
+        .terminal-box {
+            background-color: #0f172a;
+            color: #38bdf8;
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: var(--font-mono);
+            font-size: 0.86rem;
+            line-height: 1.45;
+            margin: 0.75rem 0 1rem;
+            overflow-x: auto;
+            border: 1px solid #1e293b;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 0.65rem;
+            padding-bottom: 0.4rem;
+            border-bottom: 1px solid #334155;
+            font-size: 0.75rem;
+            color: #94a3b8;
+        }
+
+        .terminal-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+        .dot-red { background: #ef4444; }
+        .dot-yellow { background: #f59e0b; }
+        .dot-green { background: #10b981; }
+
+        /* Right Column: Code Editor */
+        .panel-editor {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+        }
+
+        .editor-toolbar {
+            background: #1e293b;
+            padding: 0.6rem 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #334155;
+        }
+
+        .editor-meta {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.82rem;
+            color: #cbd5e1;
+        }
+
+        .editor-status-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.8rem;
+            padding: 3px 8px;
+            border-radius: 4px;
+            background: #334155;
+            color: #4ade80;
+            font-weight: 500;
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background-color: #4ade80;
+        }
+
+        .editor-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-tool {
+            background: #334155;
+            color: #e2e8f0;
+            border: 1px solid #475569;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .btn-tool:hover {
+            background: #475569;
+            color: #ffffff;
+        }
+
+        .btn-tool-danger:hover {
+            background: #991b1b;
+            border-color: #b91c1c;
+            color: white;
+        }
+
+        /* CodeMirror Custom Height & Container */
+        .codemirror-wrapper {
+            flex: 1;
+            position: relative;
+            background: #282a36;
+        }
+
+        .CodeMirror {
+            height: 100%;
+            font-family: var(--font-mono);
+            font-size: 14.5px;
+            line-height: 1.5;
+        }
+
+        /* Footer Action Bar */
+        .footer-action-bar {
+            background: #ffffff;
+            border-top: 1px solid var(--border-color);
+            padding: 0.85rem 1.75rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 -2px 6px rgba(0,0,0,0.03);
+        }
+
+        .footer-hint {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* Standard Buttons */
+        .btn {
+            font-family: var(--font-sans);
+            font-weight: 600;
+            font-size: 0.88rem;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            text-decoration: none;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+        }
+
+        .btn-success {
+            background-color: #15803d;
+            color: white;
+            box-shadow: 0 2px 4px rgba(21, 128, 61, 0.25);
+        }
+
+        .btn-success:hover {
+            background-color: #166534;
+            transform: translateY(-1px);
+        }
+
+        /* Toast notification */
+        .toast {
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            background: #0f172a;
+            color: white;
+            padding: 10px 18px;
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 0.88rem;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s, transform 0.3s;
+            transform: translateY(10px);
+            z-index: 1000;
+        }
+
+        .toast.show {
+            opacity: 1;
+            pointer-events: auto;
+            transform: translateY(0);
+        }
+
+        .toast-icon {
+            color: #4ade80;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Atas -->
+    <header>
+        <div class="brand-section">
+            <span class="badge-cpp">C++ PROG</span>
+            <div>
+                <div class="brand-title">Ulangan Praktik Pemrograman Dasar</div>
+                <div class="brand-subtitle">Fase E / Kelas 10 — Variabel, Tipe Data &amp; Output (cout)</div>
+            </div>
+        </div>
+        <div class="header-actions">
+            <button class="btn btn-success" onclick="generateAndDownloadReport()">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                </svg>
+                Unduh Laporan HTML
+            </button>
+        </div>
+    </header>
+
+    <!-- Strip Identitas Siswa -->
+    <div class="identity-bar">
+        <div class="identity-group">
+            <label for="studentName">Nama Lengkap:</label>
+            <input type="text" id="studentName" placeholder="Contoh: Muhammad Farhan" oninput="saveStudentData()">
+        </div>
+        <div class="identity-group">
+            <label for="studentClass">Kelas:</label>
+            <input type="text" id="studentClass" placeholder="Contoh: X PPLG 1" oninput="saveStudentData()">
+        </div>
+        <div class="identity-group">
+            <label for="studentAbsen">No. Absen / NIS:</label>
+            <input type="text" id="studentAbsen" placeholder="Contoh: 18 / 20261001" oninput="saveStudentData()">
+        </div>
+    </div>
+
+    <!-- Area Kerja Utama (Workspace) -->
+    <main class="workspace">
+        
+        <!-- Panel Kiri: Lembar Soal & Panduan -->
+        <section class="panel-soal">
+            <div class="panel-header">
+                <span class="panel-title">
+                    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                    </svg>
+                    Lembar Soal Praktik
+                </span>
+                <span class="tag-info">Durasi: 45 Menit</span>
+            </div>
+
+            <div class="panel-content">
+                <h2>Soal: Program Pembuatan Kartu Identitas Pelajar (KTS Digital)</h2>
+                
+                <div class="scenario-box">
+                    <strong>Studi Kasus:</strong><br>
+                    Sekolah Anda sedang memperbarui sistem informasi kesiswaan. Sebagai calon programmer kelas 10, Anda diminta membuat program C++ sederhana untuk mencetak <strong>Kartu Identitas Siswa Digital</strong> secara otomatis ke layar konsol menggunakan <code>cout</code>.
+                </div>
+
+                <div class="instruction-section">
+                    <h3>Instruksi &amp; Ketentuan Soal</h3>
+                    <ol class="rule-list">
+                        <li>Gunakan header file standar <code>#include &lt;iostream&gt;</code> dan <code>#include &lt;string&gt;</code>.</li>
+                        <li>Deklarasikan dan inisialisasi minimal <strong>6 variabel</strong> dengan tipe data yang tepat sesuai tabel di bawah.</li>
+                        <li>Buat rumus perhitungan sederhana untuk variabel <code>umur</code> yaitu: <code>tahunSekarang - tahunLahir</code>.</li>
+                        <li>Cetak seluruh data siswa menggunakan objek <code>cout</code> dan manipulator baris <code>endl</code> (atau <code>\n</code>).</li>
+                        <li>Buat format output rapi dengan garis pemisah (border) seperti pada contoh tampilan yang diberikan.</li>
+                    </ol>
+                </div>
+
+                <div class="instruction-section">
+                    <h3>Daftar Variabel &amp; Tipe Data Wajib</h3>
+                    <table class="spec-table">
+                        <thead>
+                            <tr>
+                                <th>Nama Variabel</th>
+                                <th>Tipe Data</th>
+                                <th>Contoh Nilai Awal</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>namaSiswa</code></td>
+                                <td><code>string</code></td>
+                                <td>"Ahmad Pratama"</td>
+                            </tr>
+                            <tr>
+                                <td><code>nisn</code></td>
+                                <td><code>string</code></td>
+                                <td>"0089765432"</td>
+                            </tr>
+                            <tr>
+                                <td><code>kodeKelas</code></td>
+                                <td><code>char</code></td>
+                                <td>'A'</td>
+                            </tr>
+                            <tr>
+                                <td><code>tahunLahir</code></td>
+                                <td><code>int</code></td>
+                                <td>2009</td>
+                            </tr>
+                            <tr>
+                                <td><code>tahunSekarang</code></td>
+                                <td><code>int</code></td>
+                                <td>2026</td>
+                            </tr>
+                            <tr>
+                                <td><code>nilaiUjianMasuk</code></td>
+                                <td><code>double</code> / <code>float</code></td>
+                                <td>89.50</td>
+                            </tr>
+                            <tr>
+                                <td><code>statusAktif</code></td>
+                                <td><code>bool</code></td>
+                                <td><code>true</code></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="instruction-section">
+                    <h3>Contoh Tampilan Output Terminal</h3>
+                    <div class="terminal-box">
+                        <div class="terminal-header">
+                            <span class="terminal-dot dot-red"></span>
+                            <span class="terminal-dot dot-yellow"></span>
+                            <span class="terminal-dot dot-green"></span>
+                            <span>terminal — output C++</span>
+                        </div>
+<pre style="margin: 0; font-family: inherit; color: inherit; white-space: pre;">====================================================
+           KARTU TANDA SISWA (KTS) DIGITAL
+            SMK INFORMATIKA &amp; TEKNOLOGI
+====================================================
+Nama Lengkap      : Ahmad Pratama
+NISN              : 0089765432
+Rombel Kelas      : X - A
+Tahun Kelahiran   : 2009
+Usia Siswa        : 17 Tahun
+Nilai Tes Masuk   : 89.5
+Status Keaktifan  : Aktif (1)
+====================================================
+Status Verifikasi : Terdaftar Resmi pada Sistem
+====================================================</pre>
+                    </div>
+                </div>
+
+
+            </div>
+        </section>
+
+        <!-- Panel Kanan: Code Editor -->
+        <section class="panel-editor">
+            <div class="editor-toolbar">
+                <div class="editor-meta">
+                    <span style="font-weight: 600; color: #f8fafc;">main.cpp</span>
+                    <div class="editor-status-indicator" id="statusIndicator">
+                        <span class="status-dot" id="statusDot"></span>
+                        <span id="statusText">Tersimpan di Local Storage</span>
+                    </div>
+                </div>
+                <div class="editor-actions">
+                    <button class="btn-tool" onclick="saveCodeManual()" title="Simpan perubahan ke penyimpanan peramban">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path>
+                        </svg>
+                        Simpan
+                    </button>
+                    <button class="btn-tool btn-tool-danger" onclick="resetToTemplate()" title="Reset kode ke template awal">
+                        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
+                        </svg>
+                        Reset
+                    </button>
+                </div>
+            </div>
+
+            <div class="codemirror-wrapper">
+                <textarea id="codeEditorArea"></textarea>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer Bar -->
+    <footer class="footer-action-bar">
+        <div class="footer-hint">
+            <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20" style="color: #3b82f6;">
+                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+            </svg>
+            <span>Kode Anda otomatis tersimpan di peramban (Local Storage). Klik <strong>Unduh Laporan HTML</strong> saat telah selesai untuk dikumpulkan ke guru.</span>
+        </div>
+        <div>
+            <button class="btn btn-success" onclick="generateAndDownloadReport()">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M3 17a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm3.293-7.707a1 1 0 011.414 0L9 10.586V3a1 1 0 112 0v7.586l1.293-1.293a1 1 0 111.414 1.414l-3 3a1 1 0 01-1.414 0l-3-3a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                </svg>
+                Unduh Laporan Praktik (.html)
+            </button>
+        </div>
+    </footer>
+
+    <!-- Toast Notification Element -->
+    <div id="toastNotification" class="toast">
+        <span class="toast-icon">✓</span>
+        <span id="toastMsg">Perubahan tersimpan</span>
+    </div>
+
+    <!-- Logic Script -->
+    <script>
+        // Template Awal Skeleton Kode C++ untuk Ujian Siswa
+        const DEFAULT_CPP_TEMPLATE = `// ========================================================
+// ULANGAN PRAKTIK PEMROGRAMAN C++ - KELAS 10
+// Topik: Variabel, Tipe Data, dan cout
+// ========================================================
+
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+int main() {
+    // ----------------------------------------------------
+    // 1. DEKLARASI & INISIALISASI VARIABEL
+    // Deklarasikan 7 variabel sesuai tabel di sebelah kiri:
+    // (namaSiswa, nisn, kodeKelas, tahunLahir, tahunSekarang, nilaiUjianMasuk, statusAktif)
+    // ----------------------------------------------------
+    string namaSiswa = "Ahmad Pratama";
+    
+    // Tulis deklarasi variabel lainnya di sini...
+    
+
+    // ----------------------------------------------------
+    // 2. PERHITUNGAN USIA SISWA
+    // Buat variabel usia dan hitung: tahunSekarang - tahunLahir
+    // ----------------------------------------------------
+    
+    
+
+    // ----------------------------------------------------
+    // 3. CETAK KARTU TANDA SISWA MENGGUNAKAN COUT
+    // Susun tampilan rapi menggunakan cout dan endl sesuai contoh
+    // ----------------------------------------------------
+    cout << "====================================================" << endl;
+    cout << "           KARTU TANDA SISWA (KTS) DIGITAL          " << endl;
+    cout << "            SMK INFORMATIKA & TEKNOLOGI             " << endl;
+    cout << "====================================================" << endl;
+    
+    // Lanjutkan baris cout untuk mencetak data siswa di sini...
+    
+
+    cout << "====================================================" << endl;
+
+    return 0;
+}
+`;
+
+        const STORAGE_KEY_CODE = "cpp_exam_code_v1";
+        const STORAGE_KEY_NAME = "cpp_exam_student_name";
+        const STORAGE_KEY_CLASS = "cpp_exam_student_class";
+        const STORAGE_KEY_ABSEN = "cpp_exam_student_absen";
+
+        let editorInstance;
+        let debounceTimer;
+
+        // Inisialisasi CodeMirror
+        function initCodeEditor() {
+            const textarea = document.getElementById('codeEditorArea');
+            
+            // Ambil kode dari localStorage atau gunakan template default
+            const savedCode = localStorage.getItem(STORAGE_KEY_CODE) || DEFAULT_CPP_TEMPLATE;
+            textarea.value = savedCode;
+
+            editorInstance = CodeMirror.fromTextArea(textarea, {
+                lineNumbers: true,
+                mode: "text/x-c++src",
+                theme: "dracula",
+                indentUnit: 4,
+                tabSize: 4,
+                indentWithTabs: false,
+                matchBrackets: true,
+                autoCloseBrackets: true,
+                lineWrapping: true
+            });
+
+            // Event listener auto-save saat siswa mengetik
+            editorInstance.on("change", () => {
+                showSavingState();
+                clearTimeout(debounceTimer);
+                debounceTimer = setTimeout(() => {
+                    const currentCode = editorInstance.getValue();
+                    localStorage.setItem(STORAGE_KEY_CODE, currentCode);
+                    showSavedState();
+                }, 600);
+            });
+        }
+
+        // Tampilkan status "Sedang Menyimpan..."
+        function showSavingState() {
+            const dot = document.getElementById('statusDot');
+            const text = document.getElementById('statusText');
+            dot.style.backgroundColor = '#fbbf24'; // kuning
+            text.textContent = 'Menyimpan ke browser...';
+            text.style.color = '#fbbf24';
+        }
+
+        // Tampilkan status "Tersimpan"
+        function showSavedState() {
+            const dot = document.getElementById('statusDot');
+            const text = document.getElementById('statusText');
+            const now = new Date();
+            const timeStr = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            dot.style.backgroundColor = '#4ade80'; // hijau
+            text.textContent = `Tersimpan (${timeStr})`;
+            text.style.color = '#4ade80';
+        }
+
+        // Simpan manual dengan notifikasi toast
+        function saveCodeManual() {
+            if (!editorInstance) return;
+            const code = editorInstance.getValue();
+            localStorage.setItem(STORAGE_KEY_CODE, code);
+            showSavedState();
+            showToast("Kode berhasil disimpan ke Local Storage!");
+        }
+
+        // Reset kode kembali ke template default
+        function resetToTemplate() {
+            if (confirm("Apakah Anda yakin ingin mereset kode ke template awal? Seluruh ketikan Anda saat ini akan ditimpa.")) {
+                editorInstance.setValue(DEFAULT_CPP_TEMPLATE);
+                localStorage.setItem(STORAGE_KEY_CODE, DEFAULT_CPP_TEMPLATE);
+                showSavedState();
+                showToast("Kode berhasil direset ke template awal.");
+            }
+        }
+
+        // Simpan data identitas siswa
+        function saveStudentData() {
+            const name = document.getElementById('studentName').value;
+            const sClass = document.getElementById('studentClass').value;
+            const absen = document.getElementById('studentAbsen').value;
+
+            localStorage.setItem(STORAGE_KEY_NAME, name);
+            localStorage.setItem(STORAGE_KEY_CLASS, sClass);
+            localStorage.setItem(STORAGE_KEY_ABSEN, absen);
+        }
+
+        // Muat data identitas yang tersimpan
+        function loadStudentData() {
+            const name = localStorage.getItem(STORAGE_KEY_NAME) || "";
+            const sClass = localStorage.getItem(STORAGE_KEY_CLASS) || "";
+            const absen = localStorage.getItem(STORAGE_KEY_ABSEN) || "";
+
+            document.getElementById('studentName').value = name;
+            document.getElementById('studentClass').value = sClass;
+            document.getElementById('studentAbsen').value = absen;
+        }
+
+        // Tampilkan notifikasi pop-up (Toast)
+        function showToast(msg) {
+            const toast = document.getElementById('toastNotification');
+            const toastMsg = document.getElementById('toastMsg');
+            toastMsg.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Utility: Escape karakter HTML agar source code C++ tidak rusak saat dirender
+        function escapeHtml(text) {
+            return text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        // Fungsi Generate dan Unduh Laporan HTML
+        function generateAndDownloadReport() {
+            const name = document.getElementById('studentName').value.trim() || "Nama Siswa Belum Diisi";
+            const sClass = document.getElementById('studentClass').value.trim() || "Kelas Belum Diisi";
+            const absen = document.getElementById('studentAbsen').value.trim() || "-";
+            const code = editorInstance ? editorInstance.getValue() : "";
+
+            if (!code || code.trim() === "") {
+                alert("Kode program masih kosong! Harap tulis jawaban Anda terlebih dahulu.");
+                return;
+            }
+
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: '2-digit', minute: '2-digit' };
+            const timestampFormatted = now.toLocaleDateString('id-ID', options);
+
+            // Susun Konten HTML Laporan Mandiri (Self-Contained Report)
+            const reportHtml = `<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Laporan Ulangan Praktik C++ - ${escapeHtml(name)}</title>
+    <style>
+        @page {
+            size: A4;
+            margin: 15mm 15mm 15mm 15mm;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+            color: #1e293b;
+            background: #ffffff;
+            margin: 0;
+            padding: 24px;
+            line-height: 1.5;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        /* Kop Laporan */
+        .kop-header {
+            display: flex;
+            align-items: center;
+            border-bottom: 3px double #0f172a;
+            padding-bottom: 14px;
+            margin-bottom: 18px;
+        }
+        .kop-logo {
+            width: 70px;
+            height: 70px;
+            background: #00599c;
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            font-weight: bold;
+            border-radius: 8px;
+            margin-right: 18px;
+        }
+        .kop-text h1 {
+            font-size: 1.3rem;
+            margin: 0 0 4px;
+            color: #0f172a;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .kop-text p {
+            font-size: 0.9rem;
+            margin: 0;
+            color: #475569;
+        }
+        /* Tabel Identitas */
+        .meta-box {
+            background-color: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+        }
+        .meta-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px 16px;
+            font-size: 0.92rem;
+        }
+        .meta-item strong {
+            color: #334155;
+            display: inline-block;
+            width: 140px;
+        }
+        /* Section Box */
+        .section-box {
+            margin-bottom: 22px;
+        }
+        .section-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+            color: #0f172a;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .soal-card {
+            background: #fdfdfd;
+            border: 1px solid #e2e8f0;
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
+        .soal-card ol {
+            margin: 6px 0 6px 20px;
+            padding: 0;
+        }
+        /* Code Container */
+        .code-container {
+            background-color: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            overflow-x: auto;
+            font-family: "Consolas", "Courier New", Courier, monospace;
+            font-size: 13.5px;
+            line-height: 1.45;
+            padding: 14px;
+        }
+        pre {
+            margin: 0;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+        /* Output Mockup */
+        .output-box {
+            background: #0f172a;
+            color: #38bdf8;
+            padding: 12px 14px;
+            border-radius: 6px;
+            font-family: "Consolas", monospace;
+            font-size: 12.5px;
+            white-space: pre-wrap;
+            line-height: 1.35;
+        }
+
+        /* Print Action */
+        .action-banner {
+            background: #e0f2fe;
+            border: 1px solid #7dd3fc;
+            padding: 10px 16px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .btn-print {
+            background: #0284c7;
+            color: white;
+            border: none;
+            padding: 7px 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        @media print {
+            .action-banner {
+                display: none;
+            }
+            body {
+                padding: 0;
+            }
+            .code-container {
+                background: #ffffff;
+                border: 1px solid #94a3b8;
+            }
+            .output-box {
+                background: #ffffff !important;
+                color: #000000 !important;
+                border: 1px solid #94a3b8;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Banner Khusus Tampilan Layar -->
+        <div class="action-banner">
+            <span><strong>Status Dokumen:</strong> Berhasil di-generate. Dokumen ini dapat langsung dicetak atau disimpan sebagai PDF.</span>
+            <button class="btn-print" onclick="window.print()">Cetak / Simpan PDF</button>
+        </div>
+
+        <!-- KOP Lembar Jawaban -->
+        <div class="kop-header">
+            <div class="kop-logo">C++</div>
+            <div class="kop-text">
+                <h1>LEMBAR HASIL ULANGAN PRAKTIK PEMROGRAMAN</h1>
+                <p>Mata Pelajaran: Dasar-Dasar Pengembangan Perangkat Lunak dan Gim (Dasar PPLG)</p>
+                <p>Topik Evaluasi: Deklarasi Variabel, Pemilihan Tipe Data, dan Output Format <code>cout</code></p>
+            </div>
+        </div>
+
+        <!-- Identitas Siswa -->
+        <div class="meta-box">
+            <div class="meta-grid">
+                <div class="meta-item"><strong>Nama Siswa:</strong> ${escapeHtml(name)}</div>
+                <div class="meta-item"><strong>Kelas:</strong> ${escapeHtml(sClass)}</div>
+                <div class="meta-item"><strong>No. Absen / NIS:</strong> ${escapeHtml(absen)}</div>
+                <div class="meta-item"><strong>Waktu Penyerahan:</strong> ${timestampFormatted}</div>
+            </div>
+        </div>
+
+        <!-- Rangkuman Soal Praktik -->
+        <div class="section-box">
+            <div class="section-title">1. Soal &amp; Instruksi Tugas</div>
+            <div class="soal-card">
+                <strong>Judul: Program Pembuatan Kartu Identitas Pelajar (KTS Digital)</strong>
+                <ol>
+                    <li>Buat program C++ untuk menampilkan profil siswa secara rapi menggunakan perintah <code>cout</code>.</li>
+                    <li>Wajib mendefinisikan variabel: <code>namaSiswa</code> (string), <code>nisn</code> (string), <code>kodeKelas</code> (char), <code>tahunLahir</code> (int), <code>tahunSekarang</code> (int), <code>nilaiUjianMasuk</code> (double/float), dan <code>statusAktif</code> (bool).</li>
+                    <li>Hitung usia siswa melalui formula: <code>tahunSekarang - tahunLahir</code>.</li>
+                    <li>Sajikan output berbingkai rapi sesuai spesifikasi yang ditentukan.</li>
+                </ol>
+            </div>
+        </div>
+
+        <!-- Target Output -->
+        <div class="section-box">
+            <div class="section-title">2. Target Acuan Output Program</div>
+            <div class="output-box">====================================================
+           KARTU TANDA SISWA (KTS) DIGITAL
+            SMK INFORMATIKA &amp; TEKNOLOGI
+====================================================
+Nama Lengkap      : Ahmad Pratama
+NISN              : 0089765432
+Rombel Kelas      : X - A
+Tahun Kelahiran   : 2009
+Usia Siswa        : 17 Tahun
+Nilai Tes Masuk   : 89.5
+Status Keaktifan  : Aktif (1)
+====================================================
+Status Verifikasi : Terdaftar Resmi pada Sistem
+====================================================</div>
+        </div>
+
+        <!-- Kode Program Yang Ditulis Siswa -->
+        <div class="section-box">
+            <div class="section-title">3. Source Code C++ Jawaban Siswa</div>
+            <div class="code-container">
+<pre><code>${escapeHtml(code)}</code></pre>
+            </div>
+        </div>
+
+
+    </div>
+</body>
+</html>`;
+
+            // Proses Trigger Download Blob HTML
+            const sanitizedName = name.replace(/[^a-zA-Z0-9_-]/g, "_");
+            const sanitizedClass = sClass.replace(/[^a-zA-Z0-9_-]/g, "_");
+            const fileName = `Laporan_Praktik_CPP_${sanitizedName}_${sanitizedClass}.html`;
+
+            const blob = new Blob([reportHtml], { type: 'text/html;charset=utf-8' });
+            const downloadUrl = URL.createObjectURL(blob);
+            const downloadLink = document.createElement('a');
+            
+            downloadLink.href = downloadUrl;
+            downloadLink.download = fileName;
+            document.body.appendChild(downloadLink);
+            downloadLink.click();
+            document.body.removeChild(downloadLink);
+            URL.revokeObjectURL(downloadUrl);
+
+            showToast("Laporan HTML berhasil dibuat dan diunduh!");
+        }
+
+        // Jalankan saat dokumen selesai dimuat
+        document.addEventListener('DOMContentLoaded', () => {
+            loadStudentData();
+            initCodeEditor();
+            showSavedState();
+        });
+    </script>
+</body>
+</html>
