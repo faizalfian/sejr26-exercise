@@ -1,0 +1,2381 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lembar Soal Ujian Praktik Pemrograman GUI C# Desktop — Kelas 11 SMK</title>
+    <style>
+        :root {
+            --primary: #0284c7;
+            --primary-dark: #0369a1;
+            --primary-light: #e0f2fe;
+            --secondary: #475569;
+            --background: #f1f5f9;
+            --card-bg: #ffffff;
+            --border: #cbd5e1;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --success: #16a34a;
+            --success-light: #dcfce7;
+            --danger: #dc2626;
+            --win-chrome: #0078d7;
+            --win-bg: #f0f0f0;
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding-bottom: 60px;
+        }
+
+        /* Top Header */
+        .app-header {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border);
+            padding: 16px 28px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-content {
+            max-width: 1240px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-brand h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .badge-pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tag-desktop {
+            background: #e0f2fe;
+            color: #0369a1;
+            border: 1px solid #bae6fd;
+        }
+
+        .tag-tingkat {
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fde68a;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-header {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 7px 14px;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.15s ease;
+        }
+
+        .btn-header:hover {
+            background: #e2e8f0;
+            border-color: #94a3b8;
+        }
+
+        /* Paket Bar Switcher */
+        .paket-bar-container {
+            max-width: 1240px;
+            margin: 18px auto 0;
+            padding: 0 20px;
+        }
+
+        .paket-bar {
+            display: flex;
+            gap: 10px;
+            background: #ffffff;
+            padding: 8px 12px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+            overflow-x: auto;
+        }
+
+        .paket-btn {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            padding: 10px 18px;
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--secondary);
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+            transition: all 0.15s ease;
+        }
+
+        .paket-btn:hover {
+            background: #e2e8f0;
+            color: var(--text-main);
+        }
+
+        .paket-btn.active {
+            background: var(--primary);
+            color: #ffffff;
+            border-color: var(--primary-dark);
+            box-shadow: 0 2px 6px rgba(2, 132, 199, 0.35);
+        }
+
+        /* Nav Tabs within Paket */
+        .tab-bar {
+            max-width: 1240px;
+            margin: 14px auto 0;
+            padding: 0 20px;
+            display: flex;
+            gap: 8px;
+            border-bottom: 2px solid var(--border);
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            padding: 10px 16px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--secondary);
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover {
+            color: var(--primary);
+            background: rgba(2, 132, 199, 0.04);
+            border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1240px;
+            margin: 20px auto 0;
+            padding: 0 20px;
+        }
+
+        .paket-panel {
+            display: none;
+        }
+
+        .paket-panel.active {
+            display: block;
+        }
+
+        .content-panel {
+            display: none;
+        }
+
+        .content-panel.active {
+            display: block;
+            animation: fadeIn 0.2s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Question Card */
+        .soal-card {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            margin-bottom: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .soal-card-header {
+            margin-bottom: 20px;
+            padding-bottom: 14px;
+            border-bottom: 2px solid #e2e8f0;
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .soal-card-title {
+            font-size: 1.35rem;
+            font-weight: 700;
+            color: var(--text-main);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .soal-badge {
+            background: #0284c7;
+            color: #ffffff;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 3px 10px;
+            border-radius: 4px;
+            letter-spacing: 0.5px;
+        }
+
+        .soal-badge.badge-paket-b {
+            background: #0369a1;
+        }
+
+        .soal-badge.badge-paket-c {
+            background: #0f766e;
+        }
+
+        .section-heading {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin: 24px 0 12px 0;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border-left: 4px solid var(--primary);
+            padding-left: 10px;
+        }
+
+        /* Perintah Box & Lists */
+        .perintah-box {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: var(--radius-md);
+            padding: 20px 22px;
+            margin-top: 24px;
+        }
+
+        .perintah-list {
+            list-style: none;
+            counter-reset: perintah-step;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .perintah-item {
+            counter-increment: perintah-step;
+            position: relative;
+            padding-left: 36px;
+            font-size: 0.95rem;
+            color: #1e293b;
+            line-height: 1.65;
+        }
+
+        .perintah-item::before {
+            content: counter(perintah-step);
+            position: absolute;
+            left: 0;
+            top: 2px;
+            width: 24px;
+            height: 24px;
+            background: #0284c7;
+            color: #ffffff;
+            font-size: 0.8rem;
+            font-weight: 700;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .perintah-item strong {
+            color: #0f172a;
+        }
+
+        .perintah-sublist {
+            list-style-type: disc;
+            margin: 8px 0 4px 20px;
+            font-size: 0.9rem;
+            color: #334155;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .code-pill {
+            background: #e2e8f0;
+            border: 1px solid #cbd5e1;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: Consolas, Monaco, monospace;
+            font-size: 0.85rem;
+            color: #0f172a;
+            font-weight: 600;
+        }
+
+        /* Mockup Toolbar */
+        .mockup-toolbar {
+            background: #1e293b;
+            color: #f8fafc;
+            padding: 10px 18px;
+            border-radius: var(--radius-md) var(--radius-md) 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 8px;
+        }
+
+        .mockup-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .mockup-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toggle-btn {
+            background: #334155;
+            color: #f8fafc;
+            border: 1px solid #475569;
+            padding: 5px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.15s;
+        }
+
+        .toggle-btn:hover {
+            background: #475569;
+        }
+
+        .toggle-btn.active {
+            background: #0284c7;
+            border-color: #38bdf8;
+            color: #ffffff;
+        }
+
+        /* ========================================================
+           WINDOWS FORMS DESKTOP SIMULATOR STYLING
+        ======================================================== */
+        .winforms-window {
+            background: var(--win-bg);
+            border: 1px solid #7160e8;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.22);
+            border-radius: 6px 6px 0 0;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        .winforms-titlebar {
+            background: linear-gradient(180deg, #107c41 0%, #0b5a2f 100%);
+            color: #ffffff;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 8px 0 10px;
+            user-select: none;
+        }
+
+        .winforms-titlebar.blue-theme {
+            background: linear-gradient(180deg, #0284c7 0%, #0369a1 100%);
+        }
+
+        .winforms-titlebar.teal-theme {
+            background: linear-gradient(180deg, #0f766e 0%, #115e59 100%);
+        }
+
+        .winforms-title-text {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.2px;
+        }
+
+        .winforms-app-icon {
+            font-size: 14px;
+        }
+
+        .winforms-window-buttons {
+            display: flex;
+            height: 100%;
+        }
+
+        .win-btn {
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            width: 36px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .win-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .win-btn.close:hover {
+            background: #e81123;
+        }
+
+        .win-btn.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .winforms-menustrip {
+            background: #f5f6f7;
+            border-bottom: 1px solid #dcdcdc;
+            padding: 2px 6px;
+            display: flex;
+            gap: 4px;
+            font-size: 12px;
+            color: #2b2b2b;
+        }
+
+        .menu-item {
+            padding: 3px 8px;
+            border-radius: 2px;
+            cursor: default;
+        }
+
+        .menu-item:hover {
+            background: #e5f1fb;
+            outline: 1px solid #70c0e7;
+        }
+
+        .winforms-body {
+            padding: 20px;
+            background: #f0f0f0;
+            position: relative;
+        }
+
+        .login-canvas {
+            max-width: 420px;
+            margin: 0 auto;
+            background: #f0f0f0;
+        }
+
+        .login-header-section {
+            text-align: center;
+            margin-bottom: 22px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid #d0d0d0;
+        }
+
+        .login-avatar-icon {
+            width: 58px;
+            height: 58px;
+            background: #e8f5e9;
+            border: 2px solid #81c784;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin: 0 auto 10px auto;
+        }
+
+        .login-avatar-icon.avatar-blue {
+            background: #e0f2fe;
+            border-color: #38bdf8;
+        }
+
+        .login-avatar-icon.avatar-teal {
+            background: #ccfbf1;
+            border-color: #2dd4bf;
+        }
+
+        .login-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1b5e20;
+        }
+
+        .login-title.title-blue {
+            color: #0369a1;
+        }
+
+        .login-title.title-teal {
+            color: #0f766e;
+        }
+
+        .login-subtitle {
+            font-size: 11px;
+            color: #616161;
+            font-style: italic;
+        }
+
+        .wf-form-group {
+            margin-bottom: 14px;
+            position: relative;
+        }
+
+        .wf-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #212121;
+            margin-bottom: 4px;
+        }
+
+        .wf-textbox {
+            width: 100%;
+            height: 28px;
+            padding: 4px 8px;
+            border: 1px solid #7a7a7a;
+            background: #ffffff;
+            font-size: 12px;
+            font-family: inherit;
+            outline: none;
+            box-shadow: inset 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .wf-textbox:focus {
+            border-color: #0078d7;
+            box-shadow: inset 1px 1px 2px rgba(0,0,0,0.1), 0 0 3px rgba(0, 120, 215, 0.4);
+        }
+
+        .wf-textbox.readonly {
+            background: #e9e9e9;
+            color: #555555;
+            cursor: default;
+        }
+
+        .wf-combobox {
+            width: 100%;
+            height: 28px;
+            padding: 3px 6px;
+            border: 1px solid #7a7a7a;
+            background: #ffffff;
+            font-size: 12px;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .wf-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: #212121;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .wf-radio {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: #212121;
+            cursor: pointer;
+            user-select: none;
+            margin-right: 18px;
+        }
+
+        .wf-numeric-wrapper {
+            position: relative;
+            display: inline-flex;
+            width: 100%;
+        }
+
+        .wf-numeric-input {
+            width: 100%;
+            height: 28px;
+            padding: 4px 28px 4px 8px;
+            border: 1px solid #7a7a7a;
+            background: #ffffff;
+            font-size: 12px;
+            text-align: right;
+            box-shadow: inset 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .wf-numeric-spinners {
+            position: absolute;
+            right: 1px;
+            top: 1px;
+            bottom: 1px;
+            width: 22px;
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid #cccccc;
+        }
+
+        .spinner-btn {
+            background: #f0f0f0;
+            border: none;
+            border-bottom: 1px solid #cccccc;
+            height: 50%;
+            font-size: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .spinner-btn:last-child {
+            border-bottom: none;
+        }
+
+        .spinner-btn:hover {
+            background: #e0e0e0;
+        }
+
+        .wf-button {
+            height: 30px;
+            padding: 4px 16px;
+            border: 1px solid #707070;
+            background: linear-gradient(180deg, #f5f5f5 0%, #e1e1e1 100%);
+            font-size: 12px;
+            font-weight: 500;
+            color: #000000;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            box-shadow: 1px 1px 1px rgba(0,0,0,0.15);
+            font-family: inherit;
+        }
+
+        .wf-button:hover {
+            background: linear-gradient(180deg, #e5f1fb 0%, #cce4f7 100%);
+            border-color: #0078d7;
+        }
+
+        .wf-button:active {
+            background: linear-gradient(180deg, #cce4f7 0%, #b8d9f5 100%);
+            box-shadow: inset 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .wf-button.btn-primary {
+            background: linear-gradient(180deg, #2e7d32 0%, #1b5e20 100%);
+            border-color: #1b5e20;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .wf-button.btn-primary.btn-blue {
+            background: linear-gradient(180deg, #0284c7 0%, #0369a1 100%);
+            border-color: #0369a1;
+        }
+
+        .wf-button.btn-primary.btn-teal {
+            background: linear-gradient(180deg, #0f766e 0%, #115e59 100%);
+            border-color: #115e59;
+        }
+
+        .wf-button.btn-danger {
+            background: linear-gradient(180deg, #e53935 0%, #c62828 100%);
+            border-color: #b71c1c;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .wf-button.btn-danger:hover {
+            background: linear-gradient(180deg, #ef5350 0%, #d32f2f 100%);
+        }
+
+        .wf-groupbox {
+            border: 1px solid #c0c0c0;
+            border-radius: 4px;
+            padding: 16px 14px 14px 14px;
+            margin-bottom: 16px;
+            position: relative;
+            background: #ffffff;
+        }
+
+        .wf-groupbox-legend {
+            font-size: 12px;
+            font-weight: 700;
+            color: #1b5e20;
+            padding: 0 6px;
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            background: #ffffff;
+        }
+
+        .wf-groupbox-legend.legend-blue {
+            color: #0369a1;
+        }
+
+        .wf-groupbox-legend.legend-teal {
+            color: #0f766e;
+        }
+
+        .wf-datagridview {
+            border: 1px solid #ababab;
+            background: #ffffff;
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 8px;
+        }
+
+        .wf-grid-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+            text-align: left;
+        }
+
+        .wf-grid-table th {
+            background: #f0f0f0;
+            border-right: 1px solid #d0d0d0;
+            border-bottom: 2px solid #ababab;
+            padding: 6px 10px;
+            font-weight: 600;
+            color: #333333;
+            user-select: none;
+            white-space: nowrap;
+        }
+
+        .wf-grid-table td {
+            border-right: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 5px 10px;
+            color: #222222;
+            white-space: nowrap;
+        }
+
+        .wf-grid-table tr:nth-child(even) {
+            background: #fafafa;
+        }
+
+        .wf-grid-table tr.selected {
+            background: #3399ff !important;
+            color: #ffffff !important;
+        }
+
+        .wf-grid-table tr.selected td {
+            color: #ffffff !important;
+            border-right-color: #55aaff;
+        }
+
+        .wf-grid-row-header {
+            width: 24px;
+            background: #f0f0f0;
+            text-align: center;
+            border-right: 1px solid #c0c0c0;
+        }
+
+        .winforms-statusstrip {
+            background: #f0f0f0;
+            border-top: 1px solid #d0d0d0;
+            padding: 4px 10px;
+            display: flex;
+            align-items: center;
+            font-size: 11px;
+            color: #444444;
+            gap: 16px;
+        }
+
+        .status-panel {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border-right: 1px solid #cccccc;
+            padding-right: 16px;
+        }
+
+        .status-panel:last-child {
+            border-right: none;
+            padding-right: 0;
+            margin-left: auto;
+        }
+
+        /* Inspection Overlays */
+        .control-tag {
+            display: none;
+            position: absolute;
+            background: #7c3aed;
+            color: #ffffff;
+            font-size: 10px;
+            font-family: monospace;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 3px;
+            top: -12px;
+            right: 0;
+            z-index: 20;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.25);
+            pointer-events: none;
+        }
+
+        body.show-tags .control-tag {
+            display: inline-block;
+        }
+
+        .tabindex-badge {
+            display: none;
+            position: absolute;
+            background: #f59e0b;
+            color: #000000;
+            font-size: 10px;
+            font-weight: 800;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            left: -8px;
+            top: -8px;
+            z-index: 21;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+            border: 1px solid #ffffff;
+        }
+
+        body.show-tabindex .tabindex-badge {
+            display: inline-flex;
+        }
+
+        .crud-grid-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 820px) {
+            .crud-grid-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Print Friendly */
+        @media print {
+            .app-header, .paket-bar-container, .tab-bar, .mockup-toolbar, .btn-header {
+                display: none !important;
+            }
+            body {
+                background: #ffffff;
+                color: #000000;
+                padding: 0;
+            }
+            .paket-panel {
+                display: block !important;
+                page-break-after: always;
+            }
+            .content-panel {
+                display: block !important;
+            }
+            .soal-card {
+                box-shadow: none;
+                border: 1px solid #cccccc;
+                page-break-after: always;
+                margin-bottom: 20px;
+            }
+            .soal-card:last-child {
+                page-break-after: auto;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- APP HEADER -->
+    <header class="app-header">
+        <div class="header-content">
+            <div class="header-brand">
+                <span style="font-size: 1.6rem;">🖥️</span>
+                <div>
+                    <h1>Bank Soal Ujian Praktik GUI C# .NET Desktop</h1>
+                    <div style="display: flex; gap: 8px; margin-top: 4px;">
+                        <span class="badge-pill tag-desktop">Windows Forms App</span>
+                        <span class="badge-pill tag-tingkat">Kelas 11 SMK RPL</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="header-actions">
+                <button class="btn-header" onclick="window.print()">🖨️ Cetak / Simpan PDF</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- PAKET SWITCHER -->
+    <div class="paket-bar-container">
+        <div class="paket-bar">
+            <button class="paket-btn active" id="btn-paket-a" onclick="gantiPaket('paket-a')">📦 Paket A: Bank Sampah Digital</button>
+            <button class="paket-btn" id="btn-paket-b" onclick="gantiPaket('paket-b')">🔬 Paket B: Peminjaman Lab Komputer</button>
+            <button class="paket-btn" id="btn-paket-c" onclick="gantiPaket('paket-c')">🍽️ Paket C: Kasir Kantin Digital</button>
+        </div>
+    </div>
+
+    <!-- MAIN CONTAINER -->
+    <main class="main-container">
+
+        <!-- ==============================================================
+             PAKET A: GREEN SCHOOL — BANK SAMPAH DIGITAL
+        ============================================================== -->
+        <div id="panel-paket-a" class="paket-panel active">
+            <!-- Nav Tabs Paket A -->
+            <nav class="tab-bar">
+                <button class="tab-btn active" id="tab-btn-a-soal1" onclick="bukaTabPaket('a', 'soal1')">🔐 Soal 1: Form Login (FrmLogin.cs)</button>
+                <button class="tab-btn" id="tab-btn-a-soal2" onclick="bukaTabPaket('a', 'soal2')">📊 Soal 2: Form CRUD Data Setoran (FrmDataSetoran.cs)</button>
+                <button class="tab-btn" id="tab-btn-a-semua" onclick="bukaTabPaket('a', 'semua')">📄 Tampilkan Semua Soal Paket A</button>
+            </nav>
+
+            <!-- SOAL 1 PAKET A -->
+            <section id="panel-a-soal1" class="content-panel active" style="margin-top: 20px;">
+                <div class="soal-card">
+                    <div class="soal-card-header">
+                        <div class="soal-card-title">
+                            <span class="soal-badge">PAKET A — SOAL 1</span>
+                            <span>Form Login Petugas (<code class="code-pill">FrmLogin.cs</code>)</span>
+                        </div>
+                    </div>
+
+                    <!-- Layout Preview -->
+                    <div class="section-heading">🖥️ Layout Tampilan Form</div>
+                    <div class="mockup-toolbar">
+                        <div class="mockup-title">Desain Tampilan Windows Forms — FrmLogin</div>
+                        <div class="mockup-actions">
+                            <button type="button" class="toggle-btn" onclick="toggleControlTags()">🏷️ Tampilkan Nama Objek (`Name`)</button>
+                            <button type="button" class="toggle-btn" onclick="toggleTabIndex()">🔢 Tampilkan Urutan TabIndex</button>
+                        </div>
+                    </div>
+
+                    <div class="winforms-window" style="max-width: 440px; margin: 0 auto 24px auto;">
+                        <div class="winforms-titlebar">
+                            <div class="winforms-title-text">
+                                <span class="winforms-app-icon">🌿</span>
+                                <span>Login Petugas — GreenSchool Bank Sampah</span>
+                            </div>
+                            <div class="winforms-window-buttons">
+                                <button class="win-btn">_</button>
+                                <button class="win-btn disabled">□</button>
+                                <button class="win-btn close">✕</button>
+                            </div>
+                        </div>
+
+                        <div class="winforms-body login-canvas">
+                            <div class="login-header-section">
+                                <div class="login-avatar-icon" style="position: relative;">
+                                    <span class="tabindex-badge">0</span>
+                                    <span class="control-tag">picLogo</span>
+                                    ♻️
+                                </div>
+                                <div class="login-title">GREENSCHOOL BANK SAMPAH</div>
+                                <div class="login-subtitle">"Kelola Sampah, Wujudkan Lingkungan Bersih"</div>
+                            </div>
+
+                            <div class="wf-form-group">
+                                <label class="wf-label">Nama Pengguna (Username):</label>
+                                <div style="position: relative;">
+                                    <span class="tabindex-badge">1</span>
+                                    <span class="control-tag">txtUsername</span>
+                                    <input type="text" class="wf-textbox" value="admin_loket1">
+                                </div>
+                            </div>
+
+                            <div class="wf-form-group">
+                                <label class="wf-label">Kata Sandi (Password):</label>
+                                <div style="position: relative;">
+                                    <span class="tabindex-badge">2</span>
+                                    <span class="control-tag">txtPassword</span>
+                                    <input type="password" class="wf-textbox" value="passwordRahasia123">
+                                </div>
+                            </div>
+
+                            <div class="wf-form-group">
+                                <label class="wf-label">Peran / Hak Akses:</label>
+                                <div style="position: relative;">
+                                    <span class="tabindex-badge">3</span>
+                                    <span class="control-tag">cmbRole</span>
+                                    <select class="wf-combobox">
+                                        <option selected>Petugas Loket Penimbangan</option>
+                                        <option>Koordinator Bank Sampah</option>
+                                        <option>Administrator Sekolah</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="wf-form-group" style="position: relative; margin-top: 14px;">
+                                <span class="tabindex-badge">4</span>
+                                <span class="control-tag">chkIngatSaya</span>
+                                <label class="wf-checkbox">
+                                    <input type="checkbox" checked>
+                                    <span>Ingat Akun Saya pada Perangkat Ini</span>
+                                </label>
+                            </div>
+
+                            <div style="display: flex; gap: 10px; margin-top: 22px;">
+                                <div style="flex: 1; position: relative;">
+                                    <span class="tabindex-badge">5</span>
+                                    <span class="control-tag">btnLogin</span>
+                                    <button type="button" class="wf-button btn-primary" style="width: 100%;">➔ Masuk Sistem</button>
+                                </div>
+                                <div style="flex: 1; position: relative;">
+                                    <span class="tabindex-badge">6</span>
+                                    <span class="control-tag">btnBatal</span>
+                                    <button type="button" class="wf-button" style="width: 100%;">✕ Batal</button>
+                                </div>
+                            </div>
+
+                            <div style="text-align: center; margin-top: 18px; position: relative;">
+                                <span class="tabindex-badge">7</span>
+                                <span class="control-tag">lblBantuan</span>
+                                <a href="#help" onclick="return false;" style="font-size: 11px; color: #0284c7; text-decoration: underline;">
+                                    Lupa kata sandi? Hubungi Pembina Lab GreenTech
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Perintah -->
+                    <div class="perintah-box">
+                        <div class="section-heading" style="margin-top: 0; padding-left: 8px;">📋 Perintah Pengerjaan Form 1</div>
+                        <ol class="perintah-list">
+                            <li class="perintah-item">
+                                <strong>Buat Form Baru:</strong> Beri nama berkas dan class <code class="code-pill">FrmLogin.cs</code>.
+                            </li>
+                            <li class="perintah-item">
+                                <strong>Atur Properti Form:</strong>
+                                <ul class="perintah-sublist">
+                                    <li><code class="code-pill">Text = "Login Petugas — GreenSchool Bank Sampah"</code></li>
+                                    <li><code class="code-pill">Size = 420, 500</code> piksel</li>
+                                    <li><code class="code-pill">StartPosition = CenterScreen</code></li>
+                                    <li><code class="code-pill">FormBorderStyle = FixedDialog</code></li>
+                                    <li><code class="code-pill">MaximizeBox = False</code> dan <code class="code-pill">MinimizeBox = True</code></li>
+                                    <li><code class="code-pill">AcceptButton = btnLogin</code> dan <code class="code-pill">CancelButton = btnBatal</code></li>
+                                </ul>
+                            </li>
+                            <li class="perintah-item">
+                                <strong>Susun dan Konfigurasi Kontrol Antarmuka:</strong>
+                                <ul class="perintah-sublist">
+                                    <li><strong>PictureBox (<code class="code-pill">picLogo</code>)</strong>: <code class="code-pill">SizeMode = Zoom</code>, pasang ikon bank sampah.</li>
+                                    <li><strong>Label Header</strong>: Judul <em>"GREENSCHOOL BANK SAMPAH"</em> (Font Bold, hijau tua) dan subjudul slogan.</li>
+                                    <li><strong>TextBox (<code class="code-pill">txtUsername</code>)</strong>: <code class="code-pill">MaxLength = 30</code>.</li>
+                                    <li><strong>TextBox (<code class="code-pill">txtPassword</code>)</strong>: <code class="code-pill">UseSystemPasswordChar = True</code>.</li>
+                                    <li><strong>ComboBox (<code class="code-pill">cmbRole</code>)</strong>: <code class="code-pill">DropDownStyle = DropDownList</code> (3 opsi peran).</li>
+                                    <li><strong>CheckBox (<code class="code-pill">chkIngatSaya</code>)</strong>: <code class="code-pill">Text = "Ingat Akun Saya pada Perangkat Ini"</code>.</li>
+                                    <li><strong>Button (<code class="code-pill">btnLogin</code>)</strong>: <code class="code-pill">Text = "Masuk Sistem"</code> (warna hijau/kontras).</li>
+                                    <li><strong>Button (<code class="code-pill">btnBatal</code>)</strong>: <code class="code-pill">Text = "Batal"</code>, <code class="code-pill">DialogResult = Cancel</code>.</li>
+                                    <li><strong>LinkLabel (<code class="code-pill">lblBantuan</code>)</strong>: Teks bantuan lupa kata sandi.</li>
+                                </ul>
+                            </li>
+                            <li class="perintah-item">
+                                <strong>Atur Urutan TabIndex:</strong> Urutkan fokus <kbd class="code-pill">Tab</kbd> dari <code class="code-pill">txtUsername (1)</code> sampai <code class="code-pill">lblBantuan (7)</code> secara sekuensial.
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SOAL 2 PAKET A -->
+            <section id="panel-a-soal2" class="content-panel" style="margin-top: 20px;">
+                <div class="soal-card">
+                    <div class="soal-card-header">
+                        <div class="soal-card-title">
+                            <span class="soal-badge">PAKET A — SOAL 2</span>
+                            <span>Form CRUD Data Setoran Sampah (<code class="code-pill">FrmDataSetoran.cs</code>)</span>
+                        </div>
+                    </div>
+
+                    <!-- Layout Preview -->
+                    <div class="section-heading">🖥️ Layout Tampilan Form</div>
+                    <div class="mockup-toolbar">
+                        <div class="mockup-title">Desain Tampilan Windows Forms — FrmDataSetoran</div>
+                        <div class="mockup-actions">
+                            <button type="button" class="toggle-btn" onclick="toggleControlTags()">🏷️ Tampilkan Nama Objek (`Name`)</button>
+                            <button type="button" class="toggle-btn" onclick="toggleTabIndex()">🔢 Tampilkan Urutan TabIndex</button>
+                        </div>
+                    </div>
+
+                    <div class="winforms-window" style="margin-bottom: 24px;">
+                        <div class="winforms-titlebar">
+                            <div class="winforms-title-text">
+                                <span class="winforms-app-icon">📦</span>
+                                <span>Kelola Data Setoran Sampah Siswa — GreenSchool Bank Sampah</span>
+                            </div>
+                            <div class="winforms-window-buttons">
+                                <button class="win-btn">_</button>
+                                <button class="win-btn">□</button>
+                                <button class="win-btn close">✕</button>
+                            </div>
+                        </div>
+
+                        <div class="winforms-menustrip">
+                            <span class="menu-item">File</span>
+                            <span class="menu-item">Transaksi</span>
+                            <span class="menu-item">Laporan</span>
+                            <span class="menu-item">Bantuan</span>
+                        </div>
+
+                        <div class="winforms-body">
+                            <!-- GroupBox Entri -->
+                            <div class="wf-groupbox" style="position: relative;">
+                                <span class="tabindex-badge" style="left: -10px; top: -10px;">G1</span>
+                                <span class="control-tag" style="top: -12px; right: 10px;">grpEntriData</span>
+                                <div class="wf-groupbox-legend">📋 Formulir Entri Data Setoran Sampah</div>
+
+                                <div class="crud-grid-layout">
+                                    <div>
+                                        <div class="wf-form-group">
+                                            <label class="wf-label">Kode Setor (Otomatis):</label>
+                                            <div style="position: relative;">
+                                                <span class="control-tag">txtKodeSetor</span>
+                                                <input type="text" class="wf-textbox readonly" value="BS-2026-004" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="wf-form-group">
+                                            <label class="wf-label">Nomor Induk Siswa (NIS):</label>
+                                            <div style="position: relative;">
+                                                <span class="tabindex-badge">1</span>
+                                                <span class="control-tag">txtNIS</span>
+                                                <input type="text" class="wf-textbox" value="102404">
+                                            </div>
+                                        </div>
+                                        <div class="wf-form-group">
+                                            <label class="wf-label">Nama Lengkap Siswa:</label>
+                                            <div style="position: relative;">
+                                                <span class="tabindex-badge">2</span>
+                                                <span class="control-tag">txtNamaSiswa</span>
+                                                <input type="text" class="wf-textbox" value="Muhammad Fajar">
+                                            </div>
+                                        </div>
+                                        <div class="wf-form-group">
+                                            <label class="wf-label">Kelas / Rombel:</label>
+                                            <div style="position: relative;">
+                                                <span class="tabindex-badge">3</span>
+                                                <span class="control-tag">cmbKelas</span>
+                                                <select class="wf-combobox">
+                                                    <option>X PPLG 1</option>
+                                                    <option selected>XI PPLG 1</option>
+                                                    <option>XI PPLG 2</option>
+                                                    <option>XII PPLG 1</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div class="wf-form-group">
+                                            <label class="wf-label">Tanggal Penyerahan:</label>
+                                            <div style="position: relative;">
+                                                <span class="tabindex-badge">4</span>
+                                                <span class="control-tag">dtpTanggalSetor</span>
+                                                <input type="date" class="wf-textbox" value="2026-10-05">
+                                            </div>
+                                        </div>
+                                        <div class="wf-form-group">
+                                            <label class="wf-label">Kategori / Jenis Sampah:</label>
+                                            <div style="position: relative;">
+                                                <span class="tabindex-badge">5</span>
+                                                <span class="control-tag">cmbJenisSampah</span>
+                                                <select class="wf-combobox">
+                                                    <option selected>Botol Plastik PET (Rp3.000 / kg)</option>
+                                                    <option>Kardus & Kertas Bekas (Rp2.000 / kg)</option>
+                                                    <option>Kaleng Alumunium (Rp8.000 / kg)</option>
+                                                    <option>Minyak Jelantah (Rp7.000 / kg)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                            <div class="wf-form-group">
+                                                <label class="wf-label">Berat Sampah (Kg):</label>
+                                                <div class="wf-numeric-wrapper">
+                                                    <span class="tabindex-badge">6</span>
+                                                    <span class="control-tag">numBerat</span>
+                                                    <input type="text" class="wf-numeric-input" value="4.5">
+                                                    <div class="wf-numeric-spinners">
+                                                        <button class="spinner-btn" type="button">▲</button>
+                                                        <button class="spinner-btn" type="button">▼</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="wf-form-group">
+                                                <label class="wf-label">Estimasi Nilai (Rp):</label>
+                                                <div style="position: relative;">
+                                                    <span class="control-tag">txtTotalNilai</span>
+                                                    <input type="text" class="wf-textbox readonly" value="Rp 13.500" style="text-align: right; font-weight: 700; color: #1b5e20;" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="wf-form-group" style="margin-top: 6px;">
+                                            <label class="wf-label">Opsi Penyaluran Dana:</label>
+                                            <div style="position: relative; margin-top: 4px;">
+                                                <span class="tabindex-badge">7</span>
+                                                <span class="control-tag">rdoTabungan & rdoDonasi</span>
+                                                <label class="wf-radio"><input type="radio" name="opsi-dana-a" checked><span>Disimpan ke Tabungan</span></label>
+                                                <label class="wf-radio"><input type="radio" name="opsi-dana-a"><span>Disedekahkan ke Donasi</span></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Panel Tombol -->
+                            <div style="margin-bottom: 18px; display: flex; gap: 8px; flex-wrap: wrap; background: #e8e8e8; padding: 10px 12px; border: 1px solid #c8c8c8; border-radius: 4px; position: relative;">
+                                <span class="tabindex-badge" style="left: -8px; top: -8px;">P</span>
+                                <span class="control-tag" style="top: -12px; right: 8px;">pnlAksi</span>
+                                <button type="button" class="wf-button">➕ Tambah Baru</button>
+                                <button type="button" class="wf-button btn-primary">💾 Simpan Data</button>
+                                <button type="button" class="wf-button">✏️ Ubah</button>
+                                <button type="button" class="wf-button btn-danger">🗑️ Hapus</button>
+                                <button type="button" class="wf-button" style="margin-left: auto;">🔄 Batal / Bersihkan</button>
+                            </div>
+
+                            <!-- GroupBox Tabel -->
+                            <div class="wf-groupbox" style="position: relative;">
+                                <span class="control-tag" style="top: -12px; right: 10px;">grpTabel</span>
+                                <div class="wf-groupbox-legend">📑 Riwayat Transaksi & Pencarian Data</div>
+                                <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 12px; flex-wrap: wrap;">
+                                    <label style="font-size: 12px; font-weight: 600;">Cari Data:</label>
+                                    <input type="text" class="wf-textbox" placeholder="Ketik NIS atau Nama Siswa..." style="flex: 1; min-width: 180px;">
+                                    <select class="wf-combobox" style="width: 180px;">
+                                        <option>Semua Kategori</option>
+                                        <option>Plastik</option>
+                                        <option>Kertas/Kardus</option>
+                                        <option>Logam</option>
+                                    </select>
+                                    <button type="button" class="wf-button">🔍 Cari</button>
+                                </div>
+
+                                <div class="wf-datagridview">
+                                    <table class="wf-grid-table">
+                                        <thead>
+                                            <tr>
+                                                <th class="wf-grid-row-header"></th>
+                                                <th>No</th>
+                                                <th>Kode Setor</th>
+                                                <th>Tanggal</th>
+                                                <th>NIS</th>
+                                                <th>Nama Siswa</th>
+                                                <th>Kelas</th>
+                                                <th>Jenis Sampah</th>
+                                                <th style="text-align: right;">Berat (Kg)</th>
+                                                <th style="text-align: right;">Total Nilai (Rp)</th>
+                                                <th>Penyaluran</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="wf-grid-row-header">▶</td>
+                                                <td>1</td><td>BS-2026-001</td><td>05/10/2026</td><td>102401</td><td>Rizky Pratama</td><td>XI PPLG 1</td><td>Botol Plastik PET</td><td style="text-align: right;">3.5</td><td style="text-align: right;">Rp 10.500</td><td>Tabungan</td>
+                                            </tr>
+                                            <tr class="selected">
+                                                <td class="wf-grid-row-header">▶</td>
+                                                <td>2</td><td>BS-2026-002</td><td>05/10/2026</td><td>102415</td><td>Siti Aminah</td><td>XI PPLG 1</td><td>Kardus Bekas</td><td style="text-align: right;">8.0</td><td style="text-align: right;">Rp 16.000</td><td>Donasi</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="wf-grid-row-header"></td>
+                                                <td>3</td><td>BS-2026-003</td><td>05/10/2026</td><td>102422</td><td>Budi Santoso</td><td>XI PPLG 2</td><td>Minyak Jelantah</td><td style="text-align: right;">2.0</td><td style="text-align: right;">Rp 14.000</td><td>Tabungan</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="winforms-statusstrip">
+                            <div class="status-panel">👤 Petugas Aktif: <strong>Ahmad Fauzi (Loket 1)</strong></div>
+                            <div class="status-panel">⚡ Status: <strong>Siap Melayani</strong></div>
+                            <div class="status-panel">📅 05 Oktober 2026</div>
+                            <div class="status-panel">📦 GreenSchool Desktop v1.0</div>
+                        </div>
+                    </div>
+
+                    <!-- Perintah -->
+                    <div class="perintah-box">
+                        <div class="section-heading" style="margin-top: 0; padding-left: 8px;">📋 Perintah Pengerjaan Form 2</div>
+                        <ol class="perintah-list">
+                            <li class="perintah-item">
+                                <strong>Buat Form Baru:</strong> Beri nama berkas dan class <code class="code-pill">FrmDataSetoran.cs</code>.
+                            </li>
+                            <li class="perintah-item">
+                                <strong>Atur Properti Form:</strong> <code class="code-pill">Text = "Kelola Data Setoran Sampah Siswa — GreenSchool Bank Sampah"</code>, <code class="code-pill">Size = ~980, 680</code> piksel, <code class="code-pill">StartPosition = CenterScreen</code>.
+                            </li>
+                            <li class="perintah-item">
+                                <strong>Susun Navigasi & Struktur Kontainer:</strong>
+                                <ul class="perintah-sublist">
+                                    <li><code class="code-pill">menuStrip1</code>: Menu <code class="code-pill">File</code>, <code class="code-pill">Transaksi</code>, <code class="code-pill">Laporan</code>, <code class="code-pill">Bantuan</code>.</li>
+                                    <li><code class="code-pill">grpEntriData</code>: GroupBox formulir input data setoran.</li>
+                                    <li><code class="code-pill">pnlAksi</code>: Panel tombol aksi CRUD.</li>
+                                    <li><code class="code-pill">grpTabel</code>: GroupBox riwayat dan pencarian data.</li>
+                                    <li><code class="code-pill">statusStrip1</code>: 4 item status label di bilah paling dasar form.</li>
+                                </ul>
+                            </li>
+                            <li class="perintah-item">
+                                <strong>Konfigurasi Input Data (<code class="code-pill">grpEntriData</code>):</strong>
+                                <ul class="perintah-sublist">
+                                    <li><code class="code-pill">txtKodeSetor</code>: ReadOnly, warna latar kontrol.</li>
+                                    <li><code class="code-pill">txtNIS</code> (MaxLength 10) dan <code class="code-pill">txtNamaSiswa</code> (MaxLength 50).</li>
+                                    <li><code class="code-pill">cmbKelas</code>: DropDownList berisi daftar rombel kelas.</li>
+                                    <li><code class="code-pill">dtpTanggalSetor</code>: DateTimePicker format Short.</li>
+                                    <li><code class="code-pill">cmbJenisSampah</code>: DropDownList kategori sampah & tarif.</li>
+                                    <li><code class="code-pill">numBerat</code>: NumericUpDown desimal 1 digit, rentang 0.1 - 100.0 kg.</li>
+                                    <li><code class="code-pill">txtTotalNilai</code>: ReadOnly, rata kanan, font tebal.</li>
+                                    <li><code class="code-pill">rdoTabungan</code> dan <code class="code-pill">rdoDonasi</code>: Opsi radio button mutually exclusive.</li>
+                                </ul>
+                            </li>
+                            <li class="perintah-item">
+                                <strong>Ketentuan & Ukuran Panel Tombol Aksi (<code class="code-pill">pnlAksi</code>):</strong>
+                                <ul class="perintah-sublist">
+                                    <li><strong>Tipe Kontrol & Nama:</strong> <code class="code-pill">Panel</code>, <code class="code-pill">Name = pnlAksi</code>.</li>
+                                    <li><strong>Ukuran Panel (Size):</strong> <code class="code-pill">940, 50</code> piksel (Lebar: 940 px, Tinggi: 50 px).</li>
+                                    <li><strong>Posisi (Location):</strong> <code class="code-pill">X: 18, Y: 275</code> (terletak di antara formulir entri dan tabel riwayat).</li>
+                                    <li><strong>Properti Panel:</strong> <code class="code-pill">BorderStyle = FixedSingle</code>, <code class="code-pill">BackColor = SystemColors.ControlLight</code> (abu-abu muda), dan <code class="code-pill">Anchor = Top, Left, Right</code>.</li>
+                                    <li><strong>Ukuran & Tata Letak Tombol:</strong> Masing-masing tombol berukuran <code class="code-pill">Size = 130, 32</code> piksel dengan jarak renggang (*gap*) 8–10 piksel. Tombol <code class="code-pill">btnBatal</code> diposisikan di sisi paling kanan panel.</li>
+                                    <li><strong>Daftar Tombol:</strong>
+                                        <code class="code-pill">btnTambah</code> (<code class="code-pill">Text = "➕ Tambah Baru"</code>),
+                                        <code class="code-pill">btnSimpan</code> (<code class="code-pill">Text = "💾 Simpan Data"</code>, warna tema hijau),
+                                        <code class="code-pill">btnUbah</code> (<code class="code-pill">Text = "✏️ Ubah"</code>),
+                                        <code class="code-pill">btnHapus</code> (<code class="code-pill">Text = "🗑️ Hapus"</code>, warna merah), dan
+                                        <code class="code-pill">btnBatal</code> (<code class="code-pill">Text = "🔄 Batal / Bersihkan"</code>).
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="perintah-item">
+                                <strong>Konfigurasi Pencarian & DataGridView (<code class="code-pill">grpTabel</code>):</strong>
+                                <ul class="perintah-sublist">
+                                    <li>Fitur pencarian: <code class="code-pill">txtCari</code>, <code class="code-pill">cmbFilterKategori</code>, dan <code class="code-pill">btnCari</code>.</li>
+                                    <li><code class="code-pill">dgvSetoranSampah</code>: ReadOnly, FullRowSelect, AllowUserToAddRows = False, minimal 7-10 kolom, serta masukkan 3 baris data sampel realistis.</li>
+                                </ul>
+                            </li>
+                            <li class="perintah-item">
+                                <strong>TabIndex, Naming Convention & Anchor Responsif:</strong> Beri awalan standar pada setiap objek kontrol (<code class="code-pill">txt</code>, <code class="code-pill">btn</code>, <code class="code-pill">cmb</code>, <code class="code-pill">num</code>, <code class="code-pill">dtp</code>, <code class="code-pill">dgv</code>). Urutkan TabIndex secara sekuensial. Atur Anchor agar tabel melebar saat form dimaksimalkan (*Maximize*).
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+
+        <!-- ==============================================================
+             PAKET B: LABTRACK — PEMINJAMAN ALAT & FASILITAS LAB KOMPUTER
+        ============================================================== -->
+        <div id="panel-paket-b" class="paket-panel">
+            <!-- Nav Tabs Paket B -->
+            <nav class="tab-bar">
+                <button class="tab-btn active" id="tab-btn-b-soal1" onclick="bukaTabPaket('b', 'soal1')">🔐 Soal 1: Form Login (FrmLoginPetugas.cs)</button>
+                <button class="tab-btn" id="tab-btn-b-soal2" onclick="bukaTabPaket('b', 'soal2')">📊 Soal 2: Form CRUD Peminjaman Alat (FrmPeminjamanAlat.cs)</button>
+                <button class="tab-btn" id="tab-btn-b-semua" onclick="bukaTabPaket('b', 'semua')">📄 Tampilkan Semua Soal Paket B</button>
+            </nav>
+
+            <!-- SOAL 1 PAKET B -->
+            <section id="panel-b-soal1" class="content-panel active" style="margin-top: 20px;">
+                <div class="soal-card">
+                    <div class="soal-card-header">
+                        <div class="soal-card-title">
+                            <span class="soal-badge badge-paket-b">PAKET B — SOAL 1</span>
+                            <span>Form Login Petugas Lab (<code class="code-pill">FrmLoginPetugas.cs</code>)</span>
+                        </div>
+                    </div>
+
+                    <!-- Layout Preview -->
+                    <div class="section-heading">🖥️ Layout Tampilan Form</div>
+                    <div class="mockup-toolbar">
+                        <div class="mockup-title">Desain Tampilan Windows Forms — FrmLoginPetugas</div>
+                        <div class="mockup-actions">
+                            <button type="button" class="toggle-btn" onclick="toggleControlTags()">🏷️ Tampilkan Nama Objek (`Name`)</button>
+                            <button type="button" class="toggle-btn" onclick="toggleTabIndex()">🔢 Tampilkan Urutan TabIndex</button>
+                        </div>
+                    </div>
+
+                    <div class="winforms-window" style="max-width: 440px; margin: 0 auto 24px auto;">
+                        <div class="winforms-titlebar blue-theme">
+                            <div class="winforms-title-text">
+                                <span class="winforms-app-icon">💻</span>
+                                <span>Login Petugas Lab — LabTrack Komputer</span>
+                            </div>
+                            <div class="winforms-window-buttons">
+                                <button class="win-btn">_</button>
+                                <button class="win-btn disabled">□</button>
+                                <button class="win-btn close">✕</button>
+                            </div>
+                        </div>
+
+                        <div class="winforms-body login-canvas">
+                            <div class="login-header-section">
+                                <div class="login-avatar-icon avatar-blue" style="position: relative;">
+                                    <span class="tabindex-badge">0</span>
+                                    <span class="control-tag">picLogo</span>
+                                    🔬
+                                </div>
+                                <div class="login-title title-blue">LABTRACK SYSTEM RPL</div>
+                                <div class="login-subtitle">"Pengelolaan Fasilitas & Alat Praktik Kejuruan"</div>
+                            </div>
+
+                            <div class="wf-form-group">
+                                <label class="wf-label">Nama Pengguna (Username Teknisi):</label>
+                                <div style="position: relative;">
+                                    <span class="tabindex-badge">1</span>
+                                    <span class="control-tag">txtUsername</span>
+                                    <input type="text" class="wf-textbox" value="teknisi_lab1">
+                                </div>
+                            </div>
+
+                            <div class="wf-form-group">
+                                <label class="wf-label">Kata Sandi (Password):</label>
+                                <div style="position: relative;">
+                                    <span class="tabindex-badge">2</span>
+                                    <span class="control-tag">txtPassword</span>
+                                    <input type="password" class="wf-textbox" value="passLab123">
+                                </div>
+                            </div>
+
+                            <div class="wf-form-group">
+                                <label class="wf-label">Jadwal Tugas / Shift Kerja:</label>
+                                <div style="position: relative;">
+                                    <span class="tabindex-badge">3</span>
+                                    <span class="control-tag">cmbShift</span>
+                                    <select class="wf-combobox">
+                                        <option selected>Sesi Pagi (07.00 - 12.00 WIB)</option>
+                                        <option>Sesi Siang (12.30 - 16.00 WIB)</option>
+                                        <option>Petugas Khusus Uji Kompetensi</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="wf-form-group" style="position: relative; margin-top: 14px;">
+                                <span class="tabindex-badge">4</span>
+                                <span class="control-tag">chkKondisiLab</span>
+                                <label class="wf-checkbox">
+                                    <input type="checkbox" checked>
+                                    <span>Saya telah memeriksa kondisi fisik lab sebelum bertugas</span>
+                                </label>
+                            </div>
+
+                            <div style="display: flex; gap: 10px; margin-top: 22px;">
+                                <div style="flex: 1; position: relative;">
+                                    <span class="tabindex-badge">5</span>
+                                    <span class="control-tag">btnLogin</span>
+                                    <button type="button" class="wf-button btn-primary btn-blue" style="width: 100%;">➔ Masuk Sistem</button>
+                                </div>
+                                <div style="flex: 1; position: relative;">
+                                    <span class="tabindex-badge">6</span>
+                                    <span class="control-tag">btnBatal</span>
+                                    <button type="button" class="wf-button" style="width: 100%;">✕ Batal</button>
+                                </div>
+                            </div>
+
+                            <div style="text-align: center; margin-top: 18px; position: relative;">
+                                <span class="tabindex-badge">7</span>
+                                <span class="control-tag">lblBantuan</span>
+                                <a href="#help" onclick="return false;" style="font-size: 11px; color: #0284c7; text-decoration: underline;">
+                                    Kendala akses akun? Hubungi Kepala Bengkel RPL
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Perintah -->
+                    <div class="perintah-box">
+                        <div class="section-heading" style="margin-top: 0; padding-left: 8px;">📋 Perintah Pengerjaan Form 1</div>
+                        <ol class="perintah-list">
+                            <li class="perintah-item">
+                                <strong>Buat Form Baru:</strong> Beri nama berkas dan class <code class="code-pill">FrmLoginPetugas.cs</code>.
+                            </li>
+                            <li class="perintah-item">
+                                <strong>Atur Properti Form:</strong>
+                                <ul class="perintah-sublist">
+                                    <li><code class="code-pill">Text = "Login Petugas Lab — LabTrack Komputer"</code></li>
+                                    <li><code class="code-pill">Size = 420, 500</code> piksel</li>
+                                    <li><code class="code-pill">StartPosition = CenterScreen</code></li>
+                                    <li><code class="code-pill">FormBorderStyle = FixedDialog</code></li>
+                                    <li><code class="code-pill">MaximizeBox = False</code> dan <code class="code-pill">MinimizeBox = True</code></li>
+                                    <li><code class="code-pill">AcceptButton = btnLogin</code> dan <code class="code-pill">CancelButton = btnBatal</code></li>
+                                </ul>
+                            </li>
+                            <li class="perintah-item">
+                                <strong>Susun dan Konfigurasi Kontrol Antarmuka:</strong>
+                                <ul class="perintah-sublist">
+                                    <li><strong>PictureBox (<code class="code-pill">picLogo</code>)</strong>: <code class="code-pill">SizeMode = Zoom</code>, pasang ikon perangkat IT / laboratorium.</li>
+                                    <li><strong>Label Header</strong>: Judul <em>"LABTRACK SYSTEM RPL"</em> (Font Bold, biru) dan subjudul deskripsi fungsi.</li>
+                                    <li><strong>TextBox (<code class="code-pill">txtUsername</code>)</strong>: <code class="code-pill">MaxLength = 30</code>.</li>
+                                    <li><strong>TextBox (<code class="code-pill">txtPassword</code>)</strong>: <code class="code-pill">UseSystemPasswordChar = True</code>.</li>
+                                    <li><strong>ComboBox (<code class="code-pill">cmbShift</code>)</strong>: <code class="code-pill">DropDownStyle = DropDownList</code> dengan 3 item jadwal shift.</li>
+                                    <li><strong>CheckBox (<code class="code-pill">chkKondisiLab</code>)</strong>: <code class="code-pill">Text = "Saya telah memeriksa kondisi fisik lab sebelum bertugas"</code>.</li>
+                                    <li><strong>Button (<code class="code-pill">btnLogin</code>)</strong>: <code class="code-pill">Text = "Masuk Sistem"</code> (warna biru/kontras).</li>
+                                    <li><strong>Button (<code class="code-pill">btnBatal</code>)</strong>: <code class="code-pill">Text = "Batal"</code>, <code class="code-pill">DialogResult = Cancel</code>.</li>
+                                    <li><strong>LinkLabel (<code class="code-pill">lblBantuan</code>)</strong>: Teks bantuan kontak Kepala Bengkel RPL.</li>
+                                </ul>
+                            </li>
+                            <li class="perintah-item">
+                                <strong>Atur Urutan TabIndex:</strong> Pastikan perpindahan fokus <kbd class="code-pill">Tab</kbd> berurutan dari <code class="code-pill">txtUsername (1)</code> sampai <code class="code-pill">lblBantuan (7)</code>.
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SOAL 2 PAKET B -->
+            <section id="panel-b-soal2" class="content-panel" style="margin-top: 20px;">
+                <div class="soal-card">
+                    <div class="soal-card-header">
+                        <div class="soal-card-title">
+                            <span class="soal-badge badge-paket-b">PAKET B — SOAL 2</span>
+                            <span>Form CRUD Peminjaman Alat Lab (<code class="code-pill">FrmPeminjamanAlat.cs</code>)</span>
+                        </div>
+                    </div>
+
+                    <!-- Layout Preview -->
+                    <div class="section-heading">🖥️ Layout Tampilan Form</div>
+                    <div class="mockup-toolbar">
+                        <div class="mockup-title">Desain Tampilan Windows Forms — FrmPeminjamanAlat</div>
+                        <div class="mockup-actions">
+                            <button type="button" class="toggle-btn" onclick="toggleControlTags()">🏷️ Tampilkan Nama Objek (`Name`)</button>
+                            <button type="button" class="toggle-btn" onclick="toggleTabIndex()">🔢 Tampilkan Urutan TabIndex</button>
+                        </div>
+                    </div>
+
+                    <div class="winforms-window" style="margin-bottom: 24px;">
+                        <div class="winforms-titlebar blue-theme">
+                            <div class="winforms-title-text">
+                                <span class="winforms-app-icon">🔬</span>
+                                <span>Peminjaman Alat Praktik Lab — LabTrack Komputer</span>
+                            </div>
+                            <div class="winforms-window-buttons">
+                                <button class="win-btn">_</button>
+                                <button class="win-btn">□</button>
+                                <button class="win-btn close">✕</button>
+                            </div>
+                        </div>
+
+                        <div class="winforms-menustrip">
+                            <span class="menu-item">File</span>
+                            <span class="menu-item">Peminjaman</span>
+                            <span class="menu-item">Inventaris</span>
+                            <span class="menu-item">Bantuan</span>
+                        </div>
+
+                        <div class="winforms-body">
+                            <!-- GroupBox Entri -->
+                            <div class="wf-groupbox" style="position: relative;">
+                                <span class="tabindex-badge" style="left: -10px; top: -10px;">G1</span>
+                                <span class="control-tag" style="top: -12px; right: 10px;">grpEntriData</span>
+                                <div class="wf-groupbox-legend legend-blue">📋 Formulir Peminjaman Fasilitas & Alat Lab</div>
+
+                                <div class="crud-grid-layout">
+                                    <div>
+                                        <div class="wf-form-group">
+                                            <label class="wf-label">Nomor Transaksi Pinjam (Otomatis):</label>
+                                            <div style="position: relative;">
+                                                <span class="control-tag">txtKodePinjam</span>
+                                                <input type="text" class="wf-textbox readonly" value="TRX-LAB-028" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="wf-form-group">
+                                            <label class="wf-label">Nomor Induk Siswa (NIS):</label>
+                                            <div style="position: relative;">
+                                                <span class="tabindex-badge">1</span>
+                                                <span class="control-tag">txtNIS</span>
+                                                <input type="text" class="wf-textbox" value="102409">
+                                            </div>
+                                        </div>
+                                        <div class="wf-form-group">
+                                            <label class="wf-label">Nama Lengkap Peminjam:</label>
+                                            <div style="position: relative;">
+                                                <span class="tabindex-badge">2</span>
+                                                <span class="control-tag">txtNamaSiswa</span>
+                                                <input type="text" class="wf-textbox" value="Deni Saputra">
+                                            </div>
+                                        </div>
+                                        <div class="wf-form-group">
+                                            <label class="wf-label">Kelas / Rombel Siswa:</label>
+                                            <div style="position: relative;">
+                                                <span class="tabindex-badge">3</span>
+                                                <span class="control-tag">cmbKelas</span>
+                                                <select class="wf-combobox">
+                                                    <option>X PPLG 1</option>
+                                                    <option selected>XI PPLG 1</option>
+                                                    <option>XI PPLG 2</option>
+                                                    <option>XII PPLG 1</option>
+                                                    <option>XI TJKT 2</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div class="wf-form-group">
+                                            <label class="wf-label">Tanggal Peminjaman:</label>
+                                            <div style="position: relative;">
+                                                <span class="tabindex-badge">4</span>
+                                                <span class="control-tag">dtpTanggalPinjam</span>
+                                                <input type="date" class="wf-textbox" value="2026-10-06">
+                                            </div>
+                                        </div>
+                                        <div class="wf-form-group">
+                                            <label class="wf-label">Pilihan Perangkat / Alat Lab:</label>
+                                            <div style="position: relative;">
+                                                <span class="tabindex-badge">5</span>
+                                                <span class="control-tag">cmbNamaAlat</span>
+                                                <select class="wf-combobox">
+                                                    <option selected>Drawing Tablet Wacom (Rp5.000 / jam)</option>
+                                                    <option>VR Headset Oculus Quest (Rp10.000 / jam)</option>
+                                                    <option>Arduino & Sensor IoT Kit (Rp4.000 / jam)</option>
+                                                    <option>Webcam & Mic Podcast Pro (Rp5.000 / jam)</option>
+                                                    <option>Laptop Asus ROG High-End (Rp12.000 / jam)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                            <div class="wf-form-group">
+                                                <label class="wf-label">Durasi Pinjam (Jam):</label>
+                                                <div class="wf-numeric-wrapper">
+                                                    <span class="tabindex-badge">6</span>
+                                                    <span class="control-tag">numDurasi</span>
+                                                    <input type="text" class="wf-numeric-input" value="3">
+                                                    <div class="wf-numeric-spinners">
+                                                        <button class="spinner-btn" type="button">▲</button>
+                                                        <button class="spinner-btn" type="button">▼</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="wf-form-group">
+                                                <label class="wf-label">Biaya / Jaminan (Rp):</label>
+                                                <div style="position: relative;">
+                                                    <span class="control-tag">txtBiayaJaminan</span>
+                                                    <input type="text" class="wf-textbox readonly" value="Rp 15.000" style="text-align: right; font-weight: 700; color: #0369a1;" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="wf-form-group" style="margin-top: 6px;">
+                                            <label class="wf-label">Tujuan / Keperluan Praktik:</label>
+                                            <div style="position: relative; margin-top: 4px;">
+                                                <span class="tabindex-badge">7</span>
+                                                <span class="control-tag">rdoPraktikMandiri & rdoTugasKelompok</span>
+                                                <label class="wf-radio"><input type="radio" name="opsi-lab" checked><span>Praktik Tugas Mandiri</span></label>
+                                                <label class="wf-radio"><input type="radio" name="opsi-lab"><span>Proyek Tim / Kelompok</span></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Panel Tombol -->
+                            <div style="margin-bottom: 18px; display: flex; gap: 8px; flex-wrap: wrap; background: #e8e8e8; padding: 10px 12px; border: 1px solid #c8c8c8; border-radius: 4px; position: relative;">
+                                <span class="tabindex-badge" style="left: -8px; top: -8px;">P</span>
+                                <span class="control-tag" style="top: -12px; right: 8px;">pnlAksi</span>
+                                <button type="button" class="wf-button">➕ Tambah Baru</button>
+                                <button type="button" class="wf-button btn-primary btn-blue">💾 Simpan Data</button>
+                                <button type="button" class="wf-button">✏️ Ubah</button>
+                                <button type="button" class="wf-button btn-danger">🗑️ Hapus</button>
+                                <button type="button" class="wf-button" style="margin-left: auto;">🔄 Batal / Bersihkan</button>
+                            </div>
+
+                            <!-- GroupBox Tabel -->
+                            <div class="wf-groupbox" style="position: relative;">
+                                <span class="control-tag" style="top: -12px; right: 10px;">grpTabel</span>
+                                <div class="wf-groupbox-legend legend-blue">📑 Daftar Peminjaman Aktif & Pencarian Data</div>
+                                <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 12px; flex-wrap: wrap;">
+                                    <label style="font-size: 12px; font-weight: 600;">Cari Data:</label>
+                                    <input type="text" class="wf-textbox" placeholder="Ketik NIS atau Nama Peminjam..." style="flex: 1; min-width: 180px;">
+                                    <select class="wf-combobox" style="width: 180px;">
+                                        <option>Semua Kategori</option>
+                                        <option>Input Device</option>
+                                        <option>IoT & Mikrokontroler</option>
+                                        <option>Multimedia</option>
+                                        <option>Laptop</option>
+                                    </select>
+                                    <button type="button" class="wf-button">🔍 Cari</button>
+                                </div>
+
+                                <div class="wf-datagridview">
+                                    <table class="wf-grid-table">
+                                        <thead>
+                                            <tr>
+                                                <th class="wf-grid-row-header"></th>
+                                                <th>No</th>
+                                                <th>Kode Pinjam</th>
+                                                <th>Tanggal</th>
+                                                <th>NIS</th>
+                                                <th>Nama Peminjam</th>
+                                                <th>Kelas</th>
+                                                <th>Nama Alat</th>
+                                                <th style="text-align: right;">Durasi (Jam)</th>
+                                                <th style="text-align: right;">Biaya / Jaminan</th>
+                                                <th>Keperluan</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="wf-grid-row-header">▶</td>
+                                                <td>1</td><td>TRX-LAB-025</td><td>06/10/2026</td><td>102402</td><td>Anisa Rahma</td><td>XI PPLG 1</td><td>Drawing Tablet Wacom</td><td style="text-align: right;">2</td><td style="text-align: right;">Rp 10.000</td><td>Mandiri</td>
+                                            </tr>
+                                            <tr class="selected">
+                                                <td class="wf-grid-row-header">▶</td>
+                                                <td>2</td><td>TRX-LAB-026</td><td>06/10/2026</td><td>102418</td><td>Bagas Pratama</td><td>XI PPLG 2</td><td>Arduino & Sensor Kit</td><td style="text-align: right;">4</td><td style="text-align: right;">Rp 16.000</td><td>Kelompok</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="wf-grid-row-header"></td>
+                                                <td>3</td><td>TRX-LAB-027</td><td>06/10/2026</td><td>102431</td><td>Cindy Claudia</td><td>XI PPLG 1</td><td>Webcam & Mic Podcast</td><td style="text-align: right;">2</td><td style="text-align: right;">Rp 10.000</td><td>Kelompok</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="winforms-statusstrip">
+                            <div class="status-panel">👤 Teknisi Lab: <strong>Drs. Hendro Wibowo</strong></div>
+                            <div class="status-panel">⚡ Status: <strong>Lab Beroperasi Normal</strong></div>
+                            <div class="status-panel">📅 06 Oktober 2026</div>
+                            <div class="status-panel">📦 LabTrack Desktop v2.0</div>
+                        </div>
+                    </div>
+
+                    <!-- Perintah -->
+                    <div class="perintah-box">
+                        <div class="section-heading" style="margin-top: 0; padding-left: 8px;">📋 Perintah Pengerjaan Form 2</div>
+                        <ol class="perintah-list">
+                            <li class="perintah-item">
+                                <strong>Buat Form Baru:</strong> Beri nama berkas dan class <code class="code-pill">FrmPeminjamanAlat.cs</code>.
+                            </li>
+                            <li class="perintah-item">
+                                <strong>Atur Properti Form:</strong> <code class="code-pill">Text = "Peminjaman Alat Praktik Lab — LabTrack Komputer"</code>, <code class="code-pill">Size = ~980, 680</code> piksel, <code class="code-pill">StartPosition = CenterScreen</code>.
+                            </li>
+                            <li class="perintah-item">
+                                <strong>Susun Navigasi & Struktur Kontainer:</strong>
+                                <ul class="perintah-sublist">
+                                    <li><code class="code-pill">menuStrip1</code>: Menu <code class="code-pill">File</code>, <code class="code-pill">Peminjaman</code>, <code class="code-pill">Inventaris</code>, <code class="code-pill">Bantuan</code>.</li>
+                                    <li><code class="code-pill">grpEntriData</code>: GroupBox formulir input data peminjaman alat.</li>
+                                    <li><code class="code-pill">pnlAksi</code>: Panel tombol aksi CRUD peminjaman.</li>
+                                    <li><code class="code-pill">grpTabel</code>: GroupBox tabel daftar peminjaman aktif & pencarian.</li>
+                                    <li><code class="code-pill">statusStrip1</code>: 4 item status label di bilah paling dasar form.</li>
+                                </ul>
+                            </li>
+                            <li class="perintah-item">
+                                <strong>Konfigurasi Input Data (<code class="code-pill">grpEntriData</code>):</strong>
+                                <ul class="perintah-sublist">
+                                    <li><code class="code-pill">txtKodePinjam</code>: ReadOnly, warna latar kontrol abu-abu.</li>
+                                    <li><code class="code-pill">txtNIS</code> (MaxLength 10) dan <code class="code-pill">txtNamaSiswa</code> (MaxLength 50).</li>
+                                    <li><code class="code-pill">cmbKelas</code>: DropDownList berisi pilihan rombel kelas.</li>
+                                    <li><code class="code-pill">dtpTanggalPinjam</code>: DateTimePicker format Short.</li>
+                                    <li><code class="code-pill">cmbNamaAlat</code>: DropDownList daftar alat lab & tarif jaminan/jam.</li>
+                                    <li><code class="code-pill">numDurasi</code>: NumericUpDown bulat (satuan jam), rentang 1 - 8 jam.</li>
+                                    <li><code class="code-pill">txtBiayaJaminan</code>: ReadOnly, rata kanan, font tebal (biru tua).</li>
+                                    <li><code class="code-pill">rdoPraktikMandiri</code> dan <code class="code-pill">rdoTugasKelompok</code>: Opsi radio button.</li>
+                                </ul>
+                            </li>
+                            <li class="perintah-item">
+                                <strong>Ketentuan & Ukuran Panel Tombol Aksi (<code class="code-pill">pnlAksi</code>):</strong>
+                                <ul class="perintah-sublist">
+                                    <li><strong>Tipe Kontrol & Nama:</strong> <code class="code-pill">Panel</code>, <code class="code-pill">Name = pnlAksi</code>.</li>
+                                    <li><strong>Ukuran Panel (Size):</strong> <code class="code-pill">940, 50</code> piksel (Lebar: 940 px, Tinggi: 50 px).</li>
+                                    <li><strong>Posisi (Location):</strong> <code class="code-pill">X: 18, Y: 275</code> (terletak di antara formulir entri dan tabel riwayat).</li>
+                                    <li><strong>Properti Panel:</strong> <code class="code-pill">BorderStyle = FixedSingle</code>, <code class="code-pill">BackColor = SystemColors.ControlLight</code> (abu-abu muda), dan <code class="code-pill">Anchor = Top, Left, Right</code>.</li>
+                                    <li><strong>Ukuran & Tata Letak Tombol:</strong> Masing-masing tombol berukuran <code class="code-pill">Size = 130, 32</code> piksel dengan jarak renggang (*gap*) 8–10 piksel. Tombol <code class="code-pill">btnBatal</code> diposisikan di sisi paling kanan panel.</li>
+                                    <li><strong>Daftar Tombol:</strong>
+                                        <code class="code-pill">btnTambah</code> (<code class="code-pill">Text = "➕ Tambah Baru"</code>),
+                                        <code class="code-pill">btnSimpan</code> (<code class="code-pill">Text = "💾 Simpan Data"</code>, warna tema biru),
+                                        <code class="code-pill">btnUbah</code> (<code class="code-pill">Text = "✏️ Ubah"</code>),
+                                        <code class="code-pill">btnHapus</code> (<code class="code-pill">Text = "🗑️ Hapus"</code>, warna merah), dan
+                                        <code class="code-pill">btnBatal</code> (<code class="code-pill">Text = "🔄 Batal / Bersihkan"</code>).
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="perintah-item">
+                                <strong>Konfigurasi Pencarian & DataGridView (<code class="code-pill">grpTabel</code>):</strong>
+                                <ul class="perintah-sublist">
+                                    <li>Fitur filter: <code class="code-pill">txtCari</code>, <code class="code-pill">cmbFilterKategori</code>, dan <code class="code-pill">btnCari</code>.</li>
+                                    <li><code class="code-pill">dgvPeminjamanAlat</code>: ReadOnly, FullRowSelect, AllowUserToAddRows = False, minimal 7-10 kolom, serta masukkan 3 baris data sampel realistis.</li>
+                                </ul>
+                            </li>
+                            <li class="perintah-item">
+                                <strong>TabIndex, Naming Convention & Anchor Responsif:</strong> Beri nama komponen dengan prefiks standar (<code class="code-pill">txt</code>, <code class="code-pill">btn</code>, <code class="code-pill">cmb</code>, <code class="code-pill">num</code>, <code class="code-pill">dtp</code>, <code class="code-pill">dgv</code>). Urutkan TabIndex dari formulir ke tabel. Pasang Anchor agar DataGridView melebar saat jendela di-maximize.
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+
+        <!-- ==============================================================
+             PAKET C: SMARTCANTEEN — KASIR PEMESANAN KANTIN DIGITAL
+        ============================================================== -->
+        <div id="panel-paket-c" class="paket-panel">
+            <!-- Nav Tabs Paket C -->
+            <nav class="tab-bar">
+                <button class="tab-btn active" id="tab-btn-c-soal1" onclick="bukaTabPaket('c', 'soal1')">🔐 Soal 1: Form Login (FrmLoginKasir.cs)</button>
+                <button class="tab-btn" id="tab-btn-c-soal2" onclick="bukaTabPaket('c', 'soal2')">📊 Soal 2: Form CRUD Kasir Kantin (FrmTransaksiKantin.cs)</button>
+                <button class="tab-btn" id="tab-btn-c-semua" onclick="bukaTabPaket('c', 'semua')">📄 Tampilkan Semua Soal Paket C</button>
+            </nav>
+
+            <!-- SOAL 1 PAKET C -->
+            <section id="panel-c-soal1" class="content-panel active" style="margin-top: 20px;">
+                <div class="soal-card">
+                    <div class="soal-card-header">
+                        <div class="soal-card-title">
+                            <span class="soal-badge badge-paket-c">PAKET C — SOAL 1</span>
+                            <span>Form Login Kasir Kantin (<code class="code-pill">FrmLoginKasir.cs</code>)</span>
+                        </div>
+                    </div>
+
+                    <!-- Layout Preview -->
+                    <div class="section-heading">🖥️ Layout Tampilan Form</div>
+                    <div class="mockup-toolbar">
+                        <div class="mockup-title">Desain Tampilan Windows Forms — FrmLoginKasir</div>
+                        <div class="mockup-actions">
+                            <button type="button" class="toggle-btn" onclick="toggleControlTags()">🏷️ Tampilkan Nama Objek (`Name`)</button>
+                            <button type="button" class="toggle-btn" onclick="toggleTabIndex()">🔢 Tampilkan Urutan TabIndex</button>
+                        </div>
+                    </div>
+
+                    <div class="winforms-window" style="max-width: 440px; margin: 0 auto 24px auto;">
+                        <div class="winforms-titlebar teal-theme">
+                            <div class="winforms-title-text">
+                                <span class="winforms-app-icon">🍽️</span>
+                                <span>Login Kasir — SmartCanteen Sekolah</span>
+                            </div>
+                            <div class="winforms-window-buttons">
+                                <button class="win-btn">_</button>
+                                <button class="win-btn disabled">□</button>
+                                <button class="win-btn close">✕</button>
+                            </div>
+                        </div>
+
+                        <div class="winforms-body login-canvas">
+                            <div class="login-header-section">
+                                <div class="login-avatar-icon avatar-teal" style="position: relative;">
+                                    <span class="tabindex-badge">0</span>
+                                    <span class="control-tag">picLogo</span>
+                                    🥗
+                                </div>
+                                <div class="login-title title-teal">SMARTCANTEEN SEKOLAH</div>
+                                <div class="login-subtitle">"Layanan Pemesanan Makanan Sehat & Higienis Siswa"</div>
+                            </div>
+
+                            <div class="wf-form-group">
+                                <label class="wf-label">Nama Pengguna (Username Kasir):</label>
+                                <div style="position: relative;">
+                                    <span class="tabindex-badge">1</span>
+                                    <span class="control-tag">txtUsername</span>
+                                    <input type="text" class="wf-textbox" value="kasir_utama">
+                                </div>
+                            </div>
+
+                            <div class="wf-form-group">
+                                <label class="wf-label">Kata Sandi (Password PIN):</label>
+                                <div style="position: relative;">
+                                    <span class="tabindex-badge">2</span>
+                                    <span class="control-tag">txtPassword</span>
+                                    <input type="password" class="wf-textbox" value="canteen2026">
+                                </div>
+                            </div>
+
+                            <div class="wf-form-group">
+                                <label class="wf-label">Pilihan Loket Penjualan:</label>
+                                <div style="position: relative;">
+                                    <span class="tabindex-badge">3</span>
+                                    <span class="control-tag">cmbLoket</span>
+                                    <select class="wf-combobox">
+                                        <option selected>Loket 1 — Makanan Utama & Nasi</option>
+                                        <option>Loket 2 — Minuman Sehat & Jus</option>
+                                        <option>Loket 3 — Camilan Buah & Snack Sehat</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="wf-form-group" style="position: relative; margin-top: 14px;">
+                                <span class="tabindex-badge">4</span>
+                                <span class="control-tag">chkBukaSesi</span>
+                                <label class="wf-checkbox">
+                                    <input type="checkbox" checked>
+                                    <span>Aktifkan transaksi sesi istirahat sekarang</span>
+                                </label>
+                            </div>
+
+                            <div style="display: flex; gap: 10px; margin-top: 22px;">
+                                <div style="flex: 1; position: relative;">
+                                    <span class="tabindex-badge">5</span>
+                                    <span class="control-tag">btnLogin</span>
+                                    <button type="button" class="wf-button btn-primary btn-teal" style="width: 100%;">➔ Masuk Sistem</button>
+                                </div>
+                                <div style="flex: 1; position: relative;">
+                                    <span class="tabindex-badge">6</span>
+                                    <span class="control-tag">btnBatal</span>
+                                    <button type="button" class="wf-button" style="width: 100%;">✕ Batal</button>
+                                </div>
+                            </div>
+
+                            <div style="text-align: center; margin-top: 18px; position: relative;">
+                                <span class="tabindex-badge">7</span>
+                                <span class="control-tag">lblBantuan</span>
+                                <a href="#help" onclick="return false;" style="font-size: 11px; color: #0284c7; text-decoration: underline;">
+                                    Kendala PIN kasir? Hubungi Manajer Koperasi Sekolah
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Perintah -->
+                    <div class="perintah-box">
+                        <div class="section-heading" style="margin-top: 0; padding-left: 8px;">📋 Perintah Pengerjaan Form 1</div>
+                        <ol class="perintah-list">
+                            <li class="perintah-item">
+                                <strong>Buat Form Baru:</strong> Beri nama berkas dan class <code class="code-pill">FrmLoginKasir.cs</code>.
+                            </li>
+                            <li class="perintah-item">
+                                <strong>Atur Properti Form:</strong>
+                                <ul class="perintah-sublist">
+                                    <li><code class="code-pill">Text = "Login Kasir — SmartCanteen Sekolah"</code></li>
+                                    <li><code class="code-pill">Size = 420, 500</code> piksel</li>
+                                    <li><code class="code-pill">StartPosition = CenterScreen</code></li>
+                                    <li><code class="code-pill">FormBorderStyle = FixedDialog</code></li>
+                                    <li><code class="code-pill">MaximizeBox = False</code> dan <code class="code-pill">MinimizeBox = True</code></li>
+                                    <li><code class="code-pill">AcceptButton = btnLogin</code> dan <code class="code-pill">CancelButton = btnBatal</code></li>
+                                </ul>
+                            </li>
+                            <li class="perintah-item">
+                                <strong>Susun dan Konfigurasi Kontrol Antarmuka:</strong>
+                                <ul class="perintah-sublist">
+                                    <li><strong>PictureBox (<code class="code-pill">picLogo</code>)</strong>: <code class="code-pill">SizeMode = Zoom</code>, ikon kantin/makanan sehat.</li>
+                                    <li><strong>Label Header</strong>: Judul <em>"SMARTCANTEEN SEKOLAH"</em> (Font Bold, hijau toska) dan subjudul slogan.</li>
+                                    <li><strong>TextBox (<code class="code-pill">txtUsername</code>)</strong>: <code class="code-pill">MaxLength = 30</code>.</li>
+                                    <li><strong>TextBox (<code class="code-pill">txtPassword</code>)</strong>: <code class="code-pill">UseSystemPasswordChar = True</code>.</li>
+                                    <li><strong>ComboBox (<code class="code-pill">cmbLoket</code>)</strong>: <code class="code-pill">DropDownStyle = DropDownList</code> berisi pilihan loket.</li>
+                                    <li><strong>CheckBox (<code class="code-pill">chkBukaSesi</code>)</strong>: <code class="code-pill">Text = "Aktifkan transaksi sesi istirahat sekarang"</code>.</li>
+                                    <li><strong>Button (<code class="code-pill">btnLogin</code>)</strong>: <code class="code-pill">Text = "Masuk Sistem"</code> (warna toska/kontras).</li>
+                                    <li><strong>Button (<code class="code-pill">btnBatal</code>)</strong>: <code class="code-pill">Text = "Batal"</code>, <code class="code-pill">DialogResult = Cancel</code>.</li>
+                                    <li><strong>LinkLabel (<code class="code-pill">lblBantuan</code>)</strong>: Teks bantuan kontak manajer koperasi.</li>
+                                </ul>
+                            </li>
+                            <li class="perintah-item">
+                                <strong>Atur Urutan TabIndex:</strong> Pastikan alur fokus <kbd class="code-pill">Tab</kbd> mengalir urut dari <code class="code-pill">txtUsername (1)</code> sampai <code class="code-pill">lblBantuan (7)</code>.
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SOAL 2 PAKET C -->
+            <section id="panel-c-soal2" class="content-panel" style="margin-top: 20px;">
+                <div class="soal-card">
+                    <div class="soal-card-header">
+                        <div class="soal-card-title">
+                            <span class="soal-badge badge-paket-c">PAKET C — SOAL 2</span>
+                            <span>Form CRUD Kasir Pemesanan Kantin (<code class="code-pill">FrmTransaksiKantin.cs</code>)</span>
+                        </div>
+                    </div>
+
+                    <!-- Layout Preview -->
+                    <div class="section-heading">🖥️ Layout Tampilan Form</div>
+                    <div class="mockup-toolbar">
+                        <div class="mockup-title">Desain Tampilan Windows Forms — FrmTransaksiKantin</div>
+                        <div class="mockup-actions">
+                            <button type="button" class="toggle-btn" onclick="toggleControlTags()">🏷️ Tampilkan Nama Objek (`Name`)</button>
+                            <button type="button" class="toggle-btn" onclick="toggleTabIndex()">🔢 Tampilkan Urutan TabIndex</button>
+                        </div>
+                    </div>
+
+                    <div class="winforms-window" style="margin-bottom: 24px;">
+                        <div class="winforms-titlebar teal-theme">
+                            <div class="winforms-title-text">
+                                <span class="winforms-app-icon">🥗</span>
+                                <span>Kasir Pemesanan Makanan — SmartCanteen Sekolah</span>
+                            </div>
+                            <div class="winforms-window-buttons">
+                                <button class="win-btn">_</button>
+                                <button class="win-btn">□</button>
+                                <button class="win-btn close">✕</button>
+                            </div>
+                        </div>
+
+                        <div class="winforms-menustrip">
+                            <span class="menu-item">File</span>
+                            <span class="menu-item">Pemesanan</span>
+                            <span class="menu-item">Daftar Menu</span>
+                            <span class="menu-item">Bantuan</span>
+                        </div>
+
+                        <div class="winforms-body">
+                            <!-- GroupBox Entri -->
+                            <div class="wf-groupbox" style="position: relative;">
+                                <span class="tabindex-badge" style="left: -10px; top: -10px;">G1</span>
+                                <span class="control-tag" style="top: -12px; right: 10px;">grpEntriData</span>
+                                <div class="wf-groupbox-legend legend-teal">📋 Formulir Entri Pesanan Siswa</div>
+
+                                <div class="crud-grid-layout">
+                                    <div>
+                                        <div class="wf-form-group">
+                                            <label class="wf-label">Nomor Struk Pesanan (Otomatis):</label>
+                                            <div style="position: relative;">
+                                                <span class="control-tag">txtNoStruk</span>
+                                                <input type="text" class="wf-textbox readonly" value="STR-2026-112" readonly>
+                                            </div>
+                                        </div>
+                                        <div class="wf-form-group">
+                                            <label class="wf-label">Nomor Induk Siswa (NIS):</label>
+                                            <div style="position: relative;">
+                                                <span class="tabindex-badge">1</span>
+                                                <span class="control-tag">txtNIS</span>
+                                                <input type="text" class="wf-textbox" value="102433">
+                                            </div>
+                                        </div>
+                                        <div class="wf-form-group">
+                                            <label class="wf-label">Nama Siswa Pembeli:</label>
+                                            <div style="position: relative;">
+                                                <span class="tabindex-badge">2</span>
+                                                <span class="control-tag">txtNamaPembeli</span>
+                                                <input type="text" class="wf-textbox" value="Farhan Maulana">
+                                            </div>
+                                        </div>
+                                        <div class="wf-form-group">
+                                            <label class="wf-label">Kelas / Rombel:</label>
+                                            <div style="position: relative;">
+                                                <span class="tabindex-badge">3</span>
+                                                <span class="control-tag">cmbKelas</span>
+                                                <select class="wf-combobox">
+                                                    <option>X PPLG 1</option>
+                                                    <option selected>XI PPLG 1</option>
+                                                    <option>XI PPLG 2</option>
+                                                    <option>XII PPLG 1</option>
+                                                    <option>X DKV 1</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div class="wf-form-group">
+                                            <label class="wf-label">Tanggal Transaksi:</label>
+                                            <div style="position: relative;">
+                                                <span class="tabindex-badge">4</span>
+                                                <span class="control-tag">dtpTanggal</span>
+                                                <input type="date" class="wf-textbox" value="2026-10-06">
+                                            </div>
+                                        </div>
+                                        <div class="wf-form-group">
+                                            <label class="wf-label">Menu Makanan / Minuman Sehat:</label>
+                                            <div style="position: relative;">
+                                                <span class="tabindex-badge">5</span>
+                                                <span class="control-tag">cmbMenu</span>
+                                                <select class="wf-combobox">
+                                                    <option selected>Nasi Bento Ayam Teriyaki (Rp15.000)</option>
+                                                    <option>Mie Sayur Sehat Spesial (Rp12.000)</option>
+                                                    <option>Jus Buah Segar Murni (Rp7.000)</option>
+                                                    <option>Salad Buah Yoghurt (Rp10.000)</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                            <div class="wf-form-group">
+                                                <label class="wf-label">Jumlah / Porsi:</label>
+                                                <div class="wf-numeric-wrapper">
+                                                    <span class="tabindex-badge">6</span>
+                                                    <span class="control-tag">numPorsi</span>
+                                                    <input type="text" class="wf-numeric-input" value="2">
+                                                    <div class="wf-numeric-spinners">
+                                                        <button class="spinner-btn" type="button">▲</button>
+                                                        <button class="spinner-btn" type="button">▼</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="wf-form-group">
+                                                <label class="wf-label">Total Pembayaran (Rp):</label>
+                                                <div style="position: relative;">
+                                                    <span class="control-tag">txtTotalBayar</span>
+                                                    <input type="text" class="wf-textbox readonly" value="Rp 30.000" style="text-align: right; font-weight: 700; color: #0f766e;" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="wf-form-group" style="margin-top: 6px;">
+                                            <label class="wf-label">Metode Pembayaran:</label>
+                                            <div style="position: relative; margin-top: 4px;">
+                                                <span class="tabindex-badge">7</span>
+                                                <span class="control-tag">rdoKartuPelajar & rdoTunai</span>
+                                                <label class="wf-radio"><input type="radio" name="opsi-canteen" checked><span>Saldo Kartu Pelajar (Non-Tunai)</span></label>
+                                                <label class="wf-radio"><input type="radio" name="opsi-canteen"><span>Uang Tunai Langsung</span></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Panel Tombol -->
+                            <div style="margin-bottom: 18px; display: flex; gap: 8px; flex-wrap: wrap; background: #e8e8e8; padding: 10px 12px; border: 1px solid #c8c8c8; border-radius: 4px; position: relative;">
+                                <span class="tabindex-badge" style="left: -8px; top: -8px;">P</span>
+                                <span class="control-tag" style="top: -12px; right: 8px;">pnlAksi</span>
+                                <button type="button" class="wf-button">➕ Tambah Baru</button>
+                                <button type="button" class="wf-button btn-primary btn-teal">💾 Simpan Data</button>
+                                <button type="button" class="wf-button">✏️ Ubah</button>
+                                <button type="button" class="wf-button btn-danger">🗑️ Hapus</button>
+                                <button type="button" class="wf-button" style="margin-left: auto;">🔄 Batal / Bersihkan</button>
+                            </div>
+
+                            <!-- GroupBox Tabel -->
+                            <div class="wf-groupbox" style="position: relative;">
+                                <span class="control-tag" style="top: -12px; right: 10px;">grpTabel</span>
+                                <div class="wf-groupbox-legend legend-teal">📑 Rekapitulasi Pesanan Hari Ini & Pencarian Data</div>
+                                <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 12px; flex-wrap: wrap;">
+                                    <label style="font-size: 12px; font-weight: 600;">Cari Data:</label>
+                                    <input type="text" class="wf-textbox" placeholder="Ketik NIS atau Nama Siswa..." style="flex: 1; min-width: 180px;">
+                                    <select class="wf-combobox" style="width: 180px;">
+                                        <option>Semua Kategori</option>
+                                        <option>Makanan Utama</option>
+                                        <option>Minuman Sehat</option>
+                                        <option>Camilan Buah</option>
+                                    </select>
+                                    <button type="button" class="wf-button">🔍 Cari</button>
+                                </div>
+
+                                <div class="wf-datagridview">
+                                    <table class="wf-grid-table">
+                                        <thead>
+                                            <tr>
+                                                <th class="wf-grid-row-header"></th>
+                                                <th>No</th>
+                                                <th>No Struk</th>
+                                                <th>Tanggal</th>
+                                                <th>NIS</th>
+                                                <th>Nama Pembeli</th>
+                                                <th>Kelas</th>
+                                                <th>Menu Pesanan</th>
+                                                <th style="text-align: right;">Porsi</th>
+                                                <th style="text-align: right;">Total Bayar</th>
+                                                <th>Metode Bayar</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="wf-grid-row-header">▶</td>
+                                                <td>1</td><td>STR-2026-109</td><td>06/10/2026</td><td>102405</td><td>Dimas Aditya</td><td>XI PPLG 1</td><td>Nasi Bento Ayam Teriyaki</td><td style="text-align: right;">1</td><td style="text-align: right;">Rp 15.000</td><td>Saldo Kartu</td>
+                                            </tr>
+                                            <tr class="selected">
+                                                <td class="wf-grid-row-header">▶</td>
+                                                <td>2</td><td>STR-2026-110</td><td>06/10/2026</td><td>102412</td><td>Nadya Putri</td><td>XI PPLG 1</td><td>Salad Buah Yoghurt</td><td style="text-align: right;">2</td><td style="text-align: right;">Rp 20.000</td><td>Tunai</td>
+                                            </tr>
+                                            <tr>
+                                                <td class="wf-grid-row-header"></td>
+                                                <td>3</td><td>STR-2026-111</td><td>06/10/2026</td><td>102427</td><td>Gilang Ramadhan</td><td>XI PPLG 2</td><td>Jus Buah Segar Murni</td><td style="text-align: right;">3</td><td style="text-align: right;">Rp 21.000</td><td>Saldo Kartu</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="winforms-statusstrip">
+                            <div class="status-panel">👤 Kasir Aktif: <strong>Siti Rahmawati (Loket 1)</strong></div>
+                            <div class="status-panel">⚡ Status: <strong>Melayani Pemesanan</strong></div>
+                            <div class="status-panel">📅 06 Oktober 2026</div>
+                            <div class="status-panel">📦 SmartCanteen Desktop v1.2</div>
+                        </div>
+                    </div>
+
+                    <!-- Perintah -->
+                    <div class="perintah-box">
+                        <div class="section-heading" style="margin-top: 0; padding-left: 8px;">📋 Perintah Pengerjaan Form 2</div>
+                        <ol class="perintah-list">
+                            <li class="perintah-item">
+                                <strong>Buat Form Baru:</strong> Beri nama berkas dan class <code class="code-pill">FrmTransaksiKantin.cs</code>.
+                            </li>
+                            <li class="perintah-item">
+                                <strong>Atur Properti Form:</strong> <code class="code-pill">Text = "Kasir Pemesanan Makanan — SmartCanteen Sekolah"</code>, <code class="code-pill">Size = ~980, 680</code> piksel, <code class="code-pill">StartPosition = CenterScreen</code>.
+                            </li>
+                            <li class="perintah-item">
+                                <strong>Susun Navigasi & Struktur Kontainer:</strong>
+                                <ul class="perintah-sublist">
+                                    <li><code class="code-pill">menuStrip1</code>: Menu <code class="code-pill">File</code>, <code class="code-pill">Pemesanan</code>, <code class="code-pill">Daftar Menu</code>, <code class="code-pill">Bantuan</code>.</li>
+                                    <li><code class="code-pill">grpEntriData</code>: GroupBox formulir entri pesanan kantin.</li>
+                                    <li><code class="code-pill">pnlAksi</code>: Panel tombol aksi CRUD pesanan.</li>
+                                    <li><code class="code-pill">grpTabel</code>: GroupBox riwayat pesanan & pencarian data.</li>
+                                    <li><code class="code-pill">statusStrip1</code>: 4 item status label di bilah paling dasar form.</li>
+                                </ul>
+                            </li>
+                            <li class="perintah-item">
+                                <strong>Konfigurasi Input Data (<code class="code-pill">grpEntriData</code>):</strong>
+                                <ul class="perintah-sublist">
+                                    <li><code class="code-pill">txtNoStruk</code>: ReadOnly, warna latar kontrol.</li>
+                                    <li><code class="code-pill">txtNIS</code> (MaxLength 10) dan <code class="code-pill">txtNamaPembeli</code> (MaxLength 50).</li>
+                                    <li><code class="code-pill">cmbKelas</code>: DropDownList pilihan rombel kelas siswa.</li>
+                                    <li><code class="code-pill">dtpTanggal</code>: DateTimePicker format Short.</li>
+                                    <li><code class="code-pill">cmbMenu</code>: DropDownList daftar menu makanan sehat & harga satuan.</li>
+                                    <li><code class="code-pill">numPorsi</code>: NumericUpDown bulat (satuan porsi), rentang 1 - 20 porsi.</li>
+                                    <li><code class="code-pill">txtTotalBayar</code>: ReadOnly, rata kanan, font tebal (warna toska).</li>
+                                    <li><code class="code-pill">rdoKartuPelajar</code> dan <code class="code-pill">rdoTunai</code>: Opsi metode pembayaran.</li>
+                                </ul>
+                            </li>
+                            <li class="perintah-item">
+                                <strong>Ketentuan & Ukuran Panel Tombol Aksi (<code class="code-pill">pnlAksi</code>):</strong>
+                                <ul class="perintah-sublist">
+                                    <li><strong>Tipe Kontrol & Nama:</strong> <code class="code-pill">Panel</code>, <code class="code-pill">Name = pnlAksi</code>.</li>
+                                    <li><strong>Ukuran Panel (Size):</strong> <code class="code-pill">940, 50</code> piksel (Lebar: 940 px, Tinggi: 50 px).</li>
+                                    <li><strong>Posisi (Location):</strong> <code class="code-pill">X: 18, Y: 275</code> (terletak di antara formulir entri dan tabel riwayat).</li>
+                                    <li><strong>Properti Panel:</strong> <code class="code-pill">BorderStyle = FixedSingle</code>, <code class="code-pill">BackColor = SystemColors.ControlLight</code> (abu-abu muda), dan <code class="code-pill">Anchor = Top, Left, Right</code>.</li>
+                                    <li><strong>Ukuran & Tata Letak Tombol:</strong> Masing-masing tombol berukuran <code class="code-pill">Size = 130, 32</code> piksel dengan jarak renggang (*gap*) 8–10 piksel. Tombol <code class="code-pill">btnBatal</code> diposisikan di sisi paling kanan panel.</li>
+                                    <li><strong>Daftar Tombol:</strong>
+                                        <code class="code-pill">btnTambah</code> (<code class="code-pill">Text = "➕ Tambah Baru"</code>),
+                                        <code class="code-pill">btnSimpan</code> (<code class="code-pill">Text = "💾 Simpan Data"</code>, warna tema toska),
+                                        <code class="code-pill">btnUbah</code> (<code class="code-pill">Text = "✏️ Ubah"</code>),
+                                        <code class="code-pill">btnHapus</code> (<code class="code-pill">Text = "🗑️ Hapus"</code>, warna merah), dan
+                                        <code class="code-pill">btnBatal</code> (<code class="code-pill">Text = "🔄 Batal / Bersihkan"</code>).
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="perintah-item">
+                                <strong>Konfigurasi Pencarian & DataGridView (<code class="code-pill">grpTabel</code>):</strong>
+                                <ul class="perintah-sublist">
+                                    <li>Fitur filter: <code class="code-pill">txtCari</code>, <code class="code-pill">cmbFilterKategori</code>, dan <code class="code-pill">btnCari</code>.</li>
+                                    <li><code class="code-pill">dgvPesananKantin</code>: ReadOnly, FullRowSelect, AllowUserToAddRows = False, minimal 7-10 kolom, serta isi 3 baris data contoh realistis.</li>
+                                </ul>
+                            </li>
+                            <li class="perintah-item">
+                                <strong>TabIndex, Naming Convention & Anchor Responsif:</strong> Beri nama semua objek kontrol sesuai standar industri (<code class="code-pill">txt</code>, <code class="code-pill">btn</code>, <code class="code-pill">cmb</code>, <code class="code-pill">num</code>, <code class="code-pill">dtp</code>, <code class="code-pill">dgv</code>). Urutkan TabIndex secara rapi. Terapkan Anchor pada kontainer dan DataGridView agar responsif saat dimaksimalkan.
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+    </main>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Paket Switcher
+        function gantiPaket(paketId) {
+            const panels = document.querySelectorAll('.paket-panel');
+            panels.forEach(p => p.classList.remove('active'));
+
+            const btns = document.querySelectorAll('.paket-btn');
+            btns.forEach(b => b.classList.remove('active'));
+
+            document.getElementById('panel-' + paketId).classList.add('active');
+            document.getElementById('btn-' + paketId).classList.add('active');
+        }
+
+        // Tab Navigation within Paket
+        function bukaTabPaket(paketCode, tabType) {
+            const panel1 = document.getElementById(`panel-${paketCode}-soal1`);
+            const panel2 = document.getElementById(`panel-${paketCode}-soal2`);
+            const btn1 = document.getElementById(`tab-btn-${paketCode}-soal1`);
+            const btn2 = document.getElementById(`tab-btn-${paketCode}-soal2`);
+            const btnAll = document.getElementById(`tab-btn-${paketCode}-semua`);
+
+            [btn1, btn2, btnAll].forEach(b => {
+                if (b) b.classList.remove('active');
+            });
+
+            if (tabType === 'soal1') {
+                panel1.classList.add('active');
+                panel2.classList.remove('active');
+                if (btn1) btn1.classList.add('active');
+            } else if (tabType === 'soal2') {
+                panel1.classList.remove('active');
+                panel2.classList.add('active');
+                if (btn2) btn2.classList.add('active');
+            } else {
+                panel1.classList.add('active');
+                panel2.classList.add('active');
+                if (btnAll) btnAll.classList.add('active');
+            }
+        }
+
+        // Toggle Control Tags (Inspection Mode)
+        let showTags = false;
+        function toggleControlTags() {
+            showTags = !showTags;
+            const toggleBtns = document.querySelectorAll('.toggle-btn');
+            if (showTags) {
+                document.body.classList.add('show-tags');
+                toggleBtns.forEach(b => {
+                    if (b.textContent.includes('Name')) b.classList.add('active');
+                });
+            } else {
+                document.body.classList.remove('show-tags');
+                toggleBtns.forEach(b => {
+                    if (b.textContent.includes('Name')) b.classList.remove('active');
+                });
+            }
+        }
+
+        // Toggle TabIndex Badges
+        let showTab = false;
+        function toggleTabIndex() {
+            showTab = !showTab;
+            const toggleBtns = document.querySelectorAll('.toggle-btn');
+            if (showTab) {
+                document.body.classList.add('show-tabindex');
+                toggleBtns.forEach(b => {
+                    if (b.textContent.includes('TabIndex')) b.classList.add('active');
+                });
+            } else {
+                document.body.classList.remove('show-tabindex');
+                toggleBtns.forEach(b => {
+                    if (b.textContent.includes('TabIndex')) b.classList.remove('active');
+                });
+            }
+        }
+    </script>
+</body>
+</html>

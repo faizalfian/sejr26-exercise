@@ -1,0 +1,1817 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ujian Praktik GUI C# .NET Desktop — Kelas 11 SMK</title>
+    <style>
+        :root {
+            --primary: #0284c7;
+            --primary-dark: #0369a1;
+            --primary-light: #e0f2fe;
+            --secondary: #475569;
+            --background: #f1f5f9;
+            --card-bg: #ffffff;
+            --border: #cbd5e1;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --success: #16a34a;
+            --success-light: #dcfce7;
+            --warning: #d97706;
+            --danger: #dc2626;
+            --win-chrome: #0078d7;
+            --win-bg: #f0f0f0;
+            --win-border: #999999;
+            --win-control-border: #7a7a7a;
+            --radius-sm: 4px;
+            --radius-md: 8px;
+            --radius-lg: 12px;
+            --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.1);
+            --shadow-lg: 0 12px 28px rgba(0,0,0,0.15);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text-main);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding-bottom: 60px;
+        }
+
+        /* Top Header */
+        .app-header {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border);
+            padding: 16px 28px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-content {
+            max-width: 1240px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .header-brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-brand h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-main);
+        }
+
+        .badge-pill {
+            display: inline-flex;
+            align-items: center;
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .tag-desktop {
+            background: #e0f2fe;
+            color: #0369a1;
+            border: 1px solid #bae6fd;
+        }
+
+        .tag-tingkat {
+            background: #fef3c7;
+            color: #92400e;
+            border: 1px solid #fde68a;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-header {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            color: var(--text-main);
+            padding: 7px 14px;
+            border-radius: var(--radius-sm);
+            font-size: 0.85rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.15s ease;
+        }
+
+        .btn-header:hover {
+            background: #e2e8f0;
+            border-color: #94a3b8;
+        }
+
+        /* Nav Tabs */
+        .tab-bar {
+            max-width: 1240px;
+            margin: 20px auto 0;
+            padding: 0 20px;
+            display: flex;
+            gap: 8px;
+            border-bottom: 2px solid var(--border);
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            padding: 12px 18px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--secondary);
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover {
+            color: var(--primary);
+            background: rgba(2, 132, 199, 0.04);
+            border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 1240px;
+            margin: 24px auto 0;
+            padding: 0 20px;
+        }
+
+        .content-panel {
+            display: none;
+        }
+
+        .content-panel.active {
+            display: block;
+            animation: fadeIn 0.2s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Cards */
+        .doc-card {
+            background: #ffffff;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .doc-card h2 {
+            font-size: 1.25rem;
+            color: var(--text-main);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .doc-card h3 {
+            font-size: 1.05rem;
+            color: var(--text-main);
+            margin: 20px 0 10px 0;
+            border-left: 4px solid var(--primary);
+            padding-left: 10px;
+        }
+
+        .doc-card p {
+            font-size: 0.95rem;
+            color: #334155;
+            margin-bottom: 12px;
+            line-height: 1.65;
+        }
+
+        .info-callout {
+            background: #f0fdf4;
+            border-left: 4px solid var(--success);
+            padding: 14px 18px;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            margin: 16px 0;
+            font-size: 0.9rem;
+            color: #166534;
+        }
+
+        .warning-callout {
+            background: #fffbeb;
+            border-left: 4px solid var(--warning);
+            padding: 14px 18px;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            margin: 16px 0;
+            font-size: 0.9rem;
+            color: #92400e;
+        }
+
+        /* Interactive Controls Bar for Mockups */
+        .mockup-toolbar {
+            background: #1e293b;
+            color: #f8fafc;
+            padding: 10px 18px;
+            border-radius: var(--radius-md) var(--radius-md) 0 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 16px;
+        }
+
+        .mockup-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .mockup-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .toggle-btn {
+            background: #334155;
+            color: #f8fafc;
+            border: 1px solid #475569;
+            padding: 5px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 0.78rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.15s;
+        }
+
+        .toggle-btn:hover {
+            background: #475569;
+        }
+
+        .toggle-btn.active {
+            background: #0284c7;
+            border-color: #38bdf8;
+            color: #ffffff;
+        }
+
+        /* ========================================================
+           AUTHENTIC WINDOWS FORMS DESKTOP SIMULATOR (CSS ONLY)
+        ======================================================== */
+        .winforms-window {
+            background: var(--win-bg);
+            border: 1px solid #7160e8;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.22);
+            border-radius: 6px 6px 0 0;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            position: relative;
+            margin-bottom: 24px;
+        }
+
+        /* Titlebar */
+        .winforms-titlebar {
+            background: linear-gradient(180deg, #107c41 0%, #0b5a2f 100%);
+            color: #ffffff;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 8px 0 10px;
+            user-select: none;
+        }
+
+        .winforms-titlebar.blue-theme {
+            background: linear-gradient(180deg, #0078d7 0%, #005a9e 100%);
+        }
+
+        .winforms-title-text {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.2px;
+        }
+
+        .winforms-app-icon {
+            font-size: 14px;
+        }
+
+        .winforms-window-buttons {
+            display: flex;
+            height: 100%;
+        }
+
+        .win-btn {
+            background: transparent;
+            border: none;
+            color: #ffffff;
+            width: 36px;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .win-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .win-btn.close:hover {
+            background: #e81123;
+        }
+
+        .win-btn.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* MenuStrip */
+        .winforms-menustrip {
+            background: #f5f6f7;
+            border-bottom: 1px solid #dcdcdc;
+            padding: 2px 6px;
+            display: flex;
+            gap: 4px;
+            font-size: 12px;
+            color: #2b2b2b;
+        }
+
+        .menu-item {
+            padding: 3px 8px;
+            border-radius: 2px;
+            cursor: default;
+        }
+
+        .menu-item:hover {
+            background: #e5f1fb;
+            outline: 1px solid #70c0e7;
+        }
+
+        /* Window Client Canvas */
+        .winforms-body {
+            padding: 20px;
+            background: #f0f0f0;
+            position: relative;
+        }
+
+        /* WinForms Form 1 (Login) Specific Canvas */
+        .login-canvas {
+            max-width: 420px;
+            margin: 0 auto;
+            background: #f0f0f0;
+        }
+
+        .login-header-section {
+            text-align: center;
+            margin-bottom: 22px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid #d0d0d0;
+        }
+
+        .login-avatar-icon {
+            width: 58px;
+            height: 58px;
+            background: #e8f5e9;
+            border: 2px solid #81c784;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin: 0 auto 10px auto;
+        }
+
+        .login-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1b5e20;
+        }
+
+        .login-subtitle {
+            font-size: 11px;
+            color: #616161;
+            font-style: italic;
+        }
+
+        /* WinForms Standard Controls Styling */
+        .wf-form-group {
+            margin-bottom: 14px;
+            position: relative;
+        }
+
+        .wf-label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #212121;
+            margin-bottom: 4px;
+        }
+
+        .wf-textbox {
+            width: 100%;
+            height: 28px;
+            padding: 4px 8px;
+            border: 1px solid #7a7a7a;
+            background: #ffffff;
+            font-size: 12px;
+            font-family: inherit;
+            outline: none;
+            box-shadow: inset 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .wf-textbox:focus {
+            border-color: #0078d7;
+            box-shadow: inset 1px 1px 2px rgba(0,0,0,0.1), 0 0 3px rgba(0, 120, 215, 0.4);
+        }
+
+        .wf-textbox.readonly {
+            background: #e9e9e9;
+            color: #555555;
+            cursor: default;
+        }
+
+        .wf-combobox {
+            width: 100%;
+            height: 28px;
+            padding: 3px 6px;
+            border: 1px solid #7a7a7a;
+            background: #ffffff;
+            font-size: 12px;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .wf-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: #212121;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .wf-radio {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: #212121;
+            cursor: pointer;
+            user-select: none;
+            margin-right: 18px;
+        }
+
+        /* Numeric Up Down */
+        .wf-numeric-wrapper {
+            position: relative;
+            display: inline-flex;
+            width: 100%;
+        }
+
+        .wf-numeric-input {
+            width: 100%;
+            height: 28px;
+            padding: 4px 28px 4px 8px;
+            border: 1px solid #7a7a7a;
+            background: #ffffff;
+            font-size: 12px;
+            text-align: right;
+            box-shadow: inset 1px 1px 2px rgba(0,0,0,0.1);
+        }
+
+        .wf-numeric-spinners {
+            position: absolute;
+            right: 1px;
+            top: 1px;
+            bottom: 1px;
+            width: 22px;
+            display: flex;
+            flex-direction: column;
+            border-left: 1px solid #cccccc;
+        }
+
+        .spinner-btn {
+            background: #f0f0f0;
+            border: none;
+            border-bottom: 1px solid #cccccc;
+            height: 50%;
+            font-size: 7px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .spinner-btn:last-child {
+            border-bottom: none;
+        }
+
+        .spinner-btn:hover {
+            background: #e0e0e0;
+        }
+
+        /* Buttons */
+        .wf-button {
+            height: 30px;
+            padding: 4px 16px;
+            border: 1px solid #707070;
+            background: linear-gradient(180deg, #f5f5f5 0%, #e1e1e1 100%);
+            font-size: 12px;
+            font-weight: 500;
+            color: #000000;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            box-shadow: 1px 1px 1px rgba(0,0,0,0.15);
+            font-family: inherit;
+        }
+
+        .wf-button:hover {
+            background: linear-gradient(180deg, #e5f1fb 0%, #cce4f7 100%);
+            border-color: #0078d7;
+        }
+
+        .wf-button:active {
+            background: linear-gradient(180deg, #cce4f7 0%, #b8d9f5 100%);
+            box-shadow: inset 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .wf-button.btn-primary {
+            background: linear-gradient(180deg, #2e7d32 0%, #1b5e20 100%);
+            border-color: #1b5e20;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .wf-button.btn-primary:hover {
+            background: linear-gradient(180deg, #388e3c 0%, #2e7d32 100%);
+            border-color: #0d3810;
+        }
+
+        .wf-button.btn-danger {
+            background: linear-gradient(180deg, #e53935 0%, #c62828 100%);
+            border-color: #b71c1c;
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .wf-button.btn-danger:hover {
+            background: linear-gradient(180deg, #ef5350 0%, #d32f2f 100%);
+        }
+
+        /* WinForms GroupBox */
+        .wf-groupbox {
+            border: 1px solid #c0c0c0;
+            border-radius: 4px;
+            padding: 16px 14px 14px 14px;
+            margin-bottom: 16px;
+            position: relative;
+            background: #ffffff;
+        }
+
+        .wf-groupbox-legend {
+            font-size: 12px;
+            font-weight: 700;
+            color: #1b5e20;
+            padding: 0 6px;
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            background: #ffffff;
+        }
+
+        /* DataGridView Simulator */
+        .wf-datagridview {
+            border: 1px solid #ababab;
+            background: #ffffff;
+            width: 100%;
+            overflow-x: auto;
+            margin-top: 8px;
+        }
+
+        .wf-grid-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+            text-align: left;
+        }
+
+        .wf-grid-table th {
+            background: #f0f0f0;
+            border-right: 1px solid #d0d0d0;
+            border-bottom: 2px solid #ababab;
+            padding: 6px 10px;
+            font-weight: 600;
+            color: #333333;
+            user-select: none;
+            white-space: nowrap;
+        }
+
+        .wf-grid-table td {
+            border-right: 1px solid #e0e0e0;
+            border-bottom: 1px solid #e0e0e0;
+            padding: 5px 10px;
+            color: #222222;
+            white-space: nowrap;
+        }
+
+        .wf-grid-table tr:nth-child(even) {
+            background: #fafafa;
+        }
+
+        .wf-grid-table tr.selected {
+            background: #3399ff !important;
+            color: #ffffff !important;
+        }
+
+        .wf-grid-table tr.selected td {
+            color: #ffffff !important;
+            border-right-color: #55aaff;
+        }
+
+        .wf-grid-row-header {
+            width: 24px;
+            background: #f0f0f0;
+            text-align: center;
+            border-right: 1px solid #c0c0c0;
+        }
+
+        /* StatusStrip Simulator */
+        .winforms-statusstrip {
+            background: #f0f0f0;
+            border-top: 1px solid #d0d0d0;
+            padding: 4px 10px;
+            display: flex;
+            align-items: center;
+            font-size: 11px;
+            color: #444444;
+            gap: 16px;
+        }
+
+        .status-panel {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            border-right: 1px solid #cccccc;
+            padding-right: 16px;
+        }
+
+        .status-panel:last-child {
+            border-right: none;
+            padding-right: 0;
+            margin-left: auto;
+        }
+
+        /* Tag Overlays (Inspection Mode) */
+        .control-tag {
+            display: none;
+            position: absolute;
+            background: #7c3aed;
+            color: #ffffff;
+            font-size: 10px;
+            font-family: monospace;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 3px;
+            top: -12px;
+            right: 0;
+            z-index: 20;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.25);
+            pointer-events: none;
+        }
+
+        body.show-tags .control-tag {
+            display: inline-block;
+        }
+
+        /* TabIndex Badges */
+        .tabindex-badge {
+            display: none;
+            position: absolute;
+            background: #f59e0b;
+            color: #000000;
+            font-size: 10px;
+            font-weight: 800;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            align-items: center;
+            justify-content: center;
+            left: -8px;
+            top: -8px;
+            z-index: 21;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+            border: 1px solid #ffffff;
+        }
+
+        body.show-tabindex .tabindex-badge {
+            display: inline-flex;
+        }
+
+        /* Spec Table */
+        .spec-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 14px;
+            font-size: 0.9rem;
+        }
+
+        .spec-table th {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            padding: 10px 14px;
+            text-align: left;
+            color: var(--text-main);
+            font-weight: 600;
+        }
+
+        .spec-table td {
+            border: 1px solid var(--border);
+            padding: 9px 14px;
+            color: #334155;
+            vertical-align: top;
+        }
+
+        .spec-table tr:nth-child(even) {
+            background: #fafbfc;
+        }
+
+        .code-pill {
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: Consolas, Monaco, monospace;
+            font-size: 0.85rem;
+            color: #0f172a;
+            font-weight: 600;
+        }
+
+        /* Interactive Rubric Checklist */
+        .rubric-item {
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 14px 18px;
+            margin-bottom: 12px;
+            background: #ffffff;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            transition: all 0.15s;
+        }
+
+        .rubric-item:hover {
+            border-color: #94a3b8;
+            background: #f8fafc;
+        }
+
+        .rubric-check {
+            width: 20px;
+            height: 20px;
+            margin-top: 2px;
+            cursor: pointer;
+            accent-color: var(--primary);
+        }
+
+        .rubric-content {
+            flex: 1;
+        }
+
+        .rubric-title {
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--text-main);
+            margin-bottom: 4px;
+        }
+
+        .rubric-desc {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+        }
+
+        .rubric-score {
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: var(--primary-dark);
+            white-space: nowrap;
+        }
+
+        .score-calculator-card {
+            background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+            color: #ffffff;
+            padding: 20px;
+            border-radius: var(--radius-md);
+            margin-top: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow-md);
+        }
+
+        /* Responsive Layout Grid */
+        .crud-grid-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 820px) {
+            .crud-grid-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Print Friendly */
+        @media print {
+            .app-header, .tab-bar, .mockup-toolbar, .btn-header {
+                display: none !important;
+            }
+            body {
+                background: #ffffff;
+                color: #000000;
+                padding: 0;
+            }
+            .content-panel {
+                display: block !important;
+                page-break-after: always;
+            }
+            .doc-card {
+                box-shadow: none;
+                border: 1px solid #cccccc;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- APP HEADER -->
+    <header class="app-header">
+        <div class="header-content">
+            <div class="header-brand">
+                <span style="font-size: 1.6rem;">🖥️</span>
+                <div>
+                    <h1>Ujian Praktik Pemrograman GUI C# .NET Desktop</h1>
+                    <div style="display: flex; gap: 8px; margin-top: 4px;">
+                        <span class="badge-pill tag-desktop">Windows Forms App</span>
+                        <span class="badge-pill tag-tingkat">Kelas 11 SMK RPL</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="header-actions">
+                <button class="btn-header" onclick="window.print()">🖨️ Cetak / Simpan PDF</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- NAVIGATION TABS -->
+    <nav class="tab-bar">
+        <button class="tab-btn active" onclick="bukaTab(event, 'tab-petunjuk')">📋 Skenario & Ketentuan</button>
+        <button class="tab-btn" onclick="bukaTab(event, 'tab-login')">🔐 Form 1: Login Petugas</button>
+        <button class="tab-btn" onclick="bukaTab(event, 'tab-crud')">📊 Form 2: CRUD Data Setoran</button>
+        <button class="tab-btn" onclick="bukaTab(event, 'tab-tantangan')">⚡ Aspek Tantangan & Kerapian</button>
+        <button class="tab-btn" onclick="bukaTab(event, 'tab-rubrik')">💯 Rubrik Penilaian Interaktif</button>
+    </nav>
+
+    <!-- MAIN CONTAINER -->
+    <main class="main-container">
+
+        <!-- ==========================================
+             TAB 1: PETUNJUK & SKENARIO
+        ========================================== -->
+        <section id="tab-petunjuk" class="content-panel active">
+            <div class="doc-card">
+                <h2>🎯 Skenario Kasus: "GreenSchool — Bank Sampah Digital"</h2>
+                <p>
+                    Sekolah Anda sedang menggalakkan kepedulian lingkungan bertajuk <strong>Green Campus</strong> melalui unit Bank Sampah Siswa. 
+                    Setiap hari, siswa menyetorkan sampah anorganik (botol plastik, kardus/kertas, kaleng logam, minyak jelantah). Hasil penimbangan sampah 
+                    dikonversikan menjadi saldo rupiah yang dapat <em>disimpan ke buku tabungan siswa</em> atau <em>disedekahkan ke kas donasi sosial sekolah</em>.
+                </p>
+                <p>
+                    Sebagai <strong>Junior Desktop Developer</strong>, Anda ditugaskan merancang antarmuka (GUI) aplikasi pencatatan loket berbasis 
+                    <strong>Windows Forms (.NET C#)</strong> yang terdiri dari:
+                </p>
+                <ol style="margin-left: 24px; margin-bottom: 16px; font-size: 0.95rem; line-height: 1.7;">
+                    <li><strong>Form 1 — Login Petugas (`FrmLogin.cs`)</strong>: Autentikasi petugas loket sebelum masuk ke sistem.</li>
+                    <li><strong>Form 2 — Form CRUD Data Setoran (`FrmDataSetoran.cs`)</strong>: Halaman kerja utama untuk mencatat transaksi setoran, memilih jenis sampah, menimbang berat, menentukan opsi penyaluran, serta memantau tabel riwayat.</li>
+                </ol>
+
+                <div class="info-callout">
+                    <strong>💡 Ketentuan Utama Ujian Praktik Desain UI:</strong><br>
+                    Pada ujian ini, Anda <strong>hanya diminta mendesain tampilan (GUI)</strong> secara presisi di Visual Studio Designer. 
+                    Belum diperlukan koneksi database SQL maupun kode simpan/ubah data yang rumit. Penilaian difokuskan pada 
+                    <strong>ketepatan tata letak (*layouting*), pemilihan komponen kontrol standar yang tepat, struktur pengelompokan (*GroupBox*), 
+                    penamaan kontrol (*naming convention*), dan kerapian properti form</strong>.
+                </div>
+
+                <h3>🛠️ Lingkungan Pengerjaan & Ketentuan Teknis</h3>
+                <ul style="margin-left: 20px; font-size: 0.92rem; line-height: 1.7;">
+                    <li><strong>IDE :</strong> Microsoft Visual Studio 2019 / 2022.</li>
+                    <li><strong>Project Template :</strong> <em>Windows Forms App (.NET Framework / .NET Core)</em>, Bahasa: <strong>C#</strong>.</li>
+                    <li><strong>Nama Project :</strong> <code class="code-pill">PraktikGUI_NamaSiswa_Kelas</code> (Contoh: <code class="code-pill">PraktikGUI_RizkyPratama_XI_RPL1</code>).</li>
+                    <li><strong>Nama Form :</strong> <code class="code-pill">FrmLogin.cs</code> dan <code class="code-pill">FrmDataSetoran.cs</code>.</li>
+                    <li><strong>Batas Waktu :</strong> 90 s.d. 120 Menit.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             TAB 2: FORM 1 - LOGIN
+        ========================================== -->
+        <section id="tab-login" class="content-panel">
+            <div class="doc-card">
+                <h2>🔐 Form 1: Form Login Petugas (<code class="code-pill">FrmLogin.cs</code>)</h2>
+                <p>Form ini berukuran ringkas, tampil tepat di tengah layar (*CenterScreen*), dan tidak dapat dimaksimalkan (*FixedDialog*).</p>
+
+                <!-- Mockup Toolbar -->
+                <div class="mockup-toolbar">
+                    <div class="mockup-title">
+                        <span>🖥️ Tampilan Simulasi GUI Windows Forms — Form Login</span>
+                    </div>
+                    <div class="mockup-actions">
+                        <button type="button" class="toggle-btn" id="btn-toggle-tag-login" onclick="toggleControlTags()">🏷️ Tampilkan Nama Objek (`Name`)</button>
+                        <button type="button" class="toggle-btn" id="btn-toggle-tab-login" onclick="toggleTabIndex()">🔢 Tampilkan Urutan TabIndex</button>
+                    </div>
+                </div>
+
+                <!-- Windows Forms Simulator: FrmLogin -->
+                <div class="winforms-window" style="max-width: 440px; margin: 0 auto 30px auto;">
+                    <!-- Title Bar -->
+                    <div class="winforms-titlebar">
+                        <div class="winforms-title-text">
+                            <span class="winforms-app-icon">🌿</span>
+                            <span>Login Petugas — GreenSchool Bank Sampah</span>
+                        </div>
+                        <div class="winforms-window-buttons">
+                            <button class="win-btn" title="Minimize">_</button>
+                            <button class="win-btn disabled" title="Maximize">□</button>
+                            <button class="win-btn close" title="Tutup">✕</button>
+                        </div>
+                    </div>
+
+                    <!-- Client Area -->
+                    <div class="winforms-body login-canvas">
+                        <div class="login-header-section">
+                            <div class="login-avatar-icon" style="position: relative;">
+                                <span class="tabindex-badge">0</span>
+                                <span class="control-tag">picLogo</span>
+                                ♻️
+                            </div>
+                            <div class="login-title">GREENSCHOOL BANK SAMPAH</div>
+                            <div class="login-subtitle">"Kelola Sampah, Wujudkan Lingkungan Bersih"</div>
+                        </div>
+
+                        <!-- Username -->
+                        <div class="wf-form-group">
+                            <label class="wf-label" for="sim-login-user">Nama Pengguna (Username):</label>
+                            <div style="position: relative;">
+                                <span class="tabindex-badge">1</span>
+                                <span class="control-tag">txtUsername</span>
+                                <input type="text" id="sim-login-user" class="wf-textbox" value="admin_loket1" placeholder="Masukkan username...">
+                            </div>
+                        </div>
+
+                        <!-- Password -->
+                        <div class="wf-form-group">
+                            <label class="wf-label" for="sim-login-pass">Kata Sandi (Password):</label>
+                            <div style="position: relative;">
+                                <span class="tabindex-badge">2</span>
+                                <span class="control-tag">txtPassword</span>
+                                <input type="password" id="sim-login-pass" class="wf-textbox" value="passwordRahasia123">
+                            </div>
+                        </div>
+
+                        <!-- Role -->
+                        <div class="wf-form-group">
+                            <label class="wf-label" for="sim-login-role">Peran / Hak Akses:</label>
+                            <div style="position: relative;">
+                                <span class="tabindex-badge">3</span>
+                                <span class="control-tag">cmbRole</span>
+                                <select id="sim-login-role" class="wf-combobox">
+                                    <option selected>Petugas Loket Penimbangan</option>
+                                    <option>Koordinator Bank Sampah</option>
+                                    <option>Administrator Sekolah</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Remember Me Checkbox -->
+                        <div class="wf-form-group" style="position: relative; margin-top: 14px;">
+                            <span class="tabindex-badge">4</span>
+                            <span class="control-tag">chkIngatSaya</span>
+                            <label class="wf-checkbox">
+                                <input type="checkbox" checked>
+                                <span>Ingat Akun Saya pada Perangkat Ini</span>
+                            </label>
+                        </div>
+
+                        <!-- Buttons Row -->
+                        <div style="display: flex; gap: 10px; margin-top: 22px;">
+                            <div style="flex: 1; position: relative;">
+                                <span class="tabindex-badge">5</span>
+                                <span class="control-tag">btnLogin</span>
+                                <button type="button" class="wf-button btn-primary" style="width: 100%;">
+                                    <span>➔ Masuk Sistem</span>
+                                </button>
+                            </div>
+                            <div style="flex: 1; position: relative;">
+                                <span class="tabindex-badge">6</span>
+                                <span class="control-tag">btnBatal</span>
+                                <button type="button" class="wf-button" style="width: 100%;">
+                                    <span>✕ Batal</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Link Help -->
+                        <div style="text-align: center; margin-top: 18px; position: relative;">
+                            <span class="tabindex-badge">7</span>
+                            <span class="control-tag">lblBantuan</span>
+                            <a href="#help" onclick="return false;" style="font-size: 11px; color: #0284c7; text-decoration: underline;">
+                                Lupa kata sandi? Hubungi Pembina Lab GreenTech
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Spesifikasi Komponen FrmLogin -->
+                <h3>📋 Tabel Spesifikasi Properti Komponen `FrmLogin`</h3>
+                <table class="spec-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 18%;">Nama Objek (`Name`)</th>
+                            <th style="width: 18%;">Tipe Komponen</th>
+                            <th style="width: 34%;">Properti Kunci yang Harus Diatur</th>
+                            <th style="width: 30%;">Penjelasan / Fungsi Desain</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="code-pill">FrmLogin</code></td>
+                            <td>Form</td>
+                            <td>
+                                <code class="code-pill">Text = "Login Petugas — GreenSchool Bank Sampah"</code><br>
+                                <code class="code-pill">StartPosition = CenterScreen</code><br>
+                                <code class="code-pill">FormBorderStyle = FixedDialog</code><br>
+                                <code class="code-pill">MaximizeBox = False</code><br>
+                                <code class="code-pill">AcceptButton = btnLogin</code><br>
+                                <code class="code-pill">CancelButton = btnBatal</code>
+                            </td>
+                            <td>Jendela dialog login standar berukuran pas (~420 x 500 px) dan tidak dapat dimaksimalkan oleh pengguna.</td>
+                        </tr>
+                        <tr>
+                            <td><code class="code-pill">picLogo</code></td>
+                            <td>PictureBox</td>
+                            <td><code class="code-pill">SizeMode = Zoom</code>, Image icon ramah lingkungan / daur ulang.</td>
+                            <td>Identitas visual aplikasi.</td>
+                        </tr>
+                        <tr>
+                            <td><code class="code-pill">txtUsername</code></td>
+                            <td>TextBox</td>
+                            <td><code class="code-pill">MaxLength = 30</code>, <code class="code-pill">TabIndex = 1</code></td>
+                            <td>Kotak input identitas user/petugas.</td>
+                        </tr>
+                        <tr>
+                            <td><code class="code-pill">txtPassword</code></td>
+                            <td>TextBox</td>
+                            <td>
+                                <strong><code class="code-pill">UseSystemPasswordChar = True</code></strong><br>
+                                (atau <code class="code-pill">PasswordChar = '*'</code>), <code class="code-pill">TabIndex = 2</code>
+                            </td>
+                            <td>Menyembunyikan kata sandi dengan simbol bulatan/bintang hitam standar Windows.</td>
+                        </tr>
+                        <tr>
+                            <td><code class="code-pill">cmbRole</code></td>
+                            <td>ComboBox</td>
+                            <td>
+                                <strong><code class="code-pill">DropDownStyle = DropDownList</code></strong><br>
+                                Items: <em>Petugas Loket</em>, <em>Koordinator Bank Sampah</em>, <em>Administrator</em>.
+                            </td>
+                            <td>Mencegah user mengetik teks sembarangan, user hanya boleh memilih opsi yang tersedia.</td>
+                        </tr>
+                        <tr>
+                            <td><code class="code-pill">chkIngatSaya</code></td>
+                            <td>CheckBox</td>
+                            <td><code class="code-pill">Text = "Ingat Akun Saya pada Perangkat Ini"</code></td>
+                            <td>Opsi penyimpanan sesi login.</td>
+                        </tr>
+                        <tr>
+                            <td><code class="code-pill">btnLogin</code></td>
+                            <td>Button</td>
+                            <td>
+                                <code class="code-pill">Text = "&Masuk Sistem"</code> (Access Key: Alt+M)<br>
+                                <code class="code-pill">BackColor = ForestGreen</code>, <code class="code-pill">ForeColor = White</code>
+                            </td>
+                            <td>Tombol aksi primer (Accept Button form).</td>
+                        </tr>
+                        <tr>
+                            <td><code class="code-pill">btnBatal</code></td>
+                            <td>Button</td>
+                            <td><code class="code-pill">Text = "&Batal"</code>, <code class="code-pill">DialogResult = Cancel</code></td>
+                            <td>Tombol aksi sekunder untuk menutup/keluar form.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             TAB 3: FORM 2 - CRUD DATA SETORAN
+        ========================================== -->
+        <section id="tab-crud" class="content-panel">
+            <div class="doc-card">
+                <h2>📊 Form 2: Form CRUD Data Setoran (<code class="code-pill">FrmDataSetoran.cs</code>)</h2>
+                <p>Form utama loket penimbangan sampah sekolah: memuat form input, kontrol angka desimal, pilihan radio, tombol aksi, filter cari, tabel DataGridView, dan bilah status.</p>
+
+                <!-- Mockup Toolbar -->
+                <div class="mockup-toolbar">
+                    <div class="mockup-title">
+                        <span>🖥️ Tampilan Simulasi GUI Windows Forms — Form CRUD Transaksi</span>
+                    </div>
+                    <div class="mockup-actions">
+                        <button type="button" class="toggle-btn" id="btn-toggle-tag-crud" onclick="toggleControlTags()">🏷️ Tampilkan Nama Objek (`Name`)</button>
+                        <button type="button" class="toggle-btn" id="btn-toggle-tab-crud" onclick="toggleTabIndex()">🔢 Tampilkan Urutan TabIndex</button>
+                    </div>
+                </div>
+
+                <!-- Windows Forms Simulator: FrmDataSetoran -->
+                <div class="winforms-window" style="margin-bottom: 30px;">
+                    <!-- Title Bar -->
+                    <div class="winforms-titlebar">
+                        <div class="winforms-title-text">
+                            <span class="winforms-app-icon">📦</span>
+                            <span>Kelola Data Setoran Sampah Siswa — GreenSchool Bank Sampah</span>
+                        </div>
+                        <div class="winforms-window-buttons">
+                            <button class="win-btn" title="Minimize">_</button>
+                            <button class="win-btn" title="Maximize">□</button>
+                            <button class="win-btn close" title="Tutup">✕</button>
+                        </div>
+                    </div>
+
+                    <!-- MenuStrip -->
+                    <div class="winforms-menustrip">
+                        <span class="menu-item"><strong>F</strong>ile</span>
+                        <span class="menu-item"><strong>T</strong>ransaksi</span>
+                        <span class="menu-item"><strong>L</strong>aporan</span>
+                        <span class="menu-item"><strong>B</strong>antuan</span>
+                    </div>
+
+                    <!-- Client Area -->
+                    <div class="winforms-body">
+
+                        <!-- GROUPBOX 1: FORMULIR ENTRI DATA -->
+                        <div class="wf-groupbox" style="position: relative;">
+                            <span class="tabindex-badge" style="left: -10px; top: -10px;">G1</span>
+                            <span class="control-tag" style="top: -12px; right: 10px;">grpEntriData</span>
+                            <div class="wf-groupbox-legend">📋 Formulir Entri Data Setoran Sampah</div>
+
+                            <div class="crud-grid-layout">
+                                <!-- Kolom Kiri -->
+                                <div>
+                                    <div class="wf-form-group">
+                                        <label class="wf-label" for="sim-kode">Kode Setor (Otomatis):</label>
+                                        <div style="position: relative;">
+                                            <span class="control-tag">txtKodeSetor</span>
+                                            <input type="text" id="sim-kode" class="wf-textbox readonly" value="BS-2026-004" readonly>
+                                        </div>
+                                    </div>
+
+                                    <div class="wf-form-group">
+                                        <label class="wf-label" for="sim-nis">Nomor Induk Siswa (NIS):</label>
+                                        <div style="position: relative;">
+                                            <span class="tabindex-badge">1</span>
+                                            <span class="control-tag">txtNIS</span>
+                                            <input type="text" id="sim-nis" class="wf-textbox" value="102404" placeholder="Ketik NIS siswa...">
+                                        </div>
+                                    </div>
+
+                                    <div class="wf-form-group">
+                                        <label class="wf-label" for="sim-nama">Nama Lengkap Siswa:</label>
+                                        <div style="position: relative;">
+                                            <span class="tabindex-badge">2</span>
+                                            <span class="control-tag">txtNamaSiswa</span>
+                                            <input type="text" id="sim-nama" class="wf-textbox" value="Muhammad Fajar" placeholder="Nama siswa...">
+                                        </div>
+                                    </div>
+
+                                    <div class="wf-form-group">
+                                        <label class="wf-label" for="sim-kelas">Kelas / Rombel:</label>
+                                        <div style="position: relative;">
+                                            <span class="tabindex-badge">3</span>
+                                            <span class="control-tag">cmbKelas</span>
+                                            <select id="sim-kelas" class="wf-combobox">
+                                                <option>X PPLG 1</option>
+                                                <option selected>XI PPLG 1</option>
+                                                <option>XI PPLG 2</option>
+                                                <option>XII PPLG 1</option>
+                                                <option>XI TJKT 1</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Kolom Kanan -->
+                                <div>
+                                    <div class="wf-form-group">
+                                        <label class="wf-label" for="sim-tgl">Tanggal Penyerahan:</label>
+                                        <div style="position: relative;">
+                                            <span class="tabindex-badge">4</span>
+                                            <span class="control-tag">dtpTanggalSetor</span>
+                                            <input type="date" id="sim-tgl" class="wf-textbox" value="2026-10-05" style="cursor: pointer;">
+                                        </div>
+                                    </div>
+
+                                    <div class="wf-form-group">
+                                        <label class="wf-label" for="sim-jenis">Kategori / Jenis Sampah:</label>
+                                        <div style="position: relative;">
+                                            <span class="tabindex-badge">5</span>
+                                            <span class="control-tag">cmbJenisSampah</span>
+                                            <select id="sim-jenis" class="wf-combobox">
+                                                <option selected>Botol Plastik PET (Rp3.000 / kg)</option>
+                                                <option>Kardus & Kertas Bekas (Rp2.000 / kg)</option>
+                                                <option>Kaleng Alumunium (Rp8.000 / kg)</option>
+                                                <option>Minyak Jelantah (Rp7.000 / kg)</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Numeric Up Down & Total Row -->
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                                        <div class="wf-form-group">
+                                            <label class="wf-label" for="sim-berat">Berat Sampah (Kg):</label>
+                                            <div class="wf-numeric-wrapper">
+                                                <span class="tabindex-badge">6</span>
+                                                <span class="control-tag">numBerat</span>
+                                                <input type="text" id="sim-berat" class="wf-numeric-input" value="4.5">
+                                                <div class="wf-numeric-spinners">
+                                                    <button class="spinner-btn" type="button">▲</button>
+                                                    <button class="spinner-btn" type="button">▼</button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="wf-form-group">
+                                            <label class="wf-label" for="sim-total">Estimasi Nilai (Rp):</label>
+                                            <div style="position: relative;">
+                                                <span class="control-tag">txtTotalNilai</span>
+                                                <input type="text" id="sim-total" class="wf-textbox readonly" value="Rp 13.500" style="text-align: right; font-weight: 700; color: #1b5e20;" readonly>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Radio Buttons Penyaluran -->
+                                    <div class="wf-form-group" style="margin-top: 6px;">
+                                        <label class="wf-label">Opsi Penyaluran Dana:</label>
+                                        <div style="position: relative; margin-top: 4px;">
+                                            <span class="tabindex-badge">7</span>
+                                            <span class="control-tag">rdoTabungan & rdoDonasi</span>
+                                            <label class="wf-radio">
+                                                <input type="radio" name="opsi-dana" checked>
+                                                <span>Disimpan ke Buku Tabungan Siswa</span>
+                                            </label>
+                                            <label class="wf-radio">
+                                                <input type="radio" name="opsi-dana">
+                                                <span>Disedekahkan ke Kas Donasi Sekolah</span>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- PANEL TOMBOL AKSI -->
+                        <div style="margin-bottom: 18px; display: flex; gap: 8px; flex-wrap: wrap; background: #e8e8e8; padding: 10px 12px; border: 1px solid #c8c8c8; border-radius: 4px; position: relative;">
+                            <span class="tabindex-badge" style="left: -8px; top: -8px;">P</span>
+                            <span class="control-tag" style="top: -12px; right: 8px;">pnlAksi</span>
+
+                            <div style="position: relative;">
+                                <span class="tabindex-badge">8</span>
+                                <span class="control-tag">btnTambah</span>
+                                <button type="button" class="wf-button">➕ &Tambah Baru</button>
+                            </div>
+
+                            <div style="position: relative;">
+                                <span class="tabindex-badge">9</span>
+                                <span class="control-tag">btnSimpan</span>
+                                <button type="button" class="wf-button btn-primary">💾 &Simpan Data</button>
+                            </div>
+
+                            <div style="position: relative;">
+                                <span class="tabindex-badge">10</span>
+                                <span class="control-tag">btnUbah</span>
+                                <button type="button" class="wf-button">✏️ &Ubah</button>
+                            </div>
+
+                            <div style="position: relative;">
+                                <span class="tabindex-badge">11</span>
+                                <span class="control-tag">btnHapus</span>
+                                <button type="button" class="wf-button btn-danger">🗑️ &Hapus</button>
+                            </div>
+
+                            <div style="position: relative; margin-left: auto;">
+                                <span class="tabindex-badge">12</span>
+                                <span class="control-tag">btnBatal</span>
+                                <button type="button" class="wf-button">🔄 &Batal / Bersihkan</button>
+                            </div>
+                        </div>
+
+                        <!-- GROUPBOX 2: TABEL & PENCARIAN -->
+                        <div class="wf-groupbox" style="position: relative;">
+                            <span class="control-tag" style="top: -12px; right: 10px;">grpTabel</span>
+                            <div class="wf-groupbox-legend">📑 Riwayat Transaksi & Pencarian Data</div>
+
+                            <!-- Search Bar Sub-row -->
+                            <div style="display: flex; gap: 10px; align-items: center; margin-bottom: 12px; flex-wrap: wrap;">
+                                <label style="font-size: 12px; font-weight: 600;" for="sim-cari">Cari Data:</label>
+                                <div style="flex: 1; min-width: 180px; position: relative;">
+                                    <span class="tabindex-badge">13</span>
+                                    <span class="control-tag">txtCari</span>
+                                    <input type="text" id="sim-cari" class="wf-textbox" placeholder="Ketik NIS atau Nama Siswa...">
+                                </div>
+
+                                <div style="width: 180px; position: relative;">
+                                    <span class="tabindex-badge">14</span>
+                                    <span class="control-tag">cmbFilterKategori</span>
+                                    <select id="sim-cari-kat" class="wf-combobox">
+                                        <option>Semua Kategori</option>
+                                        <option>Plastik</option>
+                                        <option>Kertas/Kardus</option>
+                                        <option>Logam</option>
+                                        <option>Minyak</option>
+                                    </select>
+                                </div>
+
+                                <div style="position: relative;">
+                                    <span class="tabindex-badge">15</span>
+                                    <span class="control-tag">btnCari</span>
+                                    <button type="button" class="wf-button">🔍 Cari</button>
+                                </div>
+                            </div>
+
+                            <!-- DataGridView -->
+                            <div style="position: relative;">
+                                <span class="tabindex-badge" style="left: -6px; top: -6px;">16</span>
+                                <span class="control-tag">dgvSetoranSampah</span>
+                                <div class="wf-datagridview">
+                                    <table class="wf-grid-table">
+                                        <thead>
+                                            <tr>
+                                                <th class="wf-grid-row-header"></th>
+                                                <th>No</th>
+                                                <th>Kode Setor</th>
+                                                <th>Tanggal</th>
+                                                <th>NIS</th>
+                                                <th>Nama Siswa</th>
+                                                <th>Kelas</th>
+                                                <th>Jenis Sampah</th>
+                                                <th style="text-align: right;">Berat (Kg)</th>
+                                                <th style="text-align: right;">Total Nilai (Rp)</th>
+                                                <th>Penyaluran</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td class="wf-grid-row-header">▶</td>
+                                                <td>1</td>
+                                                <td><strong>BS-2026-001</strong></td>
+                                                <td>05/10/2026</td>
+                                                <td>102401</td>
+                                                <td>Rizky Pratama</td>
+                                                <td>XI PPLG 1</td>
+                                                <td>Botol Plastik PET</td>
+                                                <td style="text-align: right;">3.5</td>
+                                                <td style="text-align: right;">Rp 10.500</td>
+                                                <td><span style="color: #15803d; font-weight: 600;">Tabungan</span></td>
+                                            </tr>
+                                            <tr class="selected">
+                                                <td class="wf-grid-row-header">▶</td>
+                                                <td>2</td>
+                                                <td><strong>BS-2026-002</strong></td>
+                                                <td>05/10/2026</td>
+                                                <td>102415</td>
+                                                <td>Siti Aminah</td>
+                                                <td>XI PPLG 1</td>
+                                                <td>Kardus Bekas</td>
+                                                <td style="text-align: right;">8.0</td>
+                                                <td style="text-align: right;">Rp 16.000</td>
+                                                <td><span style="color: #0369a1; font-weight: 600;">Donasi</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td class="wf-grid-row-header"></td>
+                                                <td>3</td>
+                                                <td><strong>BS-2026-003</strong></td>
+                                                <td>05/10/2026</td>
+                                                <td>102422</td>
+                                                <td>Budi Santoso</td>
+                                                <td>XI PPLG 2</td>
+                                                <td>Minyak Jelantah</td>
+                                                <td style="text-align: right;">2.0</td>
+                                                <td style="text-align: right;">Rp 14.000</td>
+                                                <td><span style="color: #15803d; font-weight: 600;">Tabungan</span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div style="margin-top: 8px; font-size: 11px; color: #555555; display: flex; justify-content: space-between;">
+                                <span>Menampilkan <strong>3</strong> data transaksi setoran hari ini.</span>
+                                <span>* Klik baris untuk memilih data yang ingin diubah atau dihapus</span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- StatusStrip -->
+                    <div class="winforms-statusstrip">
+                        <div class="status-panel">
+                            <span>👤 Petugas Aktif: <strong>Ahmad Fauzi (Loket 1)</strong></span>
+                        </div>
+                        <div class="status-panel">
+                            <span>⚡ Status: <strong>Siap Melayani Nasabah</strong></span>
+                        </div>
+                        <div class="status-panel">
+                            <span>📅 05 Oktober 2026</span>
+                        </div>
+                        <div class="status-panel">
+                            <span>📦 GreenSchool Desktop v1.0</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Spesifikasi Komponen FrmDataSetoran -->
+                <h3>📋 Tabel Spesifikasi Properti Komponen `FrmDataSetoran`</h3>
+                <table class="spec-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 18%;">Nama Objek (`Name`)</th>
+                            <th style="width: 18%;">Tipe Komponen</th>
+                            <th style="width: 34%;">Properti Kunci yang Harus Diatur</th>
+                            <th style="width: 30%;">Penjelasan / Fungsi Desain</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code class="code-pill">txtKodeSetor</code></td>
+                            <td>TextBox</td>
+                            <td><code class="code-pill">ReadOnly = True</code>, <code class="code-pill">BackColor = SystemColors.Control</code></td>
+                            <td>Kode unik transaksi tidak boleh diubah manual oleh siswa.</td>
+                        </tr>
+                        <tr>
+                            <td><code class="code-pill">txtNIS</code> & <code class="code-pill">txtNamaSiswa</code></td>
+                            <td>TextBox</td>
+                            <td><code class="code-pill">MaxLength = 10 / 50</code>, <code class="code-pill">TabIndex = 1 & 2</code></td>
+                            <td>Input data identitas nasabah siswa penyetor.</td>
+                        </tr>
+                        <tr>
+                            <td><code class="code-pill">cmbKelas</code></td>
+                            <td>ComboBox</td>
+                            <td><code class="code-pill">DropDownStyle = DropDownList</code>, Items rombel kelas.</td>
+                            <td>Pemilihan kelas dari daftar drop-down.</td>
+                        </tr>
+                        <tr>
+                            <td><code class="code-pill">dtpTanggalSetor</code></td>
+                            <td>DateTimePicker</td>
+                            <td><code class="code-pill">Format = Short</code></td>
+                            <td>Pemilihan tanggal transaksi dengan UI kalender.</td>
+                        </tr>
+                        <tr>
+                            <td><code class="code-pill">cmbJenisSampah</code></td>
+                            <td>ComboBox</td>
+                            <td><code class="code-pill">DropDownStyle = DropDownList</code>, Items: Plastik, Kertas, Logam, Minyak.</td>
+                            <td>Kategori sampah yang disetor.</td>
+                        </tr>
+                        <tr>
+                            <td><code class="code-pill">numBerat</code></td>
+                            <td>NumericUpDown</td>
+                            <td>
+                                <strong><code class="code-pill">DecimalPlaces = 1</code></strong><br>
+                                <code class="code-pill">Increment = 0.5</code>, <code class="code-pill">Minimum = 0.1</code>, <code class="code-pill">Maximum = 100.0</code>
+                            </td>
+                            <td>Mendukung berat berangka desimal (misal 3.5 kg) dengan spinner atas/bawah.</td>
+                        </tr>
+                        <tr>
+                            <td><code class="code-pill">txtTotalNilai</code></td>
+                            <td>TextBox</td>
+                            <td><code class="code-pill">ReadOnly = True</code>, <code class="code-pill">TextAlign = Right</code>, Font Bold</td>
+                            <td>Menampilkan kalkulasi otomatis tarif berat x harga.</td>
+                        </tr>
+                        <tr>
+                            <td><code class="code-pill">rdoTabungan</code> & <code class="code-pill">rdoDonasi</code></td>
+                            <td>RadioButton</td>
+                            <td>Pilihan saling eksklusif, salah satu <code class="code-pill">Checked = True</code></td>
+                            <td>Memilih rekening tujuan hasil setoran sampah.</td>
+                        </tr>
+                        <tr>
+                            <td><code class="code-pill">btnTambah</code>, <code class="code-pill">btnSimpan</code>, dll.</td>
+                            <td>Button</td>
+                            <td>
+                                Access key dengan simbol <code class="code-pill">&</code> (contoh: <code class="code-pill">&Simpan Data</code> $\rightarrow$ Alt+S).
+                            </td>
+                            <td>Tombol aksi manipulasi data pada panel aksi.</td>
+                        </tr>
+                        <tr>
+                            <td><code class="code-pill">dgvSetoranSampah</code></td>
+                            <td>DataGridView</td>
+                            <td>
+                                <strong><code class="code-pill">ReadOnly = True</code></strong><br>
+                                <strong><code class="code-pill">SelectionMode = FullRowSelect</code></strong><br>
+                                <strong><code class="code-pill">AllowUserToAddRows = False</code></strong><br>
+                                Minimal 7 kolom dibuat via Edit Columns Designer.
+                            </td>
+                            <td>Tabel rekapitulasi data dengan penyorotan satu baris penuh dan terisi data sampel.</td>
+                        </tr>
+                        <tr>
+                            <td><code class="code-pill">statusStrip1</code></td>
+                            <td>StatusStrip</td>
+                            <td>Memiliki 4 item <code class="code-pill">ToolStripStatusLabel</code></td>
+                            <td>Bilah informasi status di bagian paling dasar form.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             TAB 4: TANTANGAN & KERAPIAN
+        ========================================== -->
+        <section id="tab-tantangan" class="content-panel">
+            <div class="doc-card">
+                <h2>⚡ Panduan Aspek Tantangan & Kerapian Layout</h2>
+                <p>Untuk membedakan hasil kerja siswa standar dengan siswa yang memiliki pemahaman rekayasa UI mendalam, terapkan 4 prinsip berikut:</p>
+
+                <div class="crud-grid-layout" style="margin-top: 18px;">
+                    <!-- Tantangan 1 -->
+                    <div style="background: #f8fafc; border: 1px solid var(--border); padding: 18px; border-radius: var(--radius-sm);">
+                        <h4 style="color: #0369a1; margin-bottom: 8px;">1. Urutan Alur TabIndex (Fokus Kursor)</h4>
+                        <p style="font-size: 0.88rem; color: #475569;">
+                            Ketika form dijalankan dan siswa menekan tombol <kbd style="background:#e2e8f0; padding:2px 5px; border-radius:3px;">Tab</kbd>, 
+                            kursor harus berpindah secara sekuensial dan teratur dari kiri ke kanan, atas ke bawah:
+                        </p>
+                        <div style="font-family: monospace; font-size: 0.8rem; background: #ffffff; padding: 10px; border: 1px solid #cbd5e1; border-radius: 4px;">
+                            txtNIS (1) ➔ txtNamaSiswa (2) ➔ cmbKelas (3) ➔ dtpTanggal (4) ➔ cmbJenis (5) ➔ numBerat (6) ➔ rdoTabungan (7) ➔ rdoDonasi (8) ➔ btnTambah (9) ➔ btnSimpan (10) ...
+                        </div>
+                    </div>
+
+                    <!-- Tantangan 2 -->
+                    <div style="background: #f8fafc; border: 1px solid var(--border); padding: 18px; border-radius: var(--radius-sm);">
+                        <h4 style="color: #0369a1; margin-bottom: 8px;">2. Responsivitas Jendela (Anchor & Dock)</h4>
+                        <p style="font-size: 0.88rem; color: #475569;">
+                            Saat jendela <code class="code-pill">FrmDataSetoran</code> di-maximize, form tidak boleh terlihat 'kopong' di sisi kanan:
+                        </p>
+                        <ul style="font-size: 0.85rem; margin-left: 18px; color: #475569;">
+                            <li><code class="code-pill">grpEntriData</code>: Diatur <code class="code-pill">Anchor = Top, Left, Right</code> agar melebar horizontal.</li>
+                            <li><code class="code-pill">grpTabel</code> & <code class="code-pill">dgvSetoranSampah</code>: Diatur <code class="code-pill">Anchor = Top, Bottom, Left, Right</code> agar otomatis mengisi seluruh ruang bawah form.</li>
+                        </ul>
+                    </div>
+
+                    <!-- Tantangan 3 -->
+                    <div style="background: #f8fafc; border: 1px solid var(--border); padding: 18px; border-radius: var(--radius-sm);">
+                        <h4 style="color: #0369a1; margin-bottom: 8px;">3. Standar Penamaan Komponen (Naming Convention)</h4>
+                        <p style="font-size: 0.88rem; color: #475569;">
+                            Dilarang membiarkan nama default seperti <code class="code-pill">button1</code> atau <code class="code-pill">textBox3</code>. 
+                            Gunakan awalan standar industri:
+                        </p>
+                        <ul style="font-size: 0.85rem; margin-left: 18px; color: #475569;">
+                            <li><code class="code-pill">txt...</code> untuk TextBox</li>
+                            <li><code class="code-pill">btn...</code> untuk Button</li>
+                            <li><code class="code-pill">cmb...</code> untuk ComboBox</li>
+                            <li><code class="code-pill">num...</code> untuk NumericUpDown</li>
+                            <li><code class="code-pill">dtp...</code> untuk DateTimePicker</li>
+                            <li><code class="code-pill">dgv...</code> untuk DataGridView</li>
+                        </ul>
+                    </div>
+
+                    <!-- Tantangan 4 -->
+                    <div style="background: #f8fafc; border: 1px solid var(--border); padding: 18px; border-radius: var(--radius-sm);">
+                        <h4 style="color: #0369a1; margin-bottom: 8px;">4. Access Key (Shortcut Keyboard)</h4>
+                        <p style="font-size: 0.88rem; color: #475569;">
+                            Sematkan karakter ampersand (<code class="code-pill">&</code>) pada properti <code class="code-pill">Text</code> tombol:
+                        </p>
+                        <ul style="font-size: 0.85rem; margin-left: 18px; color: #475569;">
+                            <li><code class="code-pill">&Simpan Data</code> $\rightarrow$ Pengguna dapat menekan <kbd style="background:#e2e8f0; padding:1px 4px;">Alt + S</kbd></li>
+                            <li><code class="code-pill">&Ubah</code> $\rightarrow$ Shortcut <kbd style="background:#e2e8f0; padding:1px 4px;">Alt + U</kbd></li>
+                            <li><code class="code-pill">&Hapus</code> $\rightarrow$ Shortcut <kbd style="background:#e2e8f0; padding:1px 4px;">Alt + H</kbd></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================
+             TAB 5: RUBRIK PENILAIAN INTERAKTIF
+        ========================================== -->
+        <section id="tab-rubrik" class="content-panel">
+            <div class="doc-card">
+                <h2>💯 Rubrik Penilaian Praktik GUI (Total: 100 Poin)</h2>
+                <p>Gunakan checklist interaktif di bawah ini untuk menilai hasil kerja siswa atau sebagai panduan self-assessment sebelum dikumpulkan.</p>
+
+                <div id="rubric-list">
+                    <!-- Aspek 1 -->
+                    <div class="rubric-item">
+                        <input type="checkbox" class="rubric-check" data-points="25" id="chk-r1" onchange="hitungSkor()">
+                        <div class="rubric-content">
+                            <label for="chk-r1" class="rubric-title">1. Form Login Petugas (`FrmLogin.cs`)</label>
+                            <div class="rubric-desc">
+                                Ukuran jendela proporsional (~420 x 500 px), `StartPosition = CenterScreen`, `FormBorderStyle = FixedDialog`, 
+                                tombol maximize nonaktif, `txtPassword` mengaktifkan `UseSystemPasswordChar`, terdapat logo dan tombol login-batal tersusun simetris.
+                            </div>
+                        </div>
+                        <div class="rubric-score">25 Poin</div>
+                    </div>
+
+                    <!-- Aspek 2 -->
+                    <div class="rubric-item">
+                        <input type="checkbox" class="rubric-check" data-points="25" id="chk-r2" onchange="hitungSkor()">
+                        <div class="rubric-content">
+                            <label for="chk-r2" class="rubric-title">2. Kelengkapan Ragam Kontrol Input</label>
+                            <div class="rubric-desc">
+                                Memanfaatkan ragam kontrol standar: TextBox biasa & ReadOnly, ComboBox (DropDownList), DateTimePicker kalender, 
+                                NumericUpDown berdesimal (pecahan kg), RadioButton opsi penyaluran, serta pengelompokan GroupBox yang rapi.
+                            </div>
+                        </div>
+                        <div class="rubric-score">25 Poin</div>
+                    </div>
+
+                    <!-- Aspek 3 -->
+                    <div class="rubric-item">
+                        <input type="checkbox" class="rubric-check" data-points="20" id="chk-r3" onchange="hitungSkor()">
+                        <div class="rubric-content">
+                            <label for="chk-r3" class="rubric-title">3. Penyusunan DataGridView & Data Sampel</label>
+                            <div class="rubric-desc">
+                                Konfigurasi minimal 7 kolom terdefinisi dengan jelas pada Designer, mode `FullRowSelect`, `AllowUserToAddRows = False`, 
+                                dan terisi minimal 3 baris data contoh yang realistis sehingga tabel tampak hidup.
+                            </div>
+                        </div>
+                        <div class="rubric-score">20 Poin</div>
+                    </div>
+
+                    <!-- Aspek 4 -->
+                    <div class="rubric-item">
+                        <input type="checkbox" class="rubric-check" data-points="15" id="chk-r4" onchange="hitungSkor()">
+                        <div class="rubric-content">
+                            <label for="chk-r4" class="rubric-title">4. Standar Penamaan Komponen (Naming Convention)</label>
+                            <div class="rubric-desc">
+                                Seluruh komponen input, tombol aksi, dan tabel dinamai secara konsisten menggunakan awalan standar (`txt...`, `btn...`, `cmb...`, `num...`, `dtp...`, `dgv...`) dan tidak ada yang dibiarkan bernama default `button1`/`textBox1`.
+                            </div>
+                        </div>
+                        <div class="rubric-score">15 Poin</div>
+                    </div>
+
+                    <!-- Aspek 5 -->
+                    <div class="rubric-item">
+                        <input type="checkbox" class="rubric-check" data-points="15" id="chk-r5" onchange="hitungSkor()">
+                        <div class="rubric-content">
+                            <label for="chk-r5" class="rubric-title">5. Kerapian Tata Letak, TabIndex & Anchor Responsif</label>
+                            <div class="rubric-desc">
+                                Label dan input rata (*aligned*), jarak margin konsisten, urutan tombol Tab mengalir logis dari atas ke bawah, 
+                                serta tabel melebar proporsional saat form dimaksimalkan (*Anchor Top, Bottom, Left, Right*).
+                            </div>
+                        </div>
+                        <div class="rubric-score">15 Poin</div>
+                    </div>
+                </div>
+
+                <!-- Total Score Display -->
+                <div class="score-calculator-card">
+                    <div>
+                        <div style="font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.5px; opacity: 0.9;">Total Skor Praktik Siswa:</div>
+                        <div style="font-size: 2.2rem; font-weight: 800;" id="total-score-text">0 / 100</div>
+                    </div>
+                    <div>
+                        <span id="score-grade-badge" class="badge-pill" style="background: rgba(255,255,255,0.25); color: #ffffff; font-size: 0.9rem; padding: 6px 16px;">
+                            Belum Dinilai
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // Tab Navigation
+        function bukaTab(evt, tabId) {
+            const tabs = document.querySelectorAll('.content-panel');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            const tabBtns = document.querySelectorAll('.tab-btn');
+            tabBtns.forEach(btn => btn.classList.remove('active'));
+
+            document.getElementById(tabId).classList.add('active');
+            evt.currentTarget.classList.add('active');
+        }
+
+        // Toggle Control Tags (Inspection Mode)
+        let showTags = false;
+        function toggleControlTags() {
+            showTags = !showTags;
+            if (showTags) {
+                document.body.classList.add('show-tags');
+                document.getElementById('btn-toggle-tag-login').classList.add('active');
+                document.getElementById('btn-toggle-tag-crud').classList.add('active');
+            } else {
+                document.body.classList.remove('show-tags');
+                document.getElementById('btn-toggle-tag-login').classList.remove('active');
+                document.getElementById('btn-toggle-tag-crud').classList.remove('active');
+            }
+        }
+
+        // Toggle TabIndex Badges
+        let showTab = false;
+        function toggleTabIndex() {
+            showTab = !showTab;
+            if (showTab) {
+                document.body.classList.add('show-tabindex');
+                document.getElementById('btn-toggle-tab-login').classList.add('active');
+                document.getElementById('btn-toggle-tab-crud').classList.add('active');
+            } else {
+                document.body.classList.remove('show-tabindex');
+                document.getElementById('btn-toggle-tab-login').classList.remove('active');
+                document.getElementById('btn-toggle-tab-crud').classList.remove('active');
+            }
+        }
+
+        // Rubric Score Calculator
+        function hitungSkor() {
+            const checkboxes = document.querySelectorAll('.rubric-check');
+            let total = 0;
+            checkboxes.forEach(chk => {
+                if (chk.checked) {
+                    total += parseInt(chk.getAttribute('data-points'), 10);
+                }
+            });
+
+            document.getElementById('total-score-text').textContent = `${total} / 100`;
+
+            const badge = document.getElementById('score-grade-badge');
+            if (total === 100) {
+                badge.textContent = "🌟 Sangat Memuaskan (A+)";
+                badge.style.background = "#10b981";
+            } else if (total >= 85) {
+                badge.textContent = "👍 Sangat Baik (A)";
+                badge.style.background = "#059669";
+            } else if (total >= 70) {
+                badge.textContent = "👌 Baik (B)";
+                badge.style.background = "#2563eb";
+            } else if (total > 0) {
+                badge.textContent = "📚 Cukup / Perlu Perbaikan (C)";
+                badge.style.background = "#d97706";
+            } else {
+                badge.textContent = "Belum Dinilai";
+                badge.style.background = "rgba(255,255,255,0.25)";
+            }
+        }
+    </script>
+</body>
+</html>
