@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Latihan Praktik C++ Interaktif — UTS Kelas X PPLG</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --primary-light: #eff6ff;
+            --success: #16a34a;
+            --bg: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --code-bg: #0f172a;
+            --code-text: #f8fafc;
+            --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            --font-mono: Consolas, "Courier New", Courier, monospace;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text-main);
+            font-family: var(--font-sans);
+            line-height: 1.5;
+            padding-bottom: 50px;
+        }
+
+        header {
+            background: #ffffff;
+            border-bottom: 1px solid var(--border);
+            padding: 1.25rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .header-container {
+            max-width: 840px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .header-title h1 {
+            font-size: 1.35rem;
+            color: #1e293b;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .header-title p {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .btn-print {
+            background: #f1f5f9;
+            color: #334155;
+            border: 1px solid var(--border);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .btn-print:hover {
+            background: #e2e8f0;
+        }
+
+        /* 1 Kolom Saja */
+        .main-container {
+            max-width: 840px;
+            margin: 1.5rem auto;
+            padding: 0 1rem;
+        }
+
+        /* Nav Tabs */
+        .tab-nav {
+            display: flex;
+            gap: 0.5rem;
+            border-bottom: 2px solid var(--border);
+            margin-bottom: 1.5rem;
+            overflow-x: auto;
+        }
+
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 0.75rem 1.25rem;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-muted);
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            margin-bottom: -2px;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            white-space: nowrap;
+            transition: all 0.2s;
+        }
+
+        .tab-btn:hover {
+            color: var(--primary);
+        }
+
+        .tab-btn.active {
+            color: var(--primary);
+            border-bottom-color: var(--primary);
+            background: var(--primary-light);
+            border-radius: 6px 6px 0 0;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.25s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Card Layout */
+        .card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.75rem;
+        }
+
+        .card-header h2 {
+            font-size: 1.25rem;
+            color: #1e293b;
+        }
+
+        .badge {
+            display: inline-block;
+            font-size: 0.75rem;
+            font-weight: 700;
+            padding: 0.25rem 0.6rem;
+            border-radius: 9999px;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .badge-easy { background: #dcfce7; color: #15803d; }
+
+        h3 {
+            font-size: 1rem;
+            color: #334155;
+            margin: 1.2rem 0 0.5rem;
+        }
+
+        p, ul {
+            font-size: 0.95rem;
+            color: #334155;
+            margin-bottom: 0.75rem;
+        }
+
+        ul {
+            padding-left: 1.5rem;
+        }
+
+        li {
+            margin-bottom: 0.25rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 0.75rem 0 1rem;
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            border: 1px solid var(--border);
+            padding: 0.55rem 0.75rem;
+            text-align: left;
+        }
+
+        th {
+            background: #f1f5f9;
+            color: #334155;
+            font-weight: 600;
+        }
+
+        /* Test Cases Layout */
+        .test-case-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+        }
+
+        .test-case-card {
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            padding: 0.75rem 1rem;
+            font-size: 0.88rem;
+        }
+
+        .test-case-card strong {
+            color: #1e293b;
+        }
+
+        /* Simulator Styles */
+        .simulator-panel {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1.1rem;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            margin-bottom: 1.5rem;
+        }
+
+        .sim-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #f1f5f9;
+            padding-bottom: 0.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #475569;
+        }
+
+        .form-control {
+            padding: 0.6rem 0.75rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            font-size: 0.92rem;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px var(--primary-light);
+        }
+
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .btn {
+            padding: 0.6rem 1.1rem;
+            border-radius: 6px;
+            border: none;
+            font-weight: 600;
+            font-size: 0.88rem;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.4rem;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-dark);
+        }
+
+        .btn-secondary {
+            background: #f1f5f9;
+            color: #334155;
+            border: 1px solid #cbd5e1;
+        }
+
+        .btn-secondary:hover {
+            background: #e2e8f0;
+        }
+
+        .btn-accent {
+            background: #10b981;
+            color: white;
+        }
+
+        .btn-accent:hover {
+            background: #059669;
+        }
+
+        .btn-sm {
+            padding: 0.35rem 0.7rem;
+            font-size: 0.8rem;
+        }
+
+        /* Terminal Console */
+        .terminal {
+            background: var(--code-bg);
+            color: var(--code-text);
+            border-radius: 8px;
+            padding: 1rem 1.25rem;
+            font-family: var(--font-mono);
+            font-size: 0.9rem;
+            min-height: 140px;
+            overflow-x: auto;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .terminal-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 0.75rem;
+            padding-bottom: 0.4rem;
+            border-bottom: 1px solid #334155;
+            font-size: 0.78rem;
+            color: #94a3b8;
+        }
+
+        .terminal-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        .dot-red { background: #ef4444; }
+        .dot-yellow { background: #eab308; }
+        .dot-green { background: #22c55e; }
+
+        .terminal-content {
+            white-space: pre-wrap;
+            line-height: 1.5;
+        }
+
+        /* Items in While list */
+        .item-list-box {
+            background: #f8fafc;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            padding: 0.5rem;
+            max-height: 140px;
+            overflow-y: auto;
+            font-size: 0.88rem;
+        }
+
+        .item-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.3rem 0.5rem;
+            border-bottom: 1px dashed #e2e8f0;
+        }
+
+        .item-row:last-child {
+            border-bottom: none;
+        }
+
+        /* Print styles */
+        @media print {
+            header, .tab-nav, .simulator-panel, .btn-print, .btn-group {
+                display: none !important;
+            }
+            body {
+                background: white !important;
+                color: black !important;
+                font-size: 10.5pt;
+            }
+            .tab-content {
+                display: block !important;
+                page-break-after: always;
+            }
+            .card {
+                border: 1px solid #ccc;
+                box-shadow: none;
+                margin-bottom: 1.5rem;
+                padding: 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Bar -->
+    <header>
+        <div class="header-container">
+            <div class="header-title">
+                <h1>💻 Latihan Praktik C++ Interaktif</h1>
+                <p>Dasar PPLG Fase E / Kelas X — Ketentuan: Hanya If-Else & While (Tanpa switch-case & for)</p>
+            </div>
+            <div class="header-actions">
+                <button class="btn-print" onclick="window.print()">🖨️ Cetak Lembar Soal</button>
+            </div>
+        </div>
+    </header>
+
+    <div class="main-container">
+
+        <!-- Tab Navigation -->
+        <div class="tab-nav">
+            <button class="tab-btn active" onclick="switchTab('soal1')">
+                🧺 Soal 1: Kasir Laundry (If - Else)
+            </button>
+            <button class="tab-btn" onclick="switchTab('soal2')">
+                🛒 Soal 2: Kasir Belanja (While Loop)
+            </button>
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 1: SOAL 1 (IF - ELSE IF - ELSE) -->
+        <!-- ========================================== -->
+        <div id="soal1" class="tab-content active">
+            
+            <!-- Kartu Soal 1 -->
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h2>SOAL 1: Kasir Laundry Kiloan "Bersih Kilat"</h2>
+                        <p style="font-size:0.85rem; color:var(--text-muted); margin-top:2px;">Konsep: Percabangan Seleksi `if - else if - else`</p>
+                    </div>
+                    <span class="badge badge-easy">Dasar • 25 Poin</span>
+                </div>
+
+                <h3>Deskripsi Masalah</h3>
+                <p>Sebuah tempat laundry kiloan melayani 3 pilihan paket layanan dengan tarif per kilogram (kg):</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Kode</th>
+                            <th>Nama Layanan</th>
+                            <th>Tarif / kg</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><code>'C'</code> / <code>'c'</code></td>
+                            <td>Cuci Kering</td>
+                            <td>Rp 5.000</td>
+                        </tr>
+                        <tr>
+                            <td><code>'S'</code> / <code>'s'</code></td>
+                            <td>Setrika Saja</td>
+                            <td>Rp 4.000</td>
+                        </tr>
+                        <tr>
+                            <td><code>'K'</code> / <code>'k'</code></td>
+                            <td>Komplit (Cuci + Setrika)</td>
+                            <td>Rp 8.000</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Ketentuan Promo Diskon:</h3>
+                <ul>
+                    <li>Jika berat pakaian yang dicuci <strong>&ge; 5 kg</strong>, pelanggan mendapatkan diskon langsung sebesar <strong>Rp 3.000</strong>.</li>
+                    <li>Jika berat pakaian <strong>&lt; 5 kg</strong>, diskon adalah <strong>Rp 0</strong>.</li>
+                </ul>
+
+                <h3>Format Input & Output</h3>
+                <p><strong>Input (stdin):</strong></p>
+                <ul>
+                    <li>Baris 1: <code>nama_pelanggan</code> (string satu kata)</li>
+                    <li>Baris 2: <code>kode_layanan</code> (char: 'C', 'S', atau 'K')</li>
+                    <li>Baris 3: <code>berat</code> (bilangan bulat &ge; 1)</li>
+                </ul>
+                <p><strong>Format Output (stdout):</strong></p>
+                <pre style="background:#f1f5f9; padding:0.6rem 0.8rem; border-radius:6px; font-family:var(--font-mono); font-size:0.88rem; border:1px solid #e2e8f0; margin-bottom:1rem;">Nama: &lt;nama&gt;
+Layanan: &lt;layanan_kapital&gt;
+Berat: &lt;berat&gt; kg
+Total Awal: Rp &lt;total_awal&gt;
+Diskon: Rp &lt;diskon&gt;
+Total Bayar: Rp &lt;total_bayar&gt;</pre>
+
+                <h3>Uji Kasus (Test Cases)</h3>
+                <div class="test-case-grid">
+                    <div class="test-case-card">
+                        <strong>Test Case 1 (Dapat Diskon):</strong><br>
+                        Input: <code>Rudi</code>, <code>K</code>, <code>6</code><br>
+                        Expected Total: <strong>Rp 45000</strong> (Diskon Rp 3000)
+                    </div>
+                    <div class="test-case-card">
+                        <strong>Test Case 2 (Tanpa Diskon):</strong><br>
+                        Input: <code>Dewi</code>, <code>C</code>, <code>3</code><br>
+                        Expected Total: <strong>Rp 15000</strong> (Diskon Rp 0)
+                    </div>
+                    <div class="test-case-card">
+                        <strong>Test Case 3 (Pas 5 kg):</strong><br>
+                        Input: <code>Bayu</code>, <code>S</code>, <code>5</code><br>
+                        Expected Total: <strong>Rp 17000</strong> (Diskon Rp 3000)
+                    </div>
+                </div>
+            </div>
+
+            <!-- Simulator Interaktif Soal 1 -->
+            <div class="simulator-panel">
+                <div class="sim-title">
+                    <span>🎮 Simulator Interaktif Soal 1</span>
+                    <span style="font-size:0.78rem; font-weight:normal; color:#64748b;">Live C++ Emulator</span>
+                </div>
+
+                <div style="font-size:0.88rem; color:#475569;">
+                    Pilih tombol cepat (*preset*) atau isi nilai sendiri untuk menguji program:
+                </div>
+
+                <!-- Tombol Preset Cepat -->
+                <div class="btn-group">
+                    <button class="btn btn-secondary btn-sm" onclick="setPreset1('Rudi', 'K', 6)">Preset 1: Rudi (K, 6kg)</button>
+                    <button class="btn btn-secondary btn-sm" onclick="setPreset1('Dewi', 'C', 3)">Preset 2: Dewi (C, 3kg)</button>
+                    <button class="btn btn-secondary btn-sm" onclick="setPreset1('Bayu', 'S', 5)">Preset 3: Bayu (S, 5kg)</button>
+                </div>
+
+                <div class="form-group">
+                    <label for="inputNama">Nama Pelanggan (String satu kata):</label>
+                    <input type="text" id="inputNama" class="form-control" value="Rudi" placeholder="Contoh: Rudi">
+                </div>
+
+                <div class="form-group">
+                    <label for="inputLayanan">Jenis Layanan (Char: C, S, atau K):</label>
+                    <select id="inputLayanan" class="form-control">
+                        <option value="K">K — Komplit (Rp 8.000 / kg)</option>
+                        <option value="C">C — Cuci Kering (Rp 5.000 / kg)</option>
+                        <option value="S">S — Setrika Saja (Rp 4.000 / kg)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="inputBerat">Berat Pakaian (kg):</label>
+                    <input type="number" id="inputBerat" class="form-control" value="6" min="1" placeholder="Contoh: 6">
+                </div>
+
+                <button class="btn btn-primary" onclick="runSimulasi1()">
+                    ▶️ Jalankan Program (Eksekusi Logika C++)
+                </button>
+
+                <!-- Terminal Output C++ -->
+                <div class="terminal">
+                    <div class="terminal-header">
+                        <span class="terminal-dot dot-red"></span>
+                        <span class="terminal-dot dot-yellow"></span>
+                        <span class="terminal-dot dot-green"></span>
+                        <span>Output Program (stdout console)</span>
+                    </div>
+                    <div class="terminal-content" id="terminalOutput1">Nama: Rudi
+Layanan: K
+Berat: 6 kg
+Total Awal: Rp 48000
+Diskon: Rp 3000
+Total Bayar: Rp 45000</div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- ========================================== -->
+        <!-- TAB 2: SOAL 2 (WHILE LOOP ACCUMULATOR) -->
+        <!-- ========================================== -->
+        <div id="soal2" class="tab-content">
+            
+            <!-- Kartu Soal 2 -->
+            <div class="card">
+                <div class="card-header">
+                    <div>
+                        <h2>SOAL 2: Kasir Penghitung Belanja Otomatis</h2>
+                        <p style="font-size:0.85rem; color:var(--text-muted); margin-top:2px;">Konsep: Perulangan `while` & Akumulator Nilai</p>
+                    </div>
+                    <span class="badge badge-easy">Dasar • 35 Poin</span>
+                </div>
+
+                <h3>Deskripsi Masalah</h3>
+                <p>Kasir minimarket memasukkan harga belanjaan barang satu per satu ke dalam sistem komputer sekolah menggunakan perulangan <code>while</code>:</p>
+                <ul>
+                    <li>Program terus membaca harga barang (bilangan bulat &gt; 0) secara berulang.</li>
+                    <li>Setiap kali harga dimasukkan, program menjumlahkannya ke <code>total</code> belanja dan menambah penghitung <code>banyak_barang</code> sebanyak 1.</li>
+                    <li>Perulangan akan <strong>berhenti otomatis</strong> saat kasir memasukkan angka <strong><code>0</code></strong> (*sentinel value*).</li>
+                </ul>
+
+                <h3>Ketentuan Bonus Kupon:</h3>
+                <ul>
+                    <li>Jika <code>Total Belanja</code> <strong>&ge; 50.000</strong>, cetak: <br><code>Bonus: Mendapat kupon belanja!</code></li>
+                    <li>Jika <code>Total Belanja</code> <strong>&lt; 50.000</strong>, cetak: <br><code>Bonus: Tidak dapat kupon.</code></li>
+                </ul>
+
+                <h3>Format Input & Output</h3>
+                <p><strong>Input (stdin):</strong></p>
+                <p>Sejumlah baris bilangan bulat harga barang, diakhiri dengan angka <code>0</code>.</p>
+                <p><strong>Format Output (stdout):</strong></p>
+                <pre style="background:#f1f5f9; padding:0.6rem 0.8rem; border-radius:6px; font-family:var(--font-mono); font-size:0.88rem; border:1px solid #e2e8f0; margin-bottom:1rem;">Banyak Barang: &lt;jumlah_barang&gt;
+Total Belanja: Rp &lt;total&gt;
+Bonus: &lt;keterangan_kupon&gt;</pre>
+
+                <h3>Uji Kasus (Test Cases)</h3>
+                <div class="test-case-grid">
+                    <div class="test-case-card">
+                        <strong>Test Case 1 (Total &ge; 50.000):</strong><br>
+                        Input: <code>15000</code>, <code>25000</code>, <code>15000</code>, <code>0</code><br>
+                        Output: Banyak: 3 | Total: Rp 55000 | <strong>Mendapat kupon belanja!</strong>
+                    </div>
+                    <div class="test-case-card">
+                        <strong>Test Case 2 (Total &lt; 50.000):</strong><br>
+                        Input: <code>10000</code>, <code>12000</code>, <code>0</code><br>
+                        Output: Banyak: 2 | Total: Rp 22000 | <strong>Tidak dapat kupon.</strong>
+                    </div>
+                    <div class="test-case-card">
+                        <strong>Test Case 3 (Pas Rp 50.000):</strong><br>
+                        Input: <code>50000</code>, <code>0</code><br>
+                        Output: Banyak: 1 | Total: Rp 50000 | <strong>Mendapat kupon belanja!</strong>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Simulator Interaktif Soal 2 -->
+            <div class="simulator-panel">
+                <div class="sim-title">
+                    <span>🎮 Simulator Interaktif While Loop</span>
+                    <span style="font-size:0.78rem; font-weight:normal; color:#64748b;">Live C++ Emulator</span>
+                </div>
+
+                <div style="font-size:0.88rem; color:#475569;">
+                    Pilih preset uji kasus atau masukkan harga belanjaan satu per satu:
+                </div>
+
+                <!-- Presets Cepat -->
+                <div class="btn-group">
+                    <button class="btn btn-secondary btn-sm" onclick="setPreset2([15000, 25000, 15000])">Preset 1 (55rb - Kupon)</button>
+                    <button class="btn btn-secondary btn-sm" onclick="setPreset2([10000, 12000])">Preset 2 (22rb - No Kupon)</button>
+                    <button class="btn btn-secondary btn-sm" onclick="setPreset2([50000])">Preset 3 (50rb Pas)</button>
+                </div>
+
+                <!-- Input Harga Barang -->
+                <div style="display:flex; gap:0.5rem; align-items:flex-end;">
+                    <div class="form-group" style="flex:1;">
+                        <label for="inputHarga">Input Harga Barang (Rp):</label>
+                        <input type="number" id="inputHarga" class="form-control" placeholder="Contoh: 15000" onkeydown="if(event.key==='Enter') tambahBarang()">
+                    </div>
+                    <button class="btn btn-primary" onclick="tambahBarang()">➕ Masukkan</button>
+                    <button class="btn btn-secondary" onclick="resetBarang()">🔄 Reset</button>
+                </div>
+
+                <!-- Daftar Keranjang Barang -->
+                <div class="form-group">
+                    <label>Daftar Antrean Harga Masuk:</label>
+                    <div class="item-list-box" id="itemListBox">
+                        <div style="color:#94a3b8; text-align:center; padding:1rem;">Belum ada barang dimasukkan.</div>
+                    </div>
+                </div>
+
+                <button class="btn btn-accent" onclick="selesaikanWhile()">
+                    🏁 Masukkan Angka 0 (Selesaikan While Loop)
+                </button>
+
+                <!-- Terminal Output C++ -->
+                <div class="terminal">
+                    <div class="terminal-header">
+                        <span class="terminal-dot dot-red"></span>
+                        <span class="terminal-dot dot-yellow"></span>
+                        <span class="terminal-dot dot-green"></span>
+                        <span>Output Program (stdout console)</span>
+                    </div>
+                    <div class="terminal-content" id="terminalOutput2">Banyak Barang: 0
+Total Belanja: Rp 0
+Bonus: Belum diproses.</div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Script Logika Interaktif -->
+    <script>
+        // Tab Switcher
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            event.currentTarget.classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+
+        // ==========================================
+        // LOGIKA SOAL 1 (KASIR LAUNDRY)
+        // ==========================================
+        function setPreset1(nama, layanan, berat) {
+            document.getElementById('inputNama').value = nama;
+            document.getElementById('inputLayanan').value = layanan;
+            document.getElementById('inputBerat').value = berat;
+            runSimulasi1();
+        }
+
+        function runSimulasi1() {
+            const nama = document.getElementById('inputNama').value.trim() || 'Pelanggan';
+            const layanan = document.getElementById('inputLayanan').value.toUpperCase();
+            const berat = parseInt(document.getElementById('inputBerat').value) || 0;
+
+            let tarifPerKg = 0;
+            if (layanan === 'C') {
+                tarifPerKg = 5000;
+            } else if (layanan === 'S') {
+                tarifPerKg = 4000;
+            } else if (layanan === 'K') {
+                tarifPerKg = 8000;
+            }
+
+            const totalAwal = tarifPerKg * berat;
+            let diskon = 0;
+
+            if (berat >= 5) {
+                diskon = 3000;
+            }
+
+            const totalBayar = totalAwal - diskon;
+
+            // Update Terminal Output (Persis C++ stdout)
+            const outputText = `Nama: ${nama}\n` +
+                               `Layanan: ${layanan}\n` +
+                               `Berat: ${berat} kg\n` +
+                               `Total Awal: Rp ${totalAwal}\n` +
+                               `Diskon: Rp ${diskon}\n` +
+                               `Total Bayar: Rp ${totalBayar}`;
+            document.getElementById('terminalOutput1').textContent = outputText;
+        }
+
+        // ==========================================
+        // LOGIKA SOAL 2 (WHILE ACCUMULATOR)
+        // ==========================================
+        let daftarHarga = [15000, 25000, 15000];
+
+        function renderDaftarBarang() {
+            const box = document.getElementById('itemListBox');
+            if (daftarHarga.length === 0) {
+                box.innerHTML = '<div style="color:#94a3b8; text-align:center; padding:1rem;">Belum ada barang dimasukkan.</div>';
+                return;
+            }
+
+            let html = '';
+            daftarHarga.forEach((hrg, idx) => {
+                html += `<div class="item-row">
+                            <span>Barang #${idx + 1}</span>
+                            <strong>Rp ${hrg.toLocaleString('id-ID')}</strong>
+                         </div>`;
+            });
+            box.innerHTML = html;
+        }
+
+        function setPreset2(arr) {
+            daftarHarga = [...arr];
+            renderDaftarBarang();
+            selesaikanWhile();
+        }
+
+        function tambahBarang() {
+            const input = document.getElementById('inputHarga');
+            const val = parseInt(input.value);
+            if (!isNaN(val) && val > 0) {
+                daftarHarga.push(val);
+                input.value = '';
+                input.focus();
+                renderDaftarBarang();
+            } else if (val === 0) {
+                selesaikanWhile();
+                input.value = '';
+            } else {
+                alert('Silakan masukkan nominal harga bilangan bulat lebih dari 0.');
+            }
+        }
+
+        function resetBarang() {
+            daftarHarga = [];
+            renderDaftarBarang();
+            document.getElementById('terminalOutput2').textContent = 'Banyak Barang: 0\nTotal Belanja: Rp 0\nBonus: Menunggu input...';
+        }
+
+        function selesaikanWhile() {
+            let total = 0;
+            let counter = 0;
+
+            daftarHarga.forEach((hrg) => {
+                counter++;
+                total += hrg;
+            });
+
+            let bonusText = '';
+            if (total >= 50000) {
+                bonusText = 'Mendapat kupon belanja!';
+            } else {
+                bonusText = 'Tidak dapat kupon.';
+            }
+
+            // Update Terminal Output (Persis C++ stdout)
+            const outputText = `Banyak Barang: ${counter}\n` +
+                               `Total Belanja: Rp ${total}\n` +
+                               `Bonus: ${bonusText}`;
+            document.getElementById('terminalOutput2').textContent = outputText;
+        }
+
+        // Inisialisasi awal saat halaman dibuka
+        window.onload = function() {
+            renderDaftarBarang();
+            selesaikanWhile();
+        };
+    </script>
+</body>
+</html>
