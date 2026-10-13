@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LKS Pemrograman C# (9 JP)</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --page-bg: #f8fafc;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --primary: #2563eb;
+      --primary-light: #eff6ff;
+      --border: #e2e8f0;
+      --code-bg: #0f172a;
+      --code-text: #f8fafc;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--page-bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 16px;
+      padding-bottom: 60px;
+    }
+
+    .container {
+      max-width: 760px;
+      margin: 0 auto;
+      background: var(--bg);
+      min-height: 100vh;
+      box-shadow: 0 0 20px rgba(0, 0, 0, 0.03);
+    }
+
+    /* Top Sticky Header */
+    header {
+      position: sticky;
+      top: 0;
+      background: rgba(255, 255, 255, 0.95);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 50;
+    }
+
+    .header-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .header-timer {
+      font-family: monospace;
+      font-size: 0.9rem;
+      font-weight: 700;
+      background: #f1f5f9;
+      padding: 4px 10px;
+      border-radius: 6px;
+      color: #334155;
+    }
+
+    /* Step Navigation Tabs */
+    nav.step-nav {
+      display: flex;
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    nav.step-nav::-webkit-scrollbar { display: none; }
+
+    .step-btn {
+      flex: 1;
+      min-width: 90px;
+      padding: 12px 10px;
+      text-align: center;
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .step-btn.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    /* Content Layout */
+    main {
+      padding: 28px 24px;
+    }
+
+    .step-content {
+      display: none;
+    }
+    .step-content.active {
+      display: block;
+      animation: fadeIn 0.25s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Typography Clean & Editorial */
+    h1 {
+      font-size: 1.4rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 6px;
+      letter-spacing: -0.02em;
+    }
+
+    .subtitle {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-top: 28px;
+      margin-bottom: 10px;
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #334155;
+      margin-top: 20px;
+      margin-bottom: 8px;
+    }
+
+    p, li {
+      color: #334155;
+      font-size: 0.95rem;
+      margin-bottom: 12px;
+    }
+
+    ul, ol {
+      margin-left: 22px;
+      margin-bottom: 16px;
+    }
+
+    li {
+      margin-bottom: 6px;
+    }
+
+    /* Code Block Clean */
+    pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      font-family: Consolas, Monaco, "Courier New", Courier, monospace;
+      font-size: 0.86rem;
+      line-height: 1.6;
+      padding: 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+
+    .keyword { color: #f43f5e; font-weight: 600; }
+    .type { color: #38bdf8; }
+    .func { color: #a78bfa; }
+    .comment { color: #94a3b8; font-style: italic; }
+    .num { color: #f59e0b; }
+    .str { color: #34d399; }
+    .line-no { color: #475569; display: inline-block; width: 26px; user-select: none; }
+
+    /* Tables Clean */
+    .table-wrap {
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+
+    th, td {
+      border: 1px solid var(--border);
+      padding: 10px 12px;
+      text-align: left;
+    }
+
+    th {
+      background: #f8fafc;
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    /* Clean Subtle Box */
+    .note {
+      background: #f8fafc;
+      border-left: 3px solid #94a3b8;
+      padding: 12px 16px;
+      font-size: 0.9rem;
+      margin: 18px 0;
+      border-radius: 0 6px 6px 0;
+    }
+    .note strong { color: #0f172a; }
+
+    /* Bottom Sticky Nav Bar */
+    .bottom-bar {
+      margin-top: 36px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .btn {
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      transition: all 0.2s;
+    }
+    .btn:hover { background: #f1f5f9; }
+
+    .btn-next {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+    .btn-next:hover { background: #1d4ed8; }
+
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Header Minimalis -->
+  <header>
+    <div class="header-title">Pemrograman C# &bull; Tugas Mandiri 9 JP</div>
+    <div class="header-timer" id="timer">06:45:00</div>
+  </header>
+
+  <!-- Navigasi 1 Soal 1 Halaman -->
+  <nav class="step-nav">
+    <button class="step-btn active" onclick="goToStep(0)">Petunjuk</button>
+    <button class="step-btn" onclick="goToStep(1)">Soal 1</button>
+    <button class="step-btn" onclick="goToStep(2)">Soal 2</button>
+    <button class="step-btn" onclick="goToStep(3)">Soal 3</button>
+    <button class="step-btn" onclick="goToStep(4)">Soal 4</button>
+    <button class="step-btn" onclick="goToStep(5)">Refleksi</button>
+  </nav>
+
+  <main>
+    <!-- ================= HALAMAN PETUNJUK ================= -->
+    <div class="step-content active" id="step-0">
+      <h1>Petunjuk Pengerjaan Tugas Mandiri</h1>
+      <div class="subtitle">Alokasi waktu: 9 jam pelajaran (9 &times; 45 menit) &bull; Media: kertas folio bergaris</div>
+
+      <p>Hari ini pembelajaran pemrograman dilaksanakan secara mandiri. Buka halaman ini sebagai lembar panduan soal, dan tuliskan seluruh jawaban secara runut di lembar <strong>kertas folio bergaris</strong>.</p>
+
+      <h2>Ketentuan Pengerjaan:</h2>
+      <ol>
+        <li>Tuliskan <strong>Nama Lengkap, Nomor Absen, Kelas, dan Tanggal</strong> di pojok kanan atas kertas folio.</li>
+        <li>Terdapat 4 bagian soal utama dan 1 refleksi akhir dengan pembagian waktu berikut:
+          <ul>
+            <li><strong>Soal 1 (2 JP):</strong> Perancangan Tabel IPO &amp; Algoritma Percabangan.</li>
+            <li><strong>Soal 2 (2 JP):</strong> Tabel penelusuran perubahan isi array C#.</li>
+            <li><strong>Soal 3 (2 JP):</strong> Menemukan dan memperbaiki empat kesalahan C#.</li>
+            <li><strong>Soal 4 (120 menit):</strong> Pemrograman modular: memahami prosedur dan fungsi di C#.</li>
+            <li><strong>Refleksi dan pengumpulan (15 menit):</strong> Jawab pertanyaan refleksi, periksa identitas, lalu kumpulkan pekerjaan.</li>
+          </ul>
+        </li>
+        <li>Gunakan tombol <strong>&larr; Sebelumnya</strong> dan <strong>Selanjutnya &rarr;</strong> di bagian bawah untuk berpindah halaman soal.</li>
+        <li>Serahkan seluruh lembar kerja kepada <strong>ketua kelas</strong> paling lambat pada akhir JP ke-9 untuk diteruskan kepada guru piket.</li>
+      </ol>
+
+      <div class="note">
+        <strong>Tips Manajemen Waktu:</strong> Kerjakan setiap bagian dengan tenang dan teliti. Anda tidak memerlukan komputer/laptop; fokuslah pada pemahaman logika di atas kertas.
+      </div>
+
+      <div class="bottom-bar">
+        <span></span>
+        <button class="btn btn-next" onclick="goToStep(1)">Mulai Soal 1 &rarr;</button>
+      </div>
+    </div>
+
+    <!-- ================= HALAMAN SOAL 1 ================= -->
+    <div class="step-content" id="step-1">
+      <h1>Soal 1: Perancangan Tabel IPO &amp; Percabangan C#</h1>
+      <div class="subtitle">Alokasi waktu: 2 JP (90 menit) &bull; Topik: studi kasus ekspedisi logistik</div>
+
+      <h2>Deskripsi Studi Kasus:</h2>
+      <p>Sebuah aplikasi pengiriman barang berbasis C# menghitung total ongkos kirim paket dengan aturan bisnis berikut:</p>
+      <ul>
+        <li><strong>Tarif berat:</strong> Rp10.000 untuk 1 kg pertama. Setiap kilogram tambahan dikenakan Rp6.000. Bulatkan berat ke atas ke kilogram utuh dengan <code>Math.Ceiling(...)</code> sebelum menghitung tarif.</li>
+        <li><strong>Pengali wilayah:</strong> Zona 1 (jarak &le; 20 km: pengali 1,0), Zona 2 (20 km &lt; jarak &le; 100 km: pengali 1,3), Zona 3 (jarak &gt; 100 km: pengali 1,8). Dalam kode C#, tulis bilangan desimal dengan titik.</li>
+        <li><strong>Biaya volume:</strong> Jika volume paket (panjang &times; lebar &times; tinggi dalam cm) &gt; 10.000 cm&sup3;, tambahkan biaya tetap Rp15.000.</li>
+        <li><strong>Asuransi (opsional):</strong> Jika dipilih, biayanya 0,5% dari harga barang, minimal Rp5.000. Jika tidak dipilih, biayanya Rp0.</li>
+        <li><strong>Diskon anggota:</strong> Gold 15%, Silver 5%, Reguler 0% dari subtotal setelah pengali wilayah dan biaya volume, sebelum asuransi.</li>
+      </ul>
+      <p><strong>Urutan perhitungan:</strong> Hitung tarif berat, kalikan dengan pengali wilayah, tambahkan biaya volume, kurangi diskon anggota, lalu tambahkan asuransi. Bulatkan total akhir ke atas ke rupiah utuh. Asumsikan jarak, dimensi, dan harga barang bernilai valid; berat harus lebih dari 0.</p>
+
+      <h2>Contoh Format Tabel IPO (Input - Process - Output):</h2>
+      <p>Sebagai referensi cara menyusun, berikut contoh tabel IPO untuk aplikasi kasir sederhana:</p>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 28%;">INPUT</th>
+              <th style="width: 44%;">PROCESS</th>
+              <th style="width: 28%;">OUTPUT</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                - <code>jumlahCup</code> (int)<br>
+                - <code>hargaSatuan</code> (double)<br>
+                - <code>kodeKupon</code> (string)
+              </td>
+              <td>
+                1. <code>subtotal = jumlahCup * hargaSatuan</code><br>
+                2. Cek jika kupon valid:<br>
+                &nbsp;&nbsp;&bull; <code>diskon = subtotal * 0.1</code><br>
+                3. <code>total = subtotal - diskon</code>
+              </td>
+              <td>
+                - Subtotal<br>
+                - Potongan Diskon<br>
+                - <code>totalBayar</code>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>Instruksi Tugas Kertas:</h2>
+      <ol>
+        <li><strong>Tugas 1.A:</strong> Buatlah Tabel IPO lengkap untuk studi kasus ekspedisi logistik di atas pada kertas folio Anda. Tuliskan nama variabel dan tipe data C# untuk input, urutan rumus proses, dan hasil outputnya.</li>
+        <li><strong>Tugas 1.B:</strong> Tuliskan kode C# dengan percabangan <code>if</code>/<code>else</code> atau <code>switch</code> untuk menghitung total ongkos kirim sesuai urutan di atas. Tangani berat &le; 0 sebelum perhitungan.</li>
+      </ol>
+
+      <div class="bottom-bar">
+        <button class="btn" onclick="goToStep(0)">&larr; Petunjuk</button>
+        <button class="btn btn-next" onclick="goToStep(2)">Lanjut ke Soal 2 &rarr;</button>
+      </div>
+    </div>
+
+    <!-- ================= HALAMAN SOAL 2 ================= -->
+    <div class="step-content" id="step-2">
+      <h1>Soal 2: Tabel Penelusuran Array C#</h1>
+      <div class="subtitle">Alokasi waktu: 2 JP (90 menit) &bull; Topik: perubahan isi array dan perulangan bersarang</div>
+
+      <p>Perhatikan potongan program C# berikut. Program ini mengolah elemen array dan mengubah nilai array secara dinamis selama perulangan berjalan:</p>
+
+<pre><span class="type">int</span>[] A = <span class="keyword">new</span> <span class="type">int</span>[] { <span class="num">4</span>, <span class="num">7</span>, <span class="num">2</span>, <span class="num">9</span>, <span class="num">5</span> };
+<span class="type">int</span> total = <span class="num">0</span>;
+<span class="type">int</span> langkah = <span class="num">0</span>;
+
+<span class="keyword">for</span> (<span class="type">int</span> i = <span class="num">0</span>; i &lt; <span class="num">4</span>; i++)
+{
+    <span class="keyword">for</span> (<span class="type">int</span> j = i + <span class="num">1</span>; j &lt; <span class="num">5</span>; j++)
+    {
+        langkah++;
+        <span class="keyword">if</span> ((A[i] + A[j]) % <span class="num">3</span> == <span class="num">0</span>)
+        {
+            total += (A[i] * <span class="num">2</span>) - A[j];
+            A[j] = A[j] + <span class="num">1</span>;
+        }
+        <span class="keyword">else</span>
+        {
+            total += (A[j] - A[i]);
+            A[i] = A[i] + (langkah % <span class="num">2</span>);
+        }
+    }
+}
+<span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="str">$"Total Akhir = {total}"</span>);</pre>
+
+      <h2>Instruksi Tugas Kertas:</h2>
+      <p>Buat <strong>tabel penelusuran (trace table)</strong> dengan enam kolom seperti contoh di kertas folio Anda. Isi satu baris untuk setiap putaran perulangan terdalam, seluruhnya <strong>10 iterasi</strong>. Gunakan nilai array terbaru pada setiap iterasi.</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 10%;">Iterasi</th>
+              <th style="width: 10%;">Nilai i</th>
+              <th style="width: 10%;">Nilai j</th>
+              <th style="width: 28%;">Kondisi ((A[i]+A[j]) % 3 == 0)</th>
+              <th style="width: 22%;">Perubahan 'total'</th>
+              <th style="width: 20%;">Kondisi Array A</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1</td>
+              <td>0</td>
+              <td>1</td>
+              <td>(4 + 7) % 3 == 2 &rarr; FALSE</td>
+              <td>total = 0 + (7 - 4) = 3</td>
+              <td>{5, 7, 2, 9, 5}</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>0</td>
+              <td>2</td>
+              <td>...</td>
+              <td>...</td>
+              <td>...</td>
+            </tr>
+            <tr>
+              <td colspan="6" style="text-align: center; color: var(--text-muted); font-style: italic;">
+                Lanjutkan secara manual sampai iterasi ke-10 di kertas folio Anda...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="note">
+        <strong>Tugas Akhir Soal 2:</strong> Di baris terakhir tabel, tuliskan dengan jelas nilai akhir variabel <code>total</code> dan susunan akhir elemen array <code>A</code>.
+      </div>
+
+      <div class="bottom-bar">
+        <button class="btn" onclick="goToStep(1)">&larr; Soal 1</button>
+        <button class="btn btn-next" onclick="goToStep(3)">Lanjut ke Soal 3 &rarr;</button>
+      </div>
+    </div>
+
+    <!-- ================= HALAMAN SOAL 3 ================= -->
+    <div class="step-content" id="step-3">
+      <h1>Soal 3: Menemukan dan Memperbaiki Kesalahan C#</h1>
+      <div class="subtitle">Alokasi waktu: 2 JP (90 menit) &bull; Topik: identifikasi kesalahan dan perbaikan kode</div>
+
+      <h2>1. Kode sumber program</h2>
+      <p>Berikut adalah program C# untuk menghitung rata-rata nilai siswa dan kelulusan. Perhatikan nomor baris di sebelah kiri:</p>
+
+<pre><span class="line-no">1</span><span class="keyword">using</span> System;
+<span class="line-no">2</span>
+<span class="line-no">3</span><span class="keyword">class</span> <span class="type">Program</span>
+<span class="line-no">4</span>{
+<span class="line-no">5</span>    <span class="keyword">static</span> <span class="type">double</span> HitungRataRata(<span class="type">int</span>[] nilai, <span class="type">int</span> jumlah)
+<span class="line-no">6</span>    {
+<span class="line-no">7</span>        <span class="type">double</span> sum = <span class="num">0</span>;
+<span class="line-no">8</span>        <span class="keyword">for</span> (<span class="type">int</span> i = <span class="num">0</span>; i &lt;= jumlah; i++)
+<span class="line-no">9</span>        {
+<span class="line-no">10</span>            sum = sum + nilai[i];
+<span class="line-no">11</span>        }
+<span class="line-no">12</span>        <span class="keyword">return</span> sum / jumlah;
+<span class="line-no">13</span>    }
+<span class="line-no">14</span>
+<span class="line-no">15</span>    <span class="keyword">static</span> <span class="keyword">void</span> Main()
+<span class="line-no">16</span>    {
+<span class="line-no">17</span>        <span class="type">int</span>[] dataNilai = <span class="keyword">new</span> <span class="type">int</span>[] { <span class="num">80</span>, <span class="num">90</span>, <span class="num">75</span>, <span class="num">85</span> };
+<span class="line-no">18</span>        <span class="type">int</span> n = <span class="num">0</span>;
+<span class="line-no">19</span>        <span class="type">double</span> rata = <span class="num">0</span>;
+<span class="line-no">20</span>
+<span class="line-no">21</span>        <span class="keyword">while</span> (n &lt; <span class="num">4</span>)
+<span class="line-no">22</span>            rata = HitungRataRata(dataNilai, n);
+<span class="line-no">23</span>            n++;
+<span class="line-no">24</span>
+<span class="line-no">25</span>        <span class="keyword">bool</span> isRemidi = <span class="keyword">false</span>;
+<span class="line-no">26</span>        <span class="keyword">if</span> (isRemidi = <span class="keyword">true</span>)
+<span class="line-no">27</span>        {
+<span class="line-no">28</span>            <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="str">"Status: Remidi"</span>);
+<span class="line-no">29</span>        }
+<span class="line-no">30</span>        <span class="keyword">else</span>
+<span class="line-no">31</span>        {
+<span class="line-no">32</span>            <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="str">"Status: Lulus"</span>);
+<span class="line-no">33</span>        }
+<span class="line-no">34</span>    }
+<span class="line-no">35</span>}</pre>
+
+      <h2>2. Empat kesalahan yang perlu dicari</h2>
+      <p>Pelajari keempat kesalahan di bawah ini. Bedakan kesalahan yang berpotensi terjadi pada suatu baris dari perilaku yang benar-benar terjadi ketika program dijalankan dari awal.</p>
+      <ul>
+        <li><strong>Indeks array di luar batas:</strong> Indeks <code>nilai</code> yang valid adalah <code>0</code> sampai <code>nilai.Length - 1</code>. Periksa apa yang terjadi jika <code>jumlah</code> sama dengan panjang array.</li>
+        <li><strong>Pembagian dengan nol:</strong> Pada pemanggilan pertama, <code>jumlah</code> bernilai 0. Karena <code>sum</code> bertipe <code>double</code>, hasil pembagian bilangan positif dengan nol adalah <code>PositiveInfinity</code>, bukan pengecualian.</li>
+        <li><strong>Perulangan tanpa akhir:</strong> Tanpa <code>{ }</code>, badan <code>while</code> hanya terdiri atas satu pernyataan. <code>n++</code> berada di luar perulangan, sehingga <code>n</code> tidak berubah selama perulangan.</li>
+        <li><strong>Penugasan dalam kondisi:</strong> <code>if (isRemidi = true)</code> mengubah nilai <code>isRemidi</code> menjadi <code>true</code>; kondisi tersebut selalu benar. Gunakan nilai variabel sebagai kondisi, misalnya <code>if (isRemidi)</code>.</li>
+      </ul>
+
+      <h2>3. Instruksi tugas kertas</h2>
+      <ol>
+        <li><strong>Tugas 3.A:</strong> Salin tabel berikut, lalu tulis nomor baris yang bermasalah serta penyebab dan dampaknya. Untuk setiap kesalahan, nyatakan apakah dampaknya tercapai saat program asli dijalankan dari awal atau hanya dapat muncul pada kondisi lain.
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width: 32%;">Jenis kesalahan</th>
+                  <th style="width: 18%;">Baris</th>
+                  <th style="width: 50%;">Penyebab, dampak, dan kapan terjadi</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Indeks array di luar batas</td>
+                  <td>...</td>
+                  <td>...</td>
+                </tr>
+                <tr>
+                  <td>Pembagian dengan nol</td>
+                  <td>...</td>
+                  <td>...</td>
+                </tr>
+                <tr>
+                  <td>Perulangan tanpa akhir</td>
+                  <td>...</td>
+                  <td>...</td>
+                </tr>
+                <tr>
+                  <td>Penugasan dalam kondisi</td>
+                  <td>...</td>
+                  <td>...</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </li>
+        <li><strong>Tugas 3.B:</strong> Tulis ulang program agar menghitung rata-rata dari keempat nilai tepat satu kali dan menampilkan status <code>Remidi</code> jika rata-rata &lt; 75, atau <code>Lulus</code> jika rata-rata &ge; 75. Dalam <code>HitungRataRata</code>, tolak <code>jumlah &le; 0</code> atau <code>jumlah &gt; nilai.Length</code>, lalu gunakan batas indeks yang benar. Anda boleh menghapus perulangan <code>while</code> yang tidak diperlukan; pastikan kondisi status tidak memakai penugasan <code>=</code>.</li>
+      </ol>
+
+      <div class="bottom-bar">
+        <button class="btn" onclick="goToStep(2)">&larr; Soal 2</button>
+        <button class="btn btn-next" onclick="goToStep(4)">Lanjut ke Soal 4 &rarr;</button>
+      </div>
+    </div>
+
+    <!-- ================= HALAMAN SOAL 4 ================= -->
+    <div class="step-content" id="step-4">
+      <h1>Soal 4: Pemrograman Modular: Prosedur &amp; Fungsi di C#</h1>
+      <div class="subtitle">Alokasi waktu: 120 menit; sisakan 15 menit untuk refleksi dan pengumpulan &bull; Topik: prosedur, fungsi, dan studi kasus parkir</div>
+
+      <h2>1. Konsep Dasar: Apa Itu Pemrograman Modular &amp; Subprogram?</h2>
+      <p>Selama ini kita terbiasa menulis semua baris program menumpuk di dalam satu blok besar, yaitu <code>Main()</code>. Bayangkan jika sebuah aplikasi kasir atau game memiliki 1.000 baris kode yang ditulis bercampur aduk di satu tempat. Kode akan menjadi sangat rumit, sulit dicari kesalahannya, dan jika kita butuh rumus yang sama di 5 tempat berbeda, kita terpaksa <em>salin-tempel</em> kode berkali-kali.</p>
+      
+      <p><strong>Pemrograman Modular</strong> adalah teknik memecah program besar yang rumit menjadi bagian-bagian kecil yang mandiri. Bagian kecil ini disebut <strong>Subprogram</strong> (atau istilah umumnya dalam C# adalah <strong>Method</strong>).</p>
+
+      <h2>2. Perbedaan Mendasar: Prosedur vs Fungsi</h2>
+      <p>Dalam ilmu algoritma dan pemrograman, subprogram dibagi menjadi dua jenis utama:</p>
+
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 20%;">Pembeda</th>
+              <th style="width: 40%;">Prosedur (Procedure)</th>
+              <th style="width: 40%;">Fungsi (Function)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Tujuan</strong></td>
+              <td>Melakukan serangkaian aksi / tugas tertentu (misal: mencetak struk, menampilkan menu, membersihkan layar).</td>
+              <td>Melakukan perhitungan atau pemrosesan data untuk <strong>menghasilkan suatu nilai baru</strong>.</td>
+            </tr>
+            <tr>
+              <td><strong>Nilai Kembalian</strong></td>
+              <td><strong>TIDAK mengembalikan nilai</strong> ke pemanggilnya.</td>
+              <td><strong>MENGEMBALIKAN nilai</strong> (return value) ke pemanggilnya.</td>
+            </tr>
+            <tr>
+              <td><strong>Tanda di C#</strong></td>
+              <td>Menggunakan kata kunci <code>void</code> sebagai tipe return.</td>
+              <td>Menggunakan tipe data tertentu (seperti <code>int</code>, <code>double</code>, <code>string</code>, <code>bool</code>).</td>
+            </tr>
+            <tr>
+              <td><strong>Kata Kunci <code>return</code></strong></td>
+              <td>Tidak memerlukan <code>return nilai;</code>.</td>
+              <td>Harus mengembalikan nilai pada setiap jalur eksekusi yang dapat dicapai; <code>return</code> tidak harus berada di baris terakhir.</td>
+            </tr>
+            <tr>
+              <td><strong>Cara Memanggil</strong></td>
+              <td>Cukup dipanggil namanya: <br><code>CetakGaris();</code></td>
+              <td>Hasilnya biasanya ditampung ke dalam variabel: <br><code>int total = HitungLuas(10, 5);</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>3. Mengapa Ada Kata Kunci <code>static</code> di C#?</h2>
+      <p>Saat melihat kode C#, siswa sering bingung: <em>"Kenapa selalu ada kata <code>static</code> di depan prosedur atau fungsi kita?"</em></p>
+      <div class="note">
+        <strong>Penjelasan Sederhana:</strong>
+        <br>Dalam C#, metode utama program kita adalah <code>static void Main()</code>.
+        <br>Aturan dasar C# menyatakan bahwa sebuah subprogram yang bertipe <code>static</code> (seperti <code>Main</code>) <strong>hanya bisa memanggil langsung subprogram lain yang juga diberi label <code>static</code></strong>.
+        <br>Jika kita tidak menambahkan kata <code>static</code>, C# akan mewajibkan kita membuat "objek baru" terlebih dahulu menggunakan perintah <code>new</code> (materi Object-Oriented Programming). Agar kita bisa langsung memanggil prosedur atau fungsi buatan kita dengan mudah di dalam <code>Main()</code>, kita cukup menambahkan kata kunci <code>static</code> di depannya.
+      </div>
+
+      <h2>4. Contoh Kode Pembanding: Prosedur vs Fungsi</h2>
+      <p>Perhatikan contoh program C# di bawah ini. Cermati bagaimana Prosedur dan Fungsi ditulis serta bagaimana cara memanggilnya:</p>
+
+<pre><span class="keyword">using</span> System;
+
+<span class="keyword">class</span> <span class="type">Program</span>
+{
+    <span class="comment">// -------------------------------------------------------------</span>
+    <span class="comment">// CONTOH 1: PROSEDUR (Menggunakan 'void', tidak mengembalikan nilai)</span>
+    <span class="comment">// Tugasnya hanya melakukan aksi: mencetak header karcis ke layar</span>
+    <span class="comment">// -------------------------------------------------------------</span>
+    <span class="keyword">static</span> <span class="keyword">void</span> <span class="func">CetakHeaderKarcis</span>(<span class="type">string</span> namaMall)
+    {
+        <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="str">"=============================="</span>);
+        <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="str">$"   PARKIR OTOMATIS {namaMall.ToUpper()}   "</span>);
+        <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="str">"=============================="</span>);
+    }
+
+    <span class="comment">// -------------------------------------------------------------</span>
+    <span class="comment">// CONTOH 2: FUNGSI (Mengembalikan tipe 'int', wajib ada 'return')</span>
+    <span class="comment">// Tugasnya memproses angka: mengonversi selisih menit menjadi jam bulat</span>
+    <span class="comment">// -------------------------------------------------------------</span>
+    <span class="keyword">static</span> <span class="type">int</span> <span class="func">HitungDurasiJam</span>(<span class="type">int</span> menitMasuk, <span class="type">int</span> menitKeluar)
+    {
+        <span class="type">int</span> selisihMenit = menitKeluar - menitMasuk;
+        <span class="keyword">if</span> (selisihMenit &lt;= <span class="num">0</span>)
+        {
+            <span class="keyword">return</span> <span class="num">1</span>; <span class="comment">// Minimal dihitung 1 jam</span>
+        }
+        
+        <span class="comment">// Rumus pembulatan ke atas (misal 65 menit jadi 2 jam)</span>
+        <span class="type">int</span> jamBulat = (<span class="type">int</span>)<span class="type">Math</span>.<span class="func">Ceiling</span>(selisihMenit / <span class="num">60.0</span>);
+        <span class="keyword">return</span> jamBulat; <span class="comment">// Nilai jam dikirim kembali ke pemanggil</span>
+    }
+
+    <span class="keyword">static</span> <span class="keyword">void</span> Main()
+    {
+        <span class="comment">// Cara 1: Memanggil Prosedur (langsung sebut nama & argumennya)</span>
+        <span class="func">CetakHeaderKarcis</span>(<span class="str">"Grand City Mall"</span>);
+
+        <span class="comment">// Cara 2: Memanggil Fungsi (tampung hasil return-nya ke variabel)</span>
+        <span class="type">int</span> jamParkir = <span class="func">HitungDurasiJam</span>(<span class="num">480</span>, <span class="num">620</span>); <span class="comment">// Masuk 08:00 (480m), Keluar 10:20 (620m)</span>
+        
+        <span class="type">Console</span>.<span class="func">WriteLine</span>(<span class="str">$"Lama Parkir: {jamParkir} Jam"</span>);
+    }
+}</pre>
+
+      <h2>5. Studi Kasus Latihan: Sistem Tarif Parkir Otomatis</h2>
+      <p>Sekarang giliran Anda merancang subprogram modular untuk sistem parkir. Aturan tarif parkir adalah:</p>
+      <ul>
+        <li><strong>Motor:</strong> Rp2.000 untuk 1–2 jam pertama. Setiap jam berikutnya Rp1.000 per jam. Tarif dasar maksimal Rp15.000.</li>
+        <li><strong>Mobil:</strong> Rp5.000 untuk 1 jam pertama. Setiap jam berikutnya Rp3.000 per jam. Tarif dasar maksimal Rp35.000.</li>
+        <li><strong>Denda tiket hilang:</strong> Tambahkan biaya tetap Rp25.000 jika tiket berstatus hilang. Denda tidak termasuk dalam batas maksimal tarif dasar.</li>
+      </ul>
+      <p><strong>Asumsi latihan:</strong> Jenis kendaraan hanya <code>Motor</code> atau <code>Mobil</code>; durasi parkir 1–24 jam dalam hari yang sama. Waktu masuk dan keluar dinyatakan sebagai jumlah menit sejak pukul 00.00, dengan waktu keluar lebih besar daripada waktu masuk.</p>
+
+      <h2>Instruksi Tugas Kertas:</h2>
+      <p>Kerjakan keempat soal berikut secara runtut di kertas folio Anda:</p>
+
+      <ol>
+        <li><strong>Tugas 4.A (Uji Konsep Prosedur vs Fungsi):</strong>
+          <br>Jawablah di kertas folio Anda:
+          <br>&bull; Apa perbedaan utama antara Prosedur dan Fungsi dalam pemrograman?
+          <br>&bull; Di antara ketiga subprogram berikut, manakah yang sebaiknya dibuat sebagai <strong>Prosedur (void)</strong> dan manakah yang sebaiknya dibuat sebagai <strong>Fungsi (return nilai)</strong>?
+          <ol type="a">
+            <li>Subprogram untuk mencetak struk parkir ke layar konsol.</li>
+            <li>Subprogram untuk menghitung nominal uang kembalian konsumen.</li>
+            <li>Subprogram untuk membunyikan alarm gerbang parkir saat tiket hilang.</li>
+          </ol>
+        </li>
+
+        <li><strong>Tugas 4.B (Menulis Fungsi 1: <code>HitungTarifDasar</code>):</strong>
+          <br>Tuliskan di kertas folio sebuah <strong>Fungsi</strong> C# dengan ketentuan:
+          <br>&bull; Header: <code>static int HitungTarifDasar(string jenisKendaraan, int durasiJam)</code>
+          <br>&bull; Logika: Hitung tarif dasar sesuai jenis kendaraan dan durasi jam, batasi hasilnya pada Rp15.000 untuk motor atau Rp35.000 untuk mobil, lalu kembalikan nominal tarif. Gunakan asumsi latihan di atas.
+        </li>
+
+        <li><strong>Tugas 4.C (Menulis Fungsi 2: <code>HitungTotalBayar</code>):</strong>
+          <br>Tuliskan di kertas folio sebuah <strong>Fungsi</strong> C# dengan ketentuan:
+          <br>&bull; Header: <code>static int HitungTotalBayar(int tarifDasar, bool tiketHilang)</code>
+          <br>&bull; Logika: Menambahkan denda sebesar Rp25.000 jika <code>tiketHilang == true</code> ke nilai <code>tarifDasar</code>, lalu mengembalikan total akhir pembayarannya.
+        </li>
+
+        <li><strong>Tugas 4.D (Menulis Prosedur &amp; Penggabungan di <code>Main</code>):</strong>
+          <br>Tuliskan:
+          <br>&bull; Satu buah <strong>Prosedur</strong> bernama <code>CetakRincianBayar(string plat, string jenis, int total)</code> bertipe <code>void</code> yang bertugas mencetak plat nomor, jenis, dan total bayar secara rapi ke layar.
+          <br>&bull; Metode utama <code>static void Main()</code> yang memanggil secara berurutan fungsi <code>HitungDurasiJam</code> dari contoh di atas, <code>HitungTarifDasar</code>, <code>HitungTotalBayar</code>, dan prosedur <code>CetakRincianBayar</code> untuk sebuah mobil bernomor polisi "G 4567 KL" yang parkir dari menit 480 hingga 665 dengan status tiket hilang. Salin juga fungsi <code>HitungDurasiJam</code> agar program lengkap.
+        </li>
+      </ol>
+
+      <div class="note">
+        <strong>Pelajaran Inti:</strong> Perhatikan bagaimana program besar kasir parkir menjadi sangat rapi dan mudah diatur ketika dibagi menjadi 3 fungsi hitung dan 1 prosedur cetak!
+      </div>
+
+      <div class="bottom-bar">
+        <button class="btn" onclick="goToStep(3)">&larr; Soal 3</button>
+        <button class="btn btn-next" onclick="goToStep(5)">Lanjut ke Refleksi &rarr;</button>
+      </div>
+    </div>
+
+    <!-- ================= HALAMAN REFLEKSI ================= -->
+    <div class="step-content" id="step-5">
+      <h1>Refleksi Akhir &amp; Pengumpulan Tugas</h1>
+      <div class="subtitle">Alokasi waktu: 15 menit terakhir dari 9 JP &bull; Refleksi dan pengumpulan lembar kerja</div>
+
+      <h2>Pertanyaan Refleksi (Tulis di Halaman Terakhir Folio):</h2>
+      <p>Jawablah 2 pertanyaan berikut secara singkat dan jujur:</p>
+      <ol>
+        <li>Mengapa membagi program menjadi beberapa fungsi/prosedur kecil membuat kode lebih mudah dipahami dibandingkan menulis semuanya di dalam <code>Main()</code>?</li>
+        <li>Apa perbedaan yang paling Anda rasakan saat melakukan pelacakan kode (<em>code tracing</em>) manual di atas kertas dibandingkan mengetik langsung di komputer?</li>
+      </ol>
+
+      <h2>Prosedur Pengumpulan:</h2>
+      <ol>
+        <li>Pastikan identitas (nama lengkap, nomor absen, kelas, dan tanggal) sudah lengkap di sudut kanan atas.</li>
+        <li>Susun lembar folio secara berurutan: Soal 1 &rarr; Soal 2 &rarr; Soal 3 &rarr; Soal 4 &rarr; Refleksi.</li>
+        <li>Serahkan seluruh lembar kerja kepada <strong>ketua kelas</strong> paling lambat pada akhir JP ke-9.</li>
+      </ol>
+
+      <div class="note">
+        <strong>Pekerjaan Selesai:</strong> Terima kasih telah belajar secara mandiri, jujur, dan bertanggung jawab.
+      </div>
+
+      <div class="bottom-bar">
+        <button class="btn" onclick="goToStep(4)">&larr; Soal 4</button>
+        <span></span>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  // Timer 9 JP (405 menit)
+  let totalSeconds = 9 * 45 * 60;
+  setInterval(() => {
+    if (totalSeconds > 0) {
+      totalSeconds--;
+      let h = Math.floor(totalSeconds / 3600);
+      let m = Math.floor((totalSeconds % 3600) / 60);
+      let s = totalSeconds % 60;
+      document.getElementById('timer').innerText = 
+        String(h).padStart(2, '0') + ':' + 
+        String(m).padStart(2, '0') + ':' + 
+        String(s).padStart(2, '0');
+    }
+  }, 1000);
+
+  // Tab & Page Navigation
+  function goToStep(stepIndex) {
+    const contents = document.querySelectorAll('.step-content');
+    const buttons = document.querySelectorAll('.step-btn');
+
+    contents.forEach((c, idx) => {
+      c.classList.toggle('active', idx === stepIndex);
+    });
+
+    buttons.forEach((b, idx) => {
+      b.classList.toggle('active', idx === stepIndex);
+    });
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+</script>
+
+</body>
+</html>
