@@ -1,0 +1,1172 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modul C++: Fondasi Pemrograman, Fungsi & Prosedur (Kelas 10)</title>
+  <style>
+    :root {
+      --bg: #ffffff;
+      --page-bg: #f8fafc;
+      --text: #1e293b;
+      --text-muted: #64748b;
+      --primary: #2563eb;
+      --primary-light: #eff6ff;
+      --border: #e2e8f0;
+      --code-bg: #0f172a;
+      --code-text: #f8fafc;
+      --accent: #0f766e;
+      --accent-light: #f0fdfa;
+      --review: #d97706;
+      --review-light: #fffbeb;
+      --success: #16a34a;
+      --danger: #dc2626;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--page-bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 16px;
+      padding-bottom: 60px;
+    }
+
+    .container {
+      max-width: 820px;
+      margin: 0 auto;
+      background: var(--bg);
+      min-height: 100vh;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.04);
+      position: relative;
+    }
+
+    header {
+      position: sticky;
+      top: 0;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(8px);
+      border-bottom: 1px solid var(--border);
+      padding: 12px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 40;
+    }
+
+    .header-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #0f172a;
+    }
+
+    .header-badge {
+      font-size: 0.78rem;
+      background: #e2e8f0;
+      color: #334155;
+      padding: 3px 8px;
+      border-radius: 4px;
+      font-weight: 600;
+    }
+
+    nav.step-nav {
+      display: flex;
+      background: #fff;
+      border-bottom: 1px solid var(--border);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    nav.step-nav::-webkit-scrollbar { display: none; }
+
+    .step-btn {
+      flex: 1;
+      min-width: 90px;
+      padding: 12px 6px;
+      text-align: center;
+      background: none;
+      border: none;
+      border-bottom: 3px solid transparent;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s;
+      white-space: nowrap;
+    }
+
+    .step-btn.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .step-btn.nav-rev { background: #fafaf9; }
+    .step-btn.nav-rev.active {
+      color: var(--review);
+      border-bottom-color: var(--review);
+      background: var(--review-light);
+    }
+
+    .step-btn.nav-theory { background: #f8fafc; }
+    .step-btn.nav-theory.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    main { padding: 28px 24px; }
+
+    .step-content { display: none; }
+    .step-content.active {
+      display: block;
+      animation: fadeIn 0.25s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    h1 {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 6px;
+      letter-spacing: -0.02em;
+    }
+
+    .subtitle {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      margin-bottom: 22px;
+      padding-bottom: 14px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .tag-badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 4px;
+    }
+    .tag-rev { background: #fef3c7; color: #b45309; }
+    .tag-theory { background: #ccfbf1; color: #0f766e; }
+    .tag-soal { background: #dbeafe; color: #1e40af; }
+
+    h2 {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #1e293b;
+      margin-top: 28px;
+      margin-bottom: 10px;
+    }
+
+    h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #334155;
+      margin-top: 20px;
+      margin-bottom: 8px;
+    }
+
+    p, li { color: #334155; font-size: 0.95rem; margin-bottom: 12px; }
+    ul, ol { margin-left: 22px; margin-bottom: 16px; }
+    li { margin-bottom: 6px; }
+
+    pre {
+      background: var(--code-bg);
+      color: var(--code-text);
+      font-family: Consolas, Monaco, "Courier New", Courier, monospace;
+      font-size: 0.86rem;
+      line-height: 1.6;
+      padding: 16px;
+      border-radius: 8px;
+      overflow-x: auto;
+      margin: 16px 0;
+    }
+
+    .keyword { color: #f43f5e; font-weight: 600; }
+    .type { color: #38bdf8; }
+    .func { color: #a78bfa; }
+    .comment { color: #94a3b8; font-style: italic; }
+    .num { color: #f59e0b; }
+    .str { color: #34d399; }
+
+    .table-wrap { overflow-x: auto; margin: 16px 0; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    th, td { border: 1px solid var(--border); padding: 10px 12px; text-align: left; }
+    th { background: #f8fafc; font-weight: 600; color: #0f172a; }
+
+    .note {
+      background: #f8fafc;
+      border-left: 3px solid #94a3b8;
+      padding: 12px 16px;
+      font-size: 0.9rem;
+      margin: 18px 0;
+      border-radius: 0 6px 6px 0;
+    }
+    .note strong { color: #0f172a; }
+
+    .note-rev {
+      border-left-color: var(--review);
+      background: var(--review-light);
+    }
+    .note-rev strong { color: var(--review); }
+
+    .note-theory {
+      border-left-color: var(--accent);
+      background: var(--accent-light);
+    }
+    .note-theory strong { color: var(--accent); }
+
+    /* Interactive Quiz Card */
+    .quiz-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 18px;
+      margin: 20px 0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.03);
+    }
+
+    .quiz-card h4 {
+      font-size: 0.96rem;
+      color: #0f172a;
+      margin-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .quiz-badge {
+      font-size: 0.72rem;
+      padding: 2px 8px;
+      border-radius: 4px;
+      background: #fef3c7;
+      color: #b45309;
+      font-weight: 700;
+    }
+
+    .quiz-options {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin: 12px 0 16px 0;
+    }
+
+    .quiz-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      padding: 8px 12px;
+      border-radius: 6px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      font-size: 0.9rem;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .quiz-option:hover {
+      background: #f8fafc;
+      border-color: #cbd5e1;
+    }
+
+    .quiz-option input[type="radio"] {
+      margin-top: 4px;
+      cursor: pointer;
+    }
+
+    .btn-check-quiz {
+      padding: 8px 18px;
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-check-quiz:hover { background: #1d4ed8; }
+
+    .quiz-feedback {
+      display: none;
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 6px;
+      font-size: 0.88rem;
+      line-height: 1.6;
+    }
+
+    .quiz-feedback.correct {
+      background: #f0fdf4;
+      border: 1px solid #86efac;
+      color: #166534;
+    }
+
+    .quiz-feedback.wrong {
+      background: #fef2f2;
+      border: 1px solid #fca5a5;
+      color: #991b1b;
+    }
+
+    .soal-card {
+      background: #ffffff;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px 18px;
+      margin: 16px 0;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+    }
+
+    .soal-card h4 {
+      font-size: 0.94rem;
+      color: #0f172a;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .soal-card .soal-badge {
+      font-size: 0.72rem;
+      padding: 2px 7px;
+      border-radius: 4px;
+      background: #f1f5f9;
+      color: #475569;
+    }
+
+    .btn-helper-theory {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border-radius: 6px;
+      background: #f0fdfa;
+      border: 1px solid #99f6e4;
+      color: #0f766e;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      margin-bottom: 16px;
+    }
+    .btn-helper-theory:hover { background: #ccfbf1; }
+
+    .bottom-bar {
+      margin-top: 36px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn {
+      padding: 10px 18px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      transition: all 0.2s;
+    }
+    .btn:hover { background: #f1f5f9; }
+
+    .btn-next {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+    .btn-next:hover { background: #1d4ed8; }
+
+    /* Modal Quick Theory */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(15, 23, 42, 0.45);
+      backdrop-filter: blur(4px);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+      padding: 16px;
+    }
+    .modal-overlay.active { display: flex; }
+
+    .modal-card {
+      background: #fff;
+      max-width: 680px;
+      width: 100%;
+      max-height: 85vh;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      display: flex;
+      flex-direction: column;
+      animation: modalPop 0.2s ease-out;
+    }
+
+    @keyframes modalPop {
+      from { transform: scale(0.96); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .modal-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .modal-header h3 { font-size: 1.05rem; color: #0f172a; margin: 0; }
+    .modal-body { padding: 20px; overflow-y: auto; font-size: 0.92rem; color: #334155; }
+    .modal-close-btn {
+      background: none; border: none; font-size: 1.4rem; color: #64748b; cursor: pointer; line-height: 1;
+    }
+
+    .quick-theory-tabs {
+      display: flex; gap: 6px; margin-bottom: 16px; border-bottom: 1px solid var(--border); padding-bottom: 8px;
+    }
+    .quick-tab-btn {
+      padding: 6px 12px; border-radius: 6px; border: 1px solid transparent; background: none; font-size: 0.82rem; font-weight: 600; color: #64748b; cursor: pointer;
+    }
+    .quick-tab-btn.active {
+      background: var(--primary-light); color: var(--primary); border-color: #bfdbfe;
+    }
+    .quick-theory-pane { display: none; }
+    .quick-theory-pane.active { display: block; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <header>
+    <div class="header-title">Modul C++ &bull; Fondasi Dasar, Fungsi & Prosedur</div>
+    <div class="header-badge">Kelas 10 Fase E / PPLG</div>
+  </header>
+
+  <!-- Step Navigation -->
+  <nav class="step-nav">
+    <button class="step-btn nav-rev active" onclick="goToStep(0)">Rev: Variabel</button>
+    <button class="step-btn nav-rev" onclick="goToStep(1)">Rev: Kondisi</button>
+    <button class="step-btn nav-rev" onclick="goToStep(2)">Rev: While</button>
+    <button class="step-btn nav-theory" onclick="goToStep(3)">Konsep Subprogram</button>
+    <button class="step-btn nav-theory" onclick="goToStep(4)">Scope C++</button>
+    <button class="step-btn" onclick="goToStep(5)">Latihan Mandiri</button>
+    <button class="step-btn" onclick="goToStep(6)">Evaluasi IRT</button>
+    <button class="step-btn" onclick="goToStep(7)">Refleksi</button>
+  </nav>
+
+  <main>
+    <!-- ================= HALAMAN 0: REVIEW VARIABEL & TIPE DATA ================= -->
+    <div class="step-content active" id="step-0">
+      <div class="subtitle">
+        <span>Penguatan Fondasi Pemrograman 1</span>
+        <span class="tag-badge tag-rev">Review 1: Variabel & Tipe Data</span>
+      </div>
+      <h1>Variabel, Tipe Data & Evaluasi Ekspresi C++</h1>
+
+      <div class="note note-rev">
+        <strong>💡 Petunjuk Pengerjaan Review:</strong>
+        Bagian review ini dikerjakan <strong>langsung di halaman web ini</strong>. Pilih jawaban Anda lalu klik tombol <em>"Periksa Jawaban"</em> untuk melihat hasil dan koreksinya seketika. <strong>TIDAK PERLU ditulis di kertas folio!</strong> (Kertas folio hanya untuk Latihan Mandiri & Evaluasi).
+      </div>
+
+      <h2>1. Konsep Dasar Variabel di Memori</h2>
+      <p><strong>Variabel</strong> adalah wadah atau kotak penyimpanan bernama di memori RAM komputer. Di dalam C++, setiap variabel memiliki aturan mutlak:</p>
+      <ul>
+        <li><strong>Deklarasi Wajib Menyebut Tipe:</strong> Komputer harus tahu apa jenis isi kotak tersebut sejak awal.</li>
+        <li><strong>Inisialisasi:</strong> Memberi nilai awal saat variabel pertama kali dibuat (contoh: <code>int usia = 15;</code>). Jika variabel lokal tidak diinisialisasi, isinya berupa nilai acak (*garbage value*).</li>
+      </ul>
+
+      <h2>2. Tipe Data Primitif C++</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 18%;">Tipe Data</th>
+              <th style="width: 20%;">Ukuran Memori</th>
+              <th style="width: 32%;">Contoh Nilai</th>
+              <th style="width: 30%;">Karakteristik Kunci</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>int</code></td>
+              <td>4 byte (32-bit)</td>
+              <td><code>-10</code>, <code>0</code>, <code>250</code></td>
+              <td>Bilangan bulat tanpa desimal.</td>
+            </tr>
+            <tr>
+              <td><code>double</code> / <code>float</code></td>
+              <td>8 byte / 4 byte</td>
+              <td><code>3.14</code>, <code>-0.5</code>, <code>85.75</code></td>
+              <td>Bilangan berkoma / desimal pecahan.</td>
+            </tr>
+            <tr>
+              <td><code>char</code></td>
+              <td>1 byte</td>
+              <td><code>'A'</code>, <code>'9'</code>, <code>'#'</code></td>
+              <td>Karakter tunggal dengan <strong>tanda petik tunggal (')</strong>.</td>
+            </tr>
+            <tr>
+              <td><code>string</code></td>
+              <td>Dinamis</td>
+              <td><code>"SMK Negeri 1"</code></td>
+              <td>Kumpulan teks dengan <strong>tanda petik ganda (")</strong>.</td>
+            </tr>
+            <tr>
+              <td><code>bool</code></td>
+              <td>1 byte</td>
+              <td><code>true</code> (1) atau <code>false</code> (0)</td>
+              <td>Logika benar atau salah.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>3. Jebakan Klasik: Integer Division (Pembagian Bulat)</h2>
+      <div class="note note-theory">
+        <strong>PENTING:</strong>
+        Di C++, jika bilangan bulat (<code>int</code>) dibagi dengan bilangan bulat (<code>int</code>), hasilnya akan <strong>dipotong bulat</strong> (angka di belakang koma dibuang).
+        <br>Contoh: <code>5 / 2</code> bernilai <code>2</code> (bukan 2.5).
+        <br>Agar mendapatkan pecahan <code>2.5</code>, minimal salah satu angka harus pecahan desimal: <code>5.0 / 2</code> atau <code>5 / 2.0</code>.
+      </div>
+
+      <h2>4. Kuis Latihan Cepat & Koreksi Langsung</h2>
+
+      <!-- Kuis 1.1 -->
+      <div class="quiz-card">
+        <h4>Soal 1.1: Sintaksis Literal Karakter & String <span class="quiz-badge">Koreksi Otomatis</span></h4>
+        <p>Di antara deklarasi variabel C++ berikut, manakah deklarasi yang <strong>VALID dan BENAR</strong> menurut aturan kompilasi C++?</p>
+        <div class="quiz-options">
+          <label class="quiz-option"><input type="radio" name="q1_1" value="A"> A. <code>char inisial = "B";</code></label>
+          <label class="quiz-option"><input type="radio" name="q1_1" value="B"> B. <code>bool isLunas = "true";</code></label>
+          <label class="quiz-option"><input type="radio" name="q1_1" value="C"> C. <code>char grade = 'A';</code></label>
+          <label class="quiz-option"><input type="radio" name="q1_1" value="D"> D. <code>string nama = 'Budi';</code></label>
+        </div>
+        <button class="btn-check-quiz" onclick="checkQuiz('1_1')">Periksa Jawaban</button>
+        <div class="quiz-feedback" id="fb-1_1"></div>
+      </div>
+
+      <!-- Kuis 1.2 -->
+      <div class="quiz-card">
+        <h4>Soal 1.2: Evaluasi Pembagian Integer C++ <span class="quiz-badge">Daya Pembeda Tinggi</span></h4>
+        <p>Perhatikan potongan kode C++ berikut:</p>
+        <pre><span class="type">int</span> a = <span class="num">7</span>, b = <span class="num">2</span>;
+<span class="type">double</span> c = a / b;
+cout &lt;&lt; c;</pre>
+        <p>Berapakah angka persis yang dicetak ke layar oleh program di atas?</p>
+        <div class="quiz-options">
+          <label class="quiz-option"><input type="radio" name="q1_2" value="A"> A. 3.5</label>
+          <label class="quiz-option"><input type="radio" name="q1_2" value="B"> B. 3 (atau 3.0)</label>
+          <label class="quiz-option"><input type="radio" name="q1_2" value="C"> C. 4</label>
+          <label class="quiz-option"><input type="radio" name="q1_2" value="D"> D. Terjadi Error Kompilasi</label>
+        </div>
+        <button class="btn-check-quiz" onclick="checkQuiz('1_2')">Periksa Jawaban</button>
+        <div class="quiz-feedback" id="fb-1_2"></div>
+      </div>
+
+      <!-- Kuis 1.3 -->
+      <div class="quiz-card">
+        <h4>Soal 1.3: Algoritma Menukar Nilai Variabel (Swap) <span class="quiz-badge">Logika Memori</span></h4>
+        <p>Diberikan dua variabel: <code>int x = 10, y = 25, temp;</code>. Manakah urutan 3 baris instruksi yang BENAR untuk menukar nilai <code>x</code> dan <code>y</code>?</p>
+        <div class="quiz-options">
+          <label class="quiz-option"><input type="radio" name="q1_3" value="A"> A. <code>x = y; y = x;</code></label>
+          <label class="quiz-option"><input type="radio" name="q1_3" value="B"> B. <code>temp = x; x = y; y = temp;</code></label>
+          <label class="quiz-option"><input type="radio" name="q1_3" value="C"> C. <code>temp = y; y = x; x = y;</code></label>
+          <label class="quiz-option"><input type="radio" name="q1_3" value="D"> D. <code>x = temp; temp = y; y = x;</code></label>
+        </div>
+        <button class="btn-check-quiz" onclick="checkQuiz('1_3')">Periksa Jawaban</button>
+        <div class="quiz-feedback" id="fb-1_3"></div>
+      </div>
+
+      <div class="bottom-bar">
+        <span></span>
+        <button class="btn btn-next" onclick="goToStep(1)">Lanjut: Review Conditional &rarr;</button>
+      </div>
+    </div>
+
+    <!-- ================= HALAMAN 1: REVIEW CONDITIONAL ================= -->
+    <div class="step-content" id="step-1">
+      <div class="subtitle">
+        <span>Penguatan Fondasi Pemrograman 2</span>
+        <span class="tag-badge tag-rev">Review 2: Conditional Statements</span>
+      </div>
+      <h1>Logika Percabangan (Conditional Statements) C++</h1>
+
+      <div class="note note-rev">
+        <strong>💡 Petunjuk Pengerjaan Review:</strong>
+        Bagian review ini dikerjakan <strong>langsung di halaman web ini</strong>. Pilih jawaban Anda lalu klik tombol <em>"Periksa Jawaban"</em> untuk melihat koreksi instan.
+      </div>
+
+      <h2>1. Struktur Percabangan di C++</h2>
+      <ul>
+        <li><strong><code>if</code> Tunggal:</strong> Blok instruksi hanya dijalankan jika kondisi bernilai <code>true</code>.</li>
+        <li><strong><code>if - else</code>:</strong> Dua cabang alternatif (benar jalankan <code>if</code>, salah jalankan <code>else</code>).</li>
+        <li><strong><code>if - else if - else</code>:</strong> Memeriksa kondisi berjenjang. Begitu satu kondisi cocok, blok dijalankan dan seluruh cabang di bawahnya dilewati (*skip*).</li>
+      </ul>
+
+      <h2>2. Jebakan Fatal: Penugasan (`=`) vs Pembanding (`==`)</h2>
+      <div class="note note-theory">
+        <strong>BAHAYA LOGIKA:</strong>
+        <br>&bull; Operator <code>==</code> (sama dengan ganda) digunakan untuk **menguji kesetaraan**.
+        <br>&bull; Operator <code>=</code> (sama dengan tunggal) digunakan untuk **mengisi nilai variabel**.
+        <br>Di C++, jika Anda menulis <code>if (x = 5)</code>, angka 5 dimasukkan ke <code>x</code>, dan angka 5 bernilai <code>true</code> (semua angka bukan nol dianggap benar). Akibatnya blok <code>if</code> akan **selalu berjalan tanpa peduli nilai sebelumnya**!
+      </div>
+
+      <h2>3. Kuis Latihan Cepat & Koreksi Langsung</h2>
+
+      <!-- Kuis 2.1 -->
+      <div class="quiz-card">
+        <h4>Soal 2.1: Jebakan Assignment di dalam `if` <span class="quiz-badge">Daya Pembeda Tinggi</span></h4>
+        <p>Perhatikan cuplikan kode C++ berikut:</p>
+        <pre><span class="type">int</span> kuota = <span class="num">0</span>;
+<span class="keyword">if</span> (kuota = <span class="num">5</span>) {
+    cout &lt;&lt; <span class="str">"Akses Dibuka"</span>;
+} <span class="keyword">else</span> {
+    cout &lt;&lt; <span class="str">"Akses Ditutup"</span>;
+}</pre>
+        <p>Teks apakah yang akan tercetak ke layar saat program dijalankan?</p>
+        <div class="quiz-options">
+          <label class="quiz-option"><input type="radio" name="q2_1" value="A"> A. Akses Ditutup</label>
+          <label class="quiz-option"><input type="radio" name="q2_1" value="B"> B. Akses Dibuka</label>
+          <label class="quiz-option"><input type="radio" name="q2_1" value="C"> C. Terjadi Error Kompilasi</label>
+          <label class="quiz-option"><input type="radio" name="q2_1" value="D"> D. Tidak mencetak teks apa pun</label>
+        </div>
+        <button class="btn-check-quiz" onclick="checkQuiz('2_1')">Periksa Jawaban</button>
+        <div class="quiz-feedback" id="fb-2_1"></div>
+      </div>
+
+      <!-- Kuis 2.2 -->
+      <div class="quiz-card">
+        <h4>Soal 2.2: Runtutan `if` Terpisah vs `else if` Berantai <span class="quiz-badge">Alur Eksekusi</span></h4>
+        <p>Jika variabel <code>int skor = 85;</code>, perhatikan potongan kode berikut:</p>
+        <pre><span class="keyword">if</span> (skor &gt;= <span class="num">70</span>) cout &lt;&lt; <span class="str">"Lulus"</span>;
+<span class="keyword">else if</span> (skor &gt;= <span class="num">80</span>) cout &lt;&lt; <span class="str">" Hebat"</span>;</pre>
+        <p>Apakah teks yang akan tercetak ke layar?</p>
+        <div class="quiz-options">
+          <label class="quiz-option"><input type="radio" name="q2_2" value="A"> A. Lulus Hebat</label>
+          <label class="quiz-option"><input type="radio" name="q2_2" value="B"> B. Hebat</label>
+          <label class="quiz-option"><input type="radio" name="q2_2" value="C"> C. Lulus</label>
+          <label class="quiz-option"><input type="radio" name="q2_2" value="D"> D. Kosong / Tidak ada output</label>
+        </div>
+        <button class="btn-check-quiz" onclick="checkQuiz('2_2')">Periksa Jawaban</button>
+        <div class="quiz-feedback" id="fb-2_2"></div>
+      </div>
+
+      <!-- Kuis 2.3 -->
+      <div class="quiz-card">
+        <h4>Soal 2.3: Logika Operator Majemuk (&& dan ||) <span class="quiz-badge">Sintaksis Logika</span></h4>
+        <p>Aturan: *"Pelamar diterima jika (Nilai tes &ge; 80 DAN Usia &le; 20) ATAU memiliki sertifikat juara"*. Manakah penulisan C++ yang paling tepat?</p>
+        <div class="quiz-options">
+          <label class="quiz-option"><input type="radio" name="q2_3" value="A"> A. <code>if (nilai &gt;= 80 || usia &lt;= 20 &amp;&amp; sertifikat == true)</code></label>
+          <label class="quiz-option"><input type="radio" name="q2_3" value="B"> B. <code>if ((nilai &gt;= 80 &amp;&amp; usia &lt;= 20) || sertifikat == true)</code></label>
+          <label class="quiz-option"><input type="radio" name="q2_3" value="C"> C. <code>if (nilai &gt;= 80 &amp;&amp; (usia &lt;= 20 || sertifikat == true))</code></label>
+          <label class="quiz-option"><input type="radio" name="q2_3" value="D"> D. <code>if (nilai &gt;= 80 || usia &lt;= 20 || sertifikat == true)</code></label>
+        </div>
+        <button class="btn-check-quiz" onclick="checkQuiz('2_3')">Periksa Jawaban</button>
+        <div class="quiz-feedback" id="fb-2_3"></div>
+      </div>
+
+      <div class="bottom-bar">
+        <button class="btn" onclick="goToStep(0)">&larr; Review Variabel</button>
+        <button class="btn btn-next" onclick="goToStep(2)">Lanjut: Review While Loop &rarr;</button>
+      </div>
+    </div>
+
+    <!-- ================= HALAMAN 2: REVIEW WHILE LOOP ================= -->
+    <div class="step-content" id="step-2">
+      <div class="subtitle">
+        <span>Penguatan Fondasi Pemrograman 3</span>
+        <span class="tag-badge tag-rev">Review 3: Perulangan While</span>
+      </div>
+      <h1>Perulangan Terkontrol (While Loop) C++</h1>
+
+      <div class="note note-rev">
+        <strong>💡 Petunjuk Pengerjaan Review:</strong>
+        Bagian review ini dikerjakan <strong>langsung di halaman web ini</strong>. Pilih jawaban Anda lalu klik tombol <em>"Periksa Jawaban"</em> untuk melihat koreksi instan.
+      </div>
+
+      <h2>1. Tiga Syarat Mutlak While Loop</h2>
+      <ol>
+        <li><strong>Inisialisasi Counter:</strong> Nilai awal variabel pencatat iterasi sebelum loop (contoh: <code>int i = 1;</code>).</li>
+        <li><strong>Kondisi Pengujian:</strong> Syarat agar perulangan terus berputar (contoh: <code>i &lt;= 5;</code>).</li>
+        <li><strong>Update / Increment Counter:</strong> Perubahan nilai pencatat di setiap putaran (contoh: <code>i++;</code>). Jika lupa ditulis, program mengalami <strong>Infinite Loop (macet/hang)</strong>.</li>
+      </ol>
+
+      <h2>2. Kuis Latihan Cepat & Koreksi Langsung</h2>
+
+      <!-- Kuis 3.1 -->
+      <div class="quiz-card">
+        <h4>Soal 3.1: Posisi Increment Sebelum vs Sesudah Cetak <span class="quiz-badge">Daya Pembeda Tinggi</span></h4>
+        <p>Perhatikan cuplikan perulangan berikut:</p>
+        <pre><span class="type">int</span> j = <span class="num">1</span>;
+<span class="keyword">while</span> (j &lt;= <span class="num">3</span>) {
+    j++;
+    cout &lt;&lt; j &lt;&lt; <span class="str">" "</span>;
+}</pre>
+        <p>Deretan angka apakah yang akan dicetak ke layar?</p>
+        <div class="quiz-options">
+          <label class="quiz-option"><input type="radio" name="q3_1" value="A"> A. 1 2 3</label>
+          <label class="quiz-option"><input type="radio" name="q3_1" value="B"> B. 2 3 4</label>
+          <label class="quiz-option"><input type="radio" name="q3_1" value="C"> C. 1 2 3 4</label>
+          <label class="quiz-option"><input type="radio" name="q3_1" value="D"> D. 2 3</label>
+        </div>
+        <button class="btn-check-quiz" onclick="checkQuiz('3_1')">Periksa Jawaban</button>
+        <div class="quiz-feedback" id="fb-3_1"></div>
+      </div>
+
+      <!-- Kuis 3.2 -->
+      <div class="quiz-card">
+        <h4>Soal 3.2: Mendiagnosa Penyebab Infinite Loop <span class="quiz-badge">Analisis Bug</span></h4>
+        <p>Perhatikan kode berikut:</p>
+        <pre><span class="type">int</span> hitung = <span class="num">5</span>;
+<span class="keyword">while</span> (hitung &gt; <span class="num">0</span>) {
+    cout &lt;&lt; hitung &lt;&lt; <span class="str">" "</span>;
+    hitung++;
+}</pre>
+        <p>Mengapa perulangan di atas berjalan tanpa henti (*infinite loop*)?</p>
+        <div class="quiz-options">
+          <label class="quiz-option"><input type="radio" name="q3_2" value="A"> A. Karena kondisi `hitung > 0` salah sejak awal.</label>
+          <label class="quiz-option"><input type="radio" name="q3_2" value="B"> B. Karena `hitung++` membuat nilai semakin besar sehingga syarat `> 0` selalu benar.</label>
+          <label class="quiz-option"><input type="radio" name="q3_2" value="C"> C. Karena tipe data int tidak mendukung perulangan mundur.</label>
+          <label class="quiz-option"><input type="radio" name="q3_2" value="D"> D. Karena perintah `cout` menghentikan proses increment.</label>
+        </div>
+        <button class="btn-check-quiz" onclick="checkQuiz('3_2')">Periksa Jawaban</button>
+        <div class="quiz-feedback" id="fb-3_2"></div>
+      </div>
+
+      <!-- Kuis 3.3 -->
+      <div class="quiz-card">
+        <h4>Soal 3.3: Akumulator Penjumlahan Deret <span class="quiz-badge">Pola Logika</span></h4>
+        <p>Potongan kode manakah yang BENAR untuk menjumlahkan angka 1 + 2 + 3 + 4 + 5 ke dalam variabel <code>total</code>?</p>
+        <div class="quiz-options">
+          <label class="quiz-option"><input type="radio" name="q3_3" value="A"> A. <code>while (i &lt;= 5) { total = i; i++; }</code></label>
+          <label class="quiz-option"><input type="radio" name="q3_3" value="B"> B. <code>while (i &lt;= 5) { total += i; i++; }</code></label>
+          <label class="quiz-option"><input type="radio" name="q3_3" value="C"> C. <code>while (i &lt;= 5) { total++; i += total; }</code></label>
+          <label class="quiz-option"><input type="radio" name="q3_3" value="D"> D. <code>while (i &lt;= 5) { i += total; }</code></label>
+        </div>
+        <button class="btn-check-quiz" onclick="checkQuiz('3_3')">Periksa Jawaban</button>
+        <div class="quiz-feedback" id="fb-3_3"></div>
+      </div>
+
+      <div class="bottom-bar">
+        <button class="btn" onclick="goToStep(1)">&larr; Review Conditional</button>
+        <button class="btn btn-next" onclick="goToStep(3)">Lanjut: Masuk Materi Fungsi & Prosedur &rarr;</button>
+      </div>
+    </div>
+
+    <!-- ================= HALAMAN 3: KONSEP SUBPROGRAM C++ ================= -->
+    <div class="step-content" id="step-3">
+      <div class="subtitle">
+        <span>Transisi Menuju Pemrograman Modular</span>
+        <span class="tag-badge tag-theory">Tahap 4 &bull; Modular C++</span>
+      </div>
+      <h1>Subprogram di C++: Prosedur & Fungsi</h1>
+
+      <p>Kini setelah seluruh fondasi dasar mantap, kita masuk ke inti materi: membagi program besar menjadi bagian-bagian terpisah yang rapi.</p>
+
+      <h2>1. Mengapa Perlu Prosedur & Fungsi?</h2>
+      <p>Dalam C++, kita bisa menulis subprogram di luar dan di atas <code>int main()</code>. Manfaat utamanya adalah prinsip <strong>DRY (Don't Repeat Yourself)</strong>: sekali dibuat, subprogram dapat dipanggil berkali-kali tanpa menulis ulang rumusnya.</p>
+
+      <h2>2. Prosedur (`void`) vs Fungsi (`return`)</h2>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 20%;">Jenis</th>
+              <th style="width: 40%;">Prosedur (Procedure)</th>
+              <th style="width: 40%;">Fungsi (Function)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Tipe Return</strong></td>
+              <td>Diawali kata kunci <code>void</code>.</td>
+              <td>Diawali tipe data kembalian (<code>int</code>, <code>double</code>, <code>bool</code>, dll).</td>
+            </tr>
+            <tr>
+              <td><strong>Fokus Tugas</strong></td>
+              <td>Melakukan tindakan/aksi cetak ke layar.</td>
+              <td>Menghitung atau mengolah data untuk menghasilkan nilai baru.</td>
+            </tr>
+            <tr>
+              <td><strong>Kewajiban <code>return</code></strong></td>
+              <td>Tidak memerlukan nilai return.</td>
+              <td><strong>Wajib</strong> mengembalikan hasil lewat <code>return nilai_hasil;</code>.</td>
+            </tr>
+            <tr>
+              <td><strong>Pemanggilan</strong></td>
+              <td>Dipanggil langsung namanya: <br><code>cetakGaris();</code></td>
+              <td>Hasilnya ditampung ke variabel atau diolah: <br><code>int luas = hitungLuas(10, 5);</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2>3. Contoh Kode C++</h2>
+<pre><span class="keyword">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="keyword">using namespace</span> std;
+
+<span class="comment">// 1. PROSEDUR (void): Bertugas menampilkan garis pemisah</span>
+<span class="type">void</span> <span class="func">cetakGaris</span>() {
+    cout &lt;&lt; <span class="str">"------------------------------"</span> &lt;&lt; endl;
+}
+
+<span class="comment">// 2. FUNGSI (int): Bertugas mengalikan dan mengembalikan angka</span>
+<span class="type">int</span> <span class="func">hitungLuasPersegi</span>(<span class="type">int</span> sisi) {
+    <span class="keyword">return</span> sisi * sisi; <span class="comment">// Mengembalikan nilai luas</span>
+}
+
+<span class="type">int</span> main() {
+    <span class="func">cetakGaris</span>(); <span class="comment">// Memanggil prosedur</span>
+    
+    <span class="type">int</span> luas = <span class="func">hitungLuasPersegi</span>(<span class="num">6</span>); <span class="comment">// Memanggil fungsi</span>
+    cout &lt;&lt; <span class="str">"Luas Persegi: "</span> &lt;&lt; luas &lt;&lt; <span class="str">" cm2"</span> &lt;&lt; endl;
+    
+    <span class="func">cetakGaris</span>();
+    <span class="keyword">return</span> <span class="num">0</span>;
+}</pre>
+
+      <div class="bottom-bar">
+        <button class="btn" onclick="goToStep(2)">&larr; Review While</button>
+        <button class="btn btn-next" onclick="goToStep(4)">Lanjut: Scope Variabel &rarr;</button>
+      </div>
+    </div>
+
+    <!-- ================= HALAMAN 4: SCOPE VARIABEL C++ ================= -->
+    <div class="step-content" id="step-4">
+      <div class="subtitle">
+        <span>Batas Hidup Variabel di Memori</span>
+        <span class="tag-badge tag-theory">Tahap 5 &bull; Scope & Shadowing</span>
+      </div>
+      <h1>Cakupan Variabel: Scope & Variable Shadowing di C++</h1>
+
+      <h2>1. Variabel Lokal vs Variabel Global</h2>
+      <ul>
+        <li><strong>Variabel Lokal:</strong> Dideklarasikan di dalam kurung kurawal <code>{ }</code> suatu fungsi. Hanya hidup di blok tersebut dan langsung dihancurkan saat keluar dari <code>}</code>.</li>
+        <li><strong>Variabel Global:</strong> Dideklarasikan di luar seluruh fungsi (paling atas). Variabel ini dapat diakses bersama oleh <strong>seluruh fungsi</strong>.</li>
+      </ul>
+
+      <h2>2. Variable Shadowing (Benturan Nama Variabel)</h2>
+      <div class="note note-theory">
+        <strong>Aturan Prioritas C++:</strong>
+        Jika nama variabel lokal atau parameter fungsi **sama persis** dengan nama variabel global di luar, fungsi akan selalu memprioritaskan variabel lokal miliknya sendiri. Variabel global akan "tertutupi" (*shadowed*).
+      </div>
+
+<pre><span class="keyword">#include</span> <span class="str">&lt;iostream&gt;</span>
+<span class="keyword">using namespace</span> std;
+
+<span class="type">int</span> angka = <span class="num">100</span>; <span class="comment">// Variabel Global</span>
+
+<span class="type">void</span> <span class="func">ubahAngka</span>(<span class="type">int</span> angka) { <span class="comment">// Parameter lokal menutupi variabel global</span>
+    angka = angka + <span class="num">50</span>;      <span class="comment">// Yang berubah HANYA variabel parameter lokal</span>
+}
+
+<span class="type">int</span> main() {
+    <span class="func">ubahAngka</span>(angka);
+    cout &lt;&lt; angka &lt;&lt; endl;  <span class="comment">// Tetap mencetak 100 (Variabel global tidak berubah)</span>
+    <span class="keyword">return</span> <span class="num">0</span>;
+}</pre>
+
+      <div class="bottom-bar">
+        <button class="btn" onclick="goToStep(3)">&larr; Konsep Subprogram</button>
+        <button class="btn btn-next" onclick="goToStep(5)">Lanjut: Latihan Mandiri &rarr;</button>
+      </div>
+    </div>
+
+    <!-- ================= HALAMAN 5: LATIHAN MANDIRI ================= -->
+    <div class="step-content" id="step-5">
+      <div class="subtitle">
+        <span>Penerapan Bertahap Pemrograman Modular</span>
+        <span class="tag-badge tag-soal">Latihan Mandiri C++ (Folio)</span>
+      </div>
+      <h1>Latihan Mandiri: Merancang Prosedur & Fungsi C++</h1>
+
+      <div class="note">
+        <strong>📝 Perhatian:</strong>
+        Mulai dari halaman ini (Latihan Mandiri, Evaluasi IRT, dan Refleksi), seluruh jawaban <strong>ditulis tangan rapi di lembar kertas folio bergaris</strong> Anda!
+      </div>
+
+      <div class="soal-card">
+        <h4>Latihan A: Prosedur Pengumuman <span class="soal-badge">Tipe void</span></h4>
+        <p>Tuliskan sebuah <strong>Prosedur</strong> C++ bernama <code>sapaSiswa</code> yang menerima satu parameter <code>string nama</code> dan mencetak teks salam <code>"Halo [nama], selamat belajar pemrograman C++!"</code> ke layar.</p>
+      </div>
+
+      <div class="soal-card">
+        <h4>Latihan B: Fungsi Konversi Suhu <span class="soal-badge">Tipe double</span></h4>
+        <p>Tuliskan sebuah <strong>Fungsi</strong> C++ bernama <code>celciusKeFahrenheit</code> dengan parameter <code>double c</code> yang menghitung rumus: <code>(c * 9.0 / 5.0) + 32.0</code> dan mengembalikan hasil akhirnya!</p>
+      </div>
+
+      <div class="soal-card">
+        <h4>Latihan C: Perangkaian di `main()` <span class="soal-badge">Alur Eksekusi</span></h4>
+        <p>Tuliskan fungsi <code>int main()</code> lengkap yang:</p>
+        <ol>
+          <li>Memanggil prosedur <code>sapaSiswa("Rizky");</code>.</li>
+          <li>Menghitung konversi suhu Celcius 30 derajat ke Fahrenheit menggunakan fungsi <code>celciusKeFahrenheit</code>.</li>
+          <li>Mencetak hasil suhu Fahrenheit tersebut ke layar menggunakan <code>cout</code>.</li>
+        </ol>
+      </div>
+
+      <div class="bottom-bar">
+        <button class="btn" onclick="goToStep(4)">&larr; Scope C++</button>
+        <button class="btn btn-next" onclick="goToStep(6)">Lanjut: Evaluasi IRT Bertingkat &rarr;</button>
+      </div>
+    </div>
+
+    <!-- ================= HALAMAN 6: EVALUASI IRT ================= -->
+    <div class="step-content" id="step-6">
+      <div class="subtitle">
+        <span>Uji Daya Pembeda & Tingkat Penguasaan Konsep</span>
+        <span class="tag-badge tag-soal">Evaluasi Bertingkat (Folio)</span>
+      </div>
+      <h1>Instrumen Evaluasi Penguasaan Konsep (IRT)</h1>
+
+      <button class="btn-helper-theory" onclick="openQuickTheory('subprogram')">📖 Buka Ringkasan Teori Subprogram</button>
+
+      <div class="soal-card">
+        <h4>Level 1: Identifikasi Komponen Method <span class="soal-badge">Kesukaran Rendah (b &lt; -0.5)</span></h4>
+        <p>Perhatikan fungsi C++ berikut:</p>
+        <pre><span class="type">double</span> <span class="func">hitungDiskon</span>(<span class="type">double</span> harga, <span class="type">int</span> persen) {
+    <span class="type">double</span> potongan = harga * (persen / <span class="num">100.0</span>);
+    <span class="keyword">return</span> potongan;
+}</pre>
+        <p>Tuliskan di kertas folio: (1) Nama fungsi, (2) Tipe kembalian, (3) Nama dan tipe data seluruh parameter, (4) Nama variabel lokal di dalamnya!</p>
+      </div>
+
+      <div class="soal-card">
+        <h4>Level 2: Substitusi Nilai vs `cout` <span class="soal-badge">Kesukaran Sedang, Daya Pembeda Tinggi (b &asymp; 0.0)</span></h4>
+        <p>Perhatikan dua subprogram:</p>
+        <pre><span class="type">void</span> <span class="func">cetakPoin</span>(<span class="type">int</span> x) { cout &lt;&lt; x * <span class="num">3</span>; }
+<span class="type">int</span> <span class="func">ambilPoin</span>(<span class="type">int</span> x) { <span class="keyword">return</span> x * <span class="num">3</span>; }</pre>
+        <p>Jika di <code>main()</code> dijalankan:</p>
+        <pre><span class="type">int</span> a = <span class="func">ambilPoin</span>(<span class="num">4</span>) + <span class="num">5</span>;               <span class="comment">// Baris 1</span>
+<span class="type">int</span> b = <span class="func">cetakPoin</span>(<span class="num">4</span>) + <span class="num">5</span>;               <span class="comment">// Baris 2</span>
+cout &lt;&lt; <span class="func">ambilPoin</span>(<span class="func">ambilPoin</span>(<span class="num">2</span>));        <span class="comment">// Baris 3</span></pre>
+        <p>a. Baris manakah yang menyebabkan error kompilasi dan mengapa?<br>
+           b. Berapakah angka pasti yang dicetak oleh Baris 3? Tuliskan langkah penelusurannya!</p>
+      </div>
+
+      <div class="soal-card">
+        <h4>Level 3: Scope & Variable Shadowing Memori <span class="soal-badge">Kesukaran Tinggi (b &gt; +0.5)</span></h4>
+        <p>Perhatikan kode berikut:</p>
+        <pre><span class="type">int</span> nilai = <span class="num">50</span>; <span class="comment">// Global</span>
+
+<span class="type">void</span> <span class="func">proses</span>(<span class="type">int</span> nilai) {
+    nilai = nilai + <span class="num">25</span>;
+    cout &lt;&lt; nilai &lt;&lt; <span class="str">"-"</span>;
+}
+
+<span class="type">int</span> main() {
+    <span class="func">proses</span>(nilai);
+    cout &lt;&lt; nilai;
+    <span class="keyword">return</span> <span class="num">0</span>;
+}</pre>
+        <p>Berapakah urutan teks keluaran yang tercetak di layar (format: <code>...-...</code>)? Jelaskan mengapa variabel global <code>nilai</code> tidak ikut bertambah 25!</p>
+      </div>
+
+      <div class="soal-card">
+        <h4>Level 4: Desain Program Kasir Sewa Komputer <span class="soal-badge">Kesukaran Sangat Tinggi (b &gt; +1.2)</span></h4>
+        <p>Aturan rental: Tarif Rp4.000/jam. Jika sewa &gt; 3 jam, dapat diskon Rp2.000. Makanan ringan flat Rp3.000 per bungkus.</p>
+        <p>Tuliskan di kertas folio:</p>
+        <ol>
+          <li>Fungsi <code>int hitungRental(int jam)</code> untuk menghitung biaya sewa setelah diskon jika &gt; 3 jam.</li>
+          <li>Fungsi <code>int hitungSnack(int jumlahSnack)</code> untuk menghitung biaya makanan.</li>
+          <li>Prosedur <code>void cetakStruk(string nama, int totalBayar)</code> untuk mencetak nota ke layar.</li>
+          <li>Fungsi <code>int main()</code> yang memanggil subprogram di atas untuk pelanggan bernama "Fajar" yang menyewa selama 5 jam dan memesan 2 snack!</li>
+        </ol>
+      </div>
+
+      <div class="bottom-bar">
+        <button class="btn" onclick="goToStep(5)">&larr; Latihan Mandiri</button>
+        <button class="btn btn-next" onclick="goToStep(7)">Lanjut: Refleksi Akhir &rarr;</button>
+      </div>
+    </div>
+
+    <!-- ================= HALAMAN 7: REFLEKSI ================= -->
+    <div class="step-content" id="step-7">
+      <div class="subtitle">
+        <span>Evaluasi Pemahaman Metakognitif</span>
+        <span class="tag-badge">Penutup Pembelajaran</span>
+      </div>
+      <h1>Refleksi Pembelajaran Siswa</h1>
+
+      <h2>Pertanyaan Refleksi (Tulis di Halaman Terakhir Kertas Folio):</h2>
+      <ol>
+        <li>Di antara materi Fondasi (Variabel, Kondisi, While) dan materi Subprogram (Fungsi & Prosedur), konsep mana yang awalnya terasa paling membingungkan bagi Anda, dan bagaimana Anda akhirnya memahaminya?</li>
+        <li>Mengapa pemahaman tentang tipe data dan pembagian bulat (integer division) sangat berpengaruh saat kita membuat fungsi perhitungan di C++?</li>
+        <li>Bagaimana membagi program menjadi fungsi-fungsi kecil membantu Anda menghindari kesalahan (*bug*) saat membuat aplikasi?</li>
+      </ol>
+
+      <h2>Prosedur Pengumpulan Tugas:</h2>
+      <ol>
+        <li>Pastikan Nama Lengkap, Nomor Absen, dan Kelas terisi jelas di pojok kanan atas lembar folio.</li>
+        <li>Susun jawaban berurutan: Latihan Mandiri &rarr; Evaluasi IRT Level 1 s.d. 4 &rarr; Refleksi.</li>
+        <li>Kumpulkan seluruh lembar kertas folio ke <strong>Ketua Kelas</strong> sebelum jam pelajaran berakhir untuk diserahkan ke Guru Piket.</li>
+      </ol>
+
+      <div class="note">
+        <strong>Pekerjaan Tuntas:</strong> Selamat, Anda telah menyelesaikan seluruh rangkaian fondasi algoritma dan pemrograman modular C# dengan sangat baik!
+      </div>
+
+      <div class="bottom-bar">
+        <button class="btn" onclick="goToStep(6)">&larr; Evaluasi IRT</button>
+        <span></span>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- ================= MODAL QUICK THEORY DRAWER ================= -->
+<div class="modal-overlay" id="theoryModal">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3>Ringkasan Teori Cepat C++</h3>
+      <button class="modal-close-btn" onclick="closeQuickTheory()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <div class="quick-theory-tabs">
+        <button class="quick-tab-btn active" id="tabBtn-fondasi" onclick="switchQuickTab('fondasi')">1. Fondasi C++</button>
+        <button class="quick-tab-btn" id="tabBtn-subprogram" onclick="switchQuickTab('subprogram')">2. Prosedur vs Fungsi</button>
+        <button class="quick-tab-btn" id="tabBtn-scope" onclick="switchQuickTab('scope')">3. Scope</button>
+      </div>
+
+      <div class="quick-theory-pane active" id="pane-fondasi">
+        <h4 style="color:#0f766e; margin-bottom:6px;">Variabel, Kondisi & While</h4>
+        <p><strong>Integer Division:</strong> <code>5 / 2</code> bernilai <code>2</code>. Gunakan desimal <code>5.0 / 2</code> agar bernilai <code>2.5</code>.</p>
+        <p><strong>Assignment vs Equality:</strong> <code>==</code> membandingkan kesetaraan, sedangkan <code>=</code> mengisi/menugaskan nilai.</p>
+        <p><strong>While Loop:</strong> Butuh inisialisasi counter, kondisi pengujian, dan increment (<code>i++</code>) agar tidak terjadi infinite loop.</p>
+      </div>
+
+      <div class="quick-theory-pane" id="pane-subprogram">
+        <h4 style="color:#0f766e; margin-bottom:6px;">Prosedur vs Fungsi C++</h4>
+        <p><strong>Prosedur:</strong> Tipe return <code>void</code>. Melakukan tindakan/aksi cetak teks. Tidak mengembalikan nilai.</p>
+        <p><strong>Fungsi:</strong> Memiliki tipe return (<code>int</code>, <code>double</code>, dll). Memproses input dan <strong>wajib</strong> mengembalikan nilai lewat perintah <code>return nilai;</code>.</p>
+      </div>
+
+      <div class="quick-theory-pane" id="pane-scope">
+        <h4 style="color:#0f766e; margin-bottom:6px;">Scope & Variable Shadowing</h4>
+        <p><strong>Variabel Lokal:</strong> Hidup di dalam kurung kurawal <code>{ }</code> dan dihancurkan saat keluar blok.</p>
+        <p><strong>Variabel Global:</strong> Dideklarasikan di luar seluruh fungsi, dikenali oleh semua fungsi.</p>
+        <p><strong>Shadowing:</strong> Parameter/variabel lokal yang bernama sama akan menutupi variabel global.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function goToStep(stepIndex) {
+    const contents = document.querySelectorAll('.step-content');
+    const buttons = document.querySelectorAll('.step-btn');
+
+    contents.forEach((c, idx) => {
+      c.classList.toggle('active', idx === stepIndex);
+    });
+
+    buttons.forEach((b, idx) => {
+      b.classList.toggle('active', idx === stepIndex);
+    });
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Database Pembahasan Kuis dengan String Template Aman
+  const quizExplanations = {
+    "1_1": {
+      correct: "C",
+      detail: "<strong>Benar!</strong> Tipe <code>char</code> di C++ wajib menggunakan tanda petik tunggal (contoh: <code>'A'</code>). Opsi A dan D salah karena memakai tanda petik ganda/tunggal yang terbalik, dan Opsi B salah karena &quot;true&quot; bertanda petik adalah teks string, bukan tipe boolean."
+    },
+    "1_2": {
+      correct: "B",
+      detail: "<strong>Benar!</strong> Terjadi fenomena <em>Integer Division Truncation</em>. Karena variabel <code>a</code> dan <code>b</code> keduanya bertipe <code>int</code>, operasi <code>7 / 2</code> menghasilkan <code>3</code> (angka desimal .5 dipotong) sebelum disimpan ke variabel <code>c</code>."
+    },
+    "1_3": {
+      correct: "B",
+      detail: "<strong>Benar!</strong> Logika swap yang benar membutuhkan variabel perantara <code>temp</code> untuk menampung nilai lama <code>x</code> terlebih dahulu sebelum <code>x</code> ditimpa oleh nilai <code>y</code>."
+    },
+    "2_1": {
+      correct: "B",
+      detail: "<strong>Benar!</strong> Terjadi jebakan operator penugasan tunggal <code>kuota = 5</code>. Angka 5 dimasukkan ke variabel kuota, dan di C++ nilai angka selain 0 dianggap bernilai <code>true</code>. Akibatnya blok <code>if</code> selalu dijalankan!"
+    },
+    "2_2": {
+      correct: "C",
+      detail: "<strong>Benar!</strong> Pada percabangan <code>else if</code> berantai, begitu kondisi pertama <code>skor >= 70</code> bernilai benar (85 >= 70), teks &quot;Lulus&quot; dicetak dan seluruh cabang <code>else if</code> di bawahnya langsung dilewati!"
+    },
+    "2_3": {
+      correct: "B",
+      detail: "<strong>Benar!</strong> Tanda kurung <code>(nilai >= 80 && usia <= 20)</code> memastikan kedua syarat tersebut dievaluasi sebagai satu kesatuan sebelum digabungkan dengan operator <code>||</code> (atau)."
+    },
+    "3_1": {
+      correct: "B",
+      detail: "<strong>Benar!</strong> Pada Kode B, baris <code>j++</code> dijalankan SEBELUM perintah <code>cout</code>. Sehingga saat <code>j = 1</code>, nilainya langsung naik menjadi 2 sebelum dicetak, menghasilkan deret: 2 3 4."
+    },
+    "3_2": {
+      correct: "B",
+      detail: "<strong>Benar!</strong> Karena nilai awal <code>hitung = 5</code> dan selalu ditambah (<code>hitung++</code>), nilainya akan selalu lebih besar dari 0, sehingga syarat perulangan tidak pernah bernilai salah (infinite loop)."
+    },
+    "3_3": {
+      correct: "B",
+      detail: "<strong>Benar!</strong> Pola akumulasi standar adalah <code>total += i;</code> (artinya: total = total + i) diikuti dengan kenaikan counter <code>i++;</code> di setiap putaran."
+    }
+  };
+
+  function checkQuiz(qKey) {
+    const selected = document.querySelector(`input[name="q${qKey}"]:checked`);
+    const fb = document.getElementById(`fb-${qKey}`);
+
+    if (!selected) {
+      alert("Silakan pilih salah satu opsi jawaban terlebih dahulu!");
+      return;
+    }
+
+    const exp = quizExplanations[qKey];
+    fb.style.display = "block";
+
+    if (selected.value === exp.correct) {
+      fb.className = "quiz-feedback correct";
+      fb.innerHTML = "✅ <strong>Jawaban Anda Benar!</strong><br>" + exp.detail;
+    } else {
+      fb.className = "quiz-feedback wrong";
+      fb.innerHTML = "❌ <strong>Jawaban Anda Belum Tepat.</strong> (Jawaban Benar: Opsi " + exp.correct + ")<br>" + exp.detail;
+    }
+  }
+
+  function openQuickTheory(topic) {
+    document.getElementById('theoryModal').classList.add('active');
+    switchQuickTab(topic);
+  }
+
+  function closeQuickTheory() {
+    document.getElementById('theoryModal').classList.remove('active');
+  }
+
+  function switchQuickTab(topic) {
+    const tabs = ['fondasi', 'subprogram', 'scope'];
+    tabs.forEach(t => {
+      const pane = document.getElementById('pane-' + t);
+      const btn = document.getElementById('tabBtn-' + t);
+      if (pane && btn) {
+        pane.classList.toggle('active', t === topic);
+        btn.classList.toggle('active', t === topic);
+      }
+    });
+  }
+
+  document.getElementById('theoryModal').addEventListener('click', function(e) {
+    if (e.target === this) closeQuickTheory();
+  });
+</script>
+
+</body>
+</html>
