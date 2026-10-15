@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modul Ajar: Fondasi Struktur Data Array</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --text-main: #1e293b;
+            --text-muted: #475569;
+            --bg-page: #f8fafc;
+            --bg-card: #ffffff;
+            --border-color: #cbd5e1;
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --code-bg: #0f172a;
+            --code-text: #f8fafc;
+            --callout-info-bg: #eff6ff;
+            --callout-info-border: #3b82f6;
+            --callout-warn-bg: #fefce8;
+            --callout-warn-border: #eab308;
+            --callout-danger-bg: #fef2f2;
+            --callout-danger-border: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            line-height: 1.7;
+            padding: 2.5rem 1rem;
+        }
+
+        .document-wrapper {
+            max-width: 860px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 3.5rem 3rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        header.doc-header {
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 1.75rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .doc-meta {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        h1.doc-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1.25;
+            margin-bottom: 0.75rem;
+        }
+
+        .doc-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 1.25rem;
+        }
+
+        .meta-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            background: #f8fafc;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .meta-table td {
+            padding: 0.6rem 1rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .meta-table td:first-child {
+            font-weight: 600;
+            width: 25%;
+            color: #334155;
+            background: #f1f5f9;
+        }
+
+        h2 {
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.4rem;
+            border-bottom: 1.5px solid #e2e8f0;
+        }
+
+        h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-top: 1.5rem;
+            margin-bottom: 0.6rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: #334155;
+        }
+
+        ul, ol {
+            margin-bottom: 1.25rem;
+            padding-left: 1.5rem;
+            color: #334155;
+        }
+
+        li {
+            margin-bottom: 0.4rem;
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: 1.1rem 1.25rem;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.88rem;
+            line-height: 1.6;
+            overflow-x: auto;
+            margin: 1rem 0 1.25rem 0;
+            border: 1px solid #1e293b;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9em;
+            background-color: #f1f5f9;
+            color: #0f172a;
+            padding: 0.15rem 0.35rem;
+            border-radius: 4px;
+            border: 1px solid #e2e8f0;
+        }
+
+        pre code {
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+            border: none;
+        }
+
+        .callout {
+            padding: 1.1rem 1.25rem;
+            border-radius: 6px;
+            margin: 1.25rem 0;
+            font-size: 0.95rem;
+        }
+
+        .callout-info {
+            background-color: var(--callout-info-bg);
+            border-left: 4px solid var(--callout-info-border);
+            color: #1e3a8a;
+        }
+
+        .callout-warn {
+            background-color: var(--callout-warn-bg);
+            border-left: 4px solid var(--callout-warn-border);
+            color: #713f12;
+        }
+
+        .callout-danger {
+            background-color: var(--callout-danger-bg);
+            border-left: 4px solid var(--callout-danger-border);
+            color: #991b1b;
+        }
+
+        .diagram-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.25rem 0;
+            text-align: center;
+            font-size: 0.95rem;
+        }
+
+        .diagram-table th, .diagram-table td {
+            border: 2px solid #cbd5e1;
+            padding: 0.75rem 0.5rem;
+        }
+
+        .diagram-table th {
+            background-color: #f1f5f9;
+            color: #475569;
+            font-weight: 600;
+        }
+
+        .diagram-table td.value-cell {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 1.15rem;
+            font-weight: 700;
+            color: #1e40af;
+            background-color: #f8fafc;
+        }
+
+        .diagram-table td.index-cell {
+            font-family: 'JetBrains Mono', monospace;
+            background-color: #f1f5f9;
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        .exercise-box {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.75rem 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+        }
+
+        .exercise-box.guided {
+            border-left: 5px solid var(--primary);
+        }
+
+        .exercise-box.challenge {
+            border-left: 5px solid #f59e0b;
+        }
+
+        .exercise-box h3 {
+            margin-top: 0;
+            color: #0f172a;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+        }
+
+        .solution-block {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 1rem 1.25rem;
+            margin-top: 1rem;
+        }
+
+        .solution-title {
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #334155;
+            margin-bottom: 0.4rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .output-block {
+            background: #090d16;
+            border: 1px solid #1e293b;
+            border-radius: 6px;
+            padding: 0.9rem 1.1rem;
+            margin-top: 0.75rem;
+        }
+
+        .output-title {
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-bottom: 0.35rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        footer {
+            margin-top: 3.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e2e8f0;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        @media (max-width: 768px) {
+            .document-wrapper {
+                padding: 2rem 1.25rem;
+            }
+            h1.doc-title {
+                font-size: 1.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="document-wrapper">
+    <header class="doc-header">
+        <div class="doc-meta">Modul Pembelajaran Pemrograman &bull; Struktur Data Dasar</div>
+        <h1 class="doc-title">Fondasi Struktur Data Array</h1>
+        <p class="doc-subtitle">Panduan Konseptual, Operasi Dasar, Studi Kasus Terbimbing, dan Lembar Praktik Mandiri</p>
+
+        <table class="meta-table">
+            <tr>
+                <td>Topik Bahasan</td>
+                <td>Konsep Dasar Array, Pengindeksan Nol (0-Indexed), dan 4 Operasi Inti</td>
+            </tr>
+            <tr>
+                <td>Target Kompetensi</td>
+                <td>Membuat, Mengisi Data, Membaca Nilai, dan Mengubah Elemen Array</td>
+            </tr>
+            <tr>
+                <td>Prasyarat</td>
+                <td>Pemahaman Variabel, Tipe Data Primitif, dan Sintaks Dasar I/O</td>
+            </tr>
+        </table>
+    </header>
+
+    <!-- BAGIAN 1: KONSEP DASAR -->
+    <section>
+        <h2>1. Apa Itu Array?</h2>
+        <p>
+            Dalam pemrograman, kita sering memerlukan penyimpanan banyak data yang sejenis. Jika kita memiliki 5 nilai ujian siswa, membuat lima variabel berbeda seperti <code>nilai1</code>, <code>nilai2</code>, hingga <code>nilai5</code> sangat tidak efisien dan menyulitkan pengelolaan data.
+        </p>
+        <p>
+            <strong>Array</strong> adalah struktur data berurutan yang menyimpan sekumpulan nilai bertipe data sama di dalam satu wadah variabel tunggal pada lokasi memori yang bersebelahan (<em>contiguous memory</em>).
+        </p>
+
+        <div class="callout callout-info">
+            <strong>Analogi Loker Bernomor</strong>
+            Bayangkan sebuah lemari loker panjang yang memiliki 5 slot laci bersebelahan. Lemari tersebut punya satu nama utama (misalnya <code>loker</code>), dan setiap slot diberi label nomor urut pengenal yang disebut <strong>indeks</strong>. Saat ingin menyimpan atau mengambil sesuatu, kita cukup merujuk pada nomor laci tersebut.
+        </div>
+
+        <h3>Aturan Emas: Indeks Dimulai dari Nol (0-Indexed)</h3>
+        <p>
+            Mayoritas bahasa pemrograman menggunakan pengindeksan berbasis nol:
+        </p>
+        <ul>
+            <li>Elemen <strong>pertama</strong> selalu berada di indeks <code>0</code>.</li>
+            <li>Elemen <strong>kedua</strong> berada di indeks <code>1</code>.</li>
+            <li>Jika kapasitas array adalah <strong>N</strong>, maka elemen <strong>terakhir</strong> selalu berada di indeks <code>N - 1</code>.</li>
+        </ul>
+
+        <table class="diagram-table">
+            <thead>
+                <tr>
+                    <th colspan="5">Ilustrasi Array: <code>int nilai[5] = {80, 85, 90, 75, 95};</code></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="value-cell">80</td>
+                    <td class="value-cell">85</td>
+                    <td class="value-cell">90</td>
+                    <td class="value-cell">75</td>
+                    <td class="value-cell">95</td>
+                </tr>
+                <tr>
+                    <td class="index-cell">Indeks [0]<br>(Elemen ke-1)</td>
+                    <td class="index-cell">Indeks [1]<br>(Elemen ke-2)</td>
+                    <td class="index-cell">Indeks [2]<br>(Elemen ke-3)</td>
+                    <td class="index-cell">Indeks [3]<br>(Elemen ke-4)</td>
+                    <td class="index-cell">Indeks [4]<br>(Elemen ke-5)</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- BAGIAN 2: EMPAT PILAR OPERASI -->
+    <section>
+        <h2>2. Empat Pilar Operasi Dasar Array</h2>
+        <p>Empat operasi pokok yang wajib dipahami sebelum melangkah ke algoritma lanjutan:</p>
+
+        <h3>Pilar 1: Membuat Array (Deklarasi)</h3>
+        <p>
+            Mendeklarasikan array berarti memesan ruang di memori komputer dengan menentukan tipe data, nama variabel, dan kapasitas slotnya di dalam tanda kurung siku <code>[ ]</code>.
+        </p>
+        <pre><code>int skor[5];        // Memesan 5 slot bilangan bulat
+string murid[3];    // Memesan 3 slot teks</code></pre>
+
+        <h3>Pilar 2: Memasukkan Data ke Dalam Array</h3>
+        <p>Pengisian data bisa dilakukan sekaligus saat dibuat atau diisi bertahap lewat nomor indeks:</p>
+        <pre><code>// Cara A: Inisialisasi langsung saat deklarasi
+int nilai[3] = {85, 90, 78};
+
+// Cara B: Pengisian bertahap per nomor indeks
+int nilai[3];
+nilai[0] = 85;
+nilai[1] = 90;
+nilai[2] = 78;</code></pre>
+
+        <h3>Pilar 3: Membaca Nilai dari Dalam Array</h3>
+        <p>
+            Nilai diambil dengan menyebut nama array beserta nomor indeks slot yang dicari di dalam tanda kurung siku:
+        </p>
+        <pre><code>cout &lt;&lt; "Nilai pertama: " &lt;&lt; nilai[0] &lt;&lt; endl;
+int total = nilai[0] + nilai[1];</code></pre>
+
+        <h3>Pilar 4: Mengubah Elemen di Dalam Array</h3>
+        <p>
+            Nilai di dalam slot array dapat ditimpa dengan nilai baru kapan saja tanpa merusak ukuran array:
+        </p>
+        <pre><code>nilai[2] = 88; // Menimpa isi indeks ke-2 menjadi 88
+cout &lt;&lt; "Nilai setelah perbaikan: " &lt;&lt; nilai[2] &lt;&lt; endl;</code></pre>
+    </section>
+
+    <!-- BAGIAN 3: JEBAKAN UMUM -->
+    <section>
+        <h2>3. Kesalahan Umum yang Sering Dilakukan Pemula</h2>
+        
+        <div class="callout callout-danger">
+            <strong>Kesalahan Batas Indeks (Out of Bounds)</strong>
+            Array berukuran 5 elemen (<code>int data[5]</code>) hanya memiliki indeks yang sah dari <code>0</code> sampai <code>4</code>. Mengakses <code>data[5]</code> berada di luar blok memori yang dialokasikan sehingga menyebabkan program berhenti mendadak (<em>crash</em>) atau membaca nilai yang tidak dapat diprediksi.
+        </div>
+
+        <div class="callout callout-warn">
+            <strong>Membaca Nilai Sampah (Garbage Value)</strong>
+            Pada bahasa seperti C++, mendeklarasikan array lokal tanpa mengisinya (misal <code>int angka[3];</code>) tidak otomatis bernilai 0. Nilai di dalamnya berisi data acak sisa penggunaan memori sebelumnya.
+        </div>
+    </section>
+
+    <!-- BAGIAN 4: LATIHAN TERBIMBING (DENGAN SOLUSI) -->
+    <section>
+        <h2>4. Latihan Terbimbing (Contoh Kasus & Solusi Kode)</h2>
+        <p>Pelajari alur kerja program berikut sebagai model referensi implementasi 4 fondasi array:</p>
+
+        <!-- LATIHAN TERBIMBING 1 -->
+        <div class="exercise-box guided">
+            <h3>Latihan Terbimbing 1: Papan Skor Pertandingan Game</h3>
+            <p><strong>Kasus:</strong> Catat skor atlet pada 4 ronde pertandingan, tampilkan nilai ronde awal dan akhir, lalu lakukan perbaikan pada skor ronde ke-3 karena ralat panitia.</p>
+            
+            <p><strong>Instruksi:</strong></p>
+            <ol>
+                <li>Buat array integer berukuran 4 bernama <code>skor</code>.</li>
+                <li>Isi skor masing-masing ronde: <code>70, 85, 60, 90</code>.</li>
+                <li>Tampilkan nilai Ronde 1 (indeks 0) dan Ronde 4 (indeks 3).</li>
+                <li>Ubah nilai ronde 3 (indeks 2) yang semula 60 menjadi 75.</li>
+                <li>Cetak kembali skor ronde 3 untuk memastikan perubahannya.</li>
+            </ol>
+
+            <div class="solution-block">
+                <div class="solution-title">Source Code (C++):</div>
+                <pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    // 1. Membuat array berukuran 4 elemen
+    int skor[4];
+
+    // 2. Memasukkan data ke masing-masing slot
+    skor[0] = 70;
+    skor[1] = 85;
+    skor[2] = 60;
+    skor[3] = 90;
+
+    // 3. Membaca data awal
+    cout &lt;&lt; "Skor Ronde 1 : " &lt;&lt; skor[0] &lt;&lt; endl;
+    cout &lt;&lt; "Skor Ronde 4 : " &lt;&lt; skor[3] &lt;&lt; endl;
+
+    // 4. Mengubah data pada indeks ke-2
+    skor[2] = 75;
+
+    // Menampilkan hasil setelah diubah
+    cout &lt;&lt; "Skor Ronde 3 (Setelah Ralat): " &lt;&lt; skor[2] &lt;&lt; endl;
+
+    return 0;
+}</code></pre>
+                <div class="output-title">Luaran Konsol (Output):</div>
+                <div class="output-block">
+                    <pre style="margin: 0; background: transparent; border: none; padding: 0;"><code>Skor Ronde 1 : 70
+Skor Ronde 4 : 90
+Skor Ronde 3 (Setelah Ralat): 75</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- LATIHAN TERBIMBING 2 -->
+        <div class="exercise-box guided">
+            <h3>Latihan Terbimbing 2: Daftar Belanja Toko</h3>
+            <p><strong>Kasus:</strong> Kelola 3 nama barang belanjaan mingguan, baca elemen pertama dan terakhir, lalu ganti salah satu barang yang habis dengan barang lain.</p>
+            
+            <div class="solution-block">
+                <div class="solution-title">Source Code (C++):</div>
+                <pre><code>#include &lt;iostream&gt;
+#include &lt;string&gt;
+using namespace std;
+
+int main() {
+    // 1 & 2. Membuat array teks sekaligus mengisinya
+    string belanja[3] = {"Beras", "Gula", "Minyak"};
+
+    // 3. Membaca elemen pertama dan terakhir
+    cout &lt;&lt; "Barang Pertama : " &lt;&lt; belanja[0] &lt;&lt; endl;
+    cout &lt;&lt; "Barang Terakhir: " &lt;&lt; belanja[2] &lt;&lt; endl;
+
+    // 4. Mengubah elemen indeks ke-2 karena stok minyak habis
+    belanja[2] = "Kecap";
+
+    cout &lt;&lt; "\n--- Kondisi Terbaru ---" &lt;&lt; endl;
+    cout &lt;&lt; "Slot [2] Terkini: " &lt;&lt; belanja[2] &lt;&lt; endl;
+
+    return 0;
+}</code></pre>
+                <div class="output-title">Luaran Konsol (Output):</div>
+                <div class="output-block">
+                    <pre style="margin: 0; background: transparent; border: none; padding: 0;"><code>Barang Pertama : Beras
+Barang Terakhir: Minyak
+
+--- Kondisi Terbaru ---
+Slot [2] Terkini: Kecap</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BAGIAN 5: LATIHAN PRAKTIK MANDIRI (TANPA SOLUSI KODE) -->
+    <section>
+        <h2>5. Lembar Praktik Mandiri Siswa (Tantangan)</h2>
+        <p>Selesaikan ketiga kasus di bawah ini di editor kodemu. Tuliskan kode dari awal tanpa melihat kunci jawaban, dan sesuaikan agar luaran konsol sama persis dengan target yang ditentukan.</p>
+
+        <!-- TANTANGAN 1 -->
+        <div class="exercise-box challenge">
+            <h3>Tantangan 1: Pemantau Suhu Ruang Server</h3>
+            <p><strong>Skenario Kasus:</strong> Teknisi jaringan mencatat suhu ruang server selama 5 hari kerja berturut-turut untuk memastikan perangkat tidak <em>overheating</em>.</p>
+            
+            <p><strong>Tugas Kamu:</strong></p>
+            <ol>
+                <li>Deklarasikan array integer <code>suhuServer</code> dengan kapasitas 5 elemen.</li>
+                <li>Isi suhu hari ke-1 sampai ke-5 secara bertahap via indeks dengan nilai: <code>24, 25, 26, 28, 24</code>.</li>
+                <li>Cetak suhu hari pertama (indeks 0) dan hari kelima (indeks 4).</li>
+                <li>Karena pendingin ruangan sempat padam di hari ke-4, ubah data suhu pada indeks 3 menjadi <code>32</code>.</li>
+                <li>Cetak pesan konfirmasi pembaruan suhu hari ke-4 ke konsol.</li>
+            </ol>
+
+            <div class="output-title">Target Luaran Konsol:</div>
+            <div class="output-block">
+                <pre style="margin: 0; background: transparent; border: none; padding: 0;"><code>Suhu Hari Pertama : 24 C
+Suhu Hari Terakhir: 24 C
+Status: Suhu hari ke-4 diperbarui menjadi 32 C</code></pre>
+            </div>
+        </div>
+
+        <!-- TANTANGAN 2 -->
+        <div class="exercise-box challenge">
+            <h3>Tantangan 2: Inventaris Meja Instruktur Lab</h3>
+            <p><strong>Skenario Kasus:</strong> Penanggung jawab lab komputer mendata empat perangkat utama yang terpasang di meja pengajar.</p>
+            
+            <p><strong>Tugas Kamu:</strong></p>
+            <ol>
+                <li>Deklarasikan array <code>string</code> berkapasitas 4 slot dan langsung isi dengan nilai: <code>{"Monitor", "Keyboard", "Mouse", "Speaker"}</code>.</li>
+                <li>Tampilkan nama perangkat yang berada di posisi indeks 1 dan indeks 3.</li>
+                <li>Unit <code>Speaker</code> di indeks 3 dipindahkan ke ruang lain dan diganti dengan <code>"Headset"</code>. Ubah isi elemen di indeks 3.</li>
+                <li>Tampilkan seluruh item inventaris terbaru secara berurutan dari indeks 0 hingga 3.</li>
+            </ol>
+
+            <div class="output-title">Target Luaran Konsol:</div>
+            <div class="output-block">
+                <pre style="margin: 0; background: transparent; border: none; padding: 0;"><code>Perangkat Indeks [1]: Keyboard
+Perangkat Indeks [3]: Speaker
+
+--- Daftar Inventaris Terkini ---
+Slot [0]: Monitor
+Slot [1]: Keyboard
+Slot [2]: Mouse
+Slot [3]: Headset</code></pre>
+            </div>
+        </div>
+
+        <!-- TANTANGAN 3 -->
+        <div class="exercise-box challenge">
+            <h3>Tantangan 3: Sistem Darah / HP Hero Game RPG</h3>
+            <p><strong>Skenario Kasus:</strong> Sebuah tim game terdiri dari 3 karakter pejuang. Kamu diminta mengelola kondisi sisa HP (Hit Points) masing-masing karakter saat pertempuran berlangsung.</p>
+            
+            <p><strong>Tugas Kamu:</strong></p>
+            <ol>
+                <li>Buat array bilangan bulat berukuran 3 bernama <code>heroHP</code> dan isi seluruh slot dengan darah penuh (<code>100</code>).</li>
+                <li>Cetak status darah awal ketiga karakter dalam satu baris.</li>
+                <li>Hero di posisi kedua (indeks 1) terkena serangan jebakan sehingga HP-nya tersisa <code>60</code>. Ubah nilai slot tersebut.</li>
+                <li>Hero utama (indeks 0) meminum ramuan tambahan darah sehingga HP-nya bertambah menjadi <code>120</code>. Ubah nilai slot tersebut.</li>
+                <li>Cetak status darah tim setelah pertempuran selesai.</li>
+            </ol>
+
+            <div class="output-title">Target Luaran Konsol:</div>
+            <div class="output-block">
+                <pre style="margin: 0; background: transparent; border: none; padding: 0;"><code>--- Kondisi Darah Awal ---
+Hero 1: 100 HP | Hero 2: 100 HP | Hero 3: 100 HP
+
+--- Kondisi Setelah Aksi ---
+Hero 1 (Buff Potion) : 120 HP
+Hero 2 (Kena Damage) : 60 HP
+Hero 3 (Aman)        : 100 HP</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- BAGIAN 6: RANGKUMAN -->
+    <section>
+        <h2>6. Rangkuman Materi</h2>
+        <ul>
+            <li><strong>Prinsip Ruang Memori:</strong> Array mengelompokkan data sejenis dalam satu deret memori yang berurutan.</li>
+            <li><strong>Aturan Indeks:</strong> Berbasis nol (<code>0</code> sampai <code>N - 1</code>, di mana $N$ adalah kapasitas array).</li>
+            <li><strong>4 Operasi Inti:</strong>
+                <ul>
+                    <li><em>Membuat (Deklarasi):</em> Menyatakan tipe data dan kapasitas ukuran tetap.</li>
+                    <li><em>Memasukkan:</em> Menempatkan data ke slot memori via inisialisasi awal atau assignment operator.</li>
+                    <li><em>Membaca:</em> Mengakses isi data dengan memanggil nomor indeksnya.</li>
+                    <li><em>Mengubah:</em> Menimpa nilai pada slot indeks tertentu tanpa menambah/mengurangi total ukuran array.</li>
+                </ul>
+            </li>
+            <li><strong>Keamanan Memori:</strong> Selalu batasi akses indeks maksimal pada <code>ukuran - 1</code> untuk mencegah kerusakan program (<em>out of bounds error</em>).</li>
+        </ul>
+    </section>
+
+    <footer>
+        <p>&copy; Modul Pembelajaran Pemrograman Dasar &bull; Disusun untuk praktikum laboratorium dan kegiatan belajar mandiri siswa.</p>
+    </footer>
+</div>
+
+</body>
+</html>
