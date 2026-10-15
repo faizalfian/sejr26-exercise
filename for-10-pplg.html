@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modul Ajar: Fondasi Perulangan For Loop</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --text-main: #1e293b;
+            --text-muted: #475569;
+            --bg-page: #f8fafc;
+            --bg-card: #ffffff;
+            --border-color: #cbd5e1;
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --code-bg: #0f172a;
+            --code-text: #f8fafc;
+            --callout-info-bg: #eff6ff;
+            --callout-info-border: #3b82f6;
+            --callout-warn-bg: #fefce8;
+            --callout-warn-border: #eab308;
+            --callout-danger-bg: #fef2f2;
+            --callout-danger-border: #ef4444;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-main);
+            line-height: 1.7;
+            padding: 2.5rem 1rem;
+        }
+
+        .document-wrapper {
+            max-width: 860px;
+            margin: 0 auto;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 3.5rem 3rem;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        header.doc-header {
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 1.75rem;
+            margin-bottom: 2.5rem;
+        }
+
+        .doc-meta {
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        h1.doc-title {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: #0f172a;
+            line-height: 1.25;
+            margin-bottom: 0.75rem;
+        }
+
+        .doc-subtitle {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 1.25rem;
+        }
+
+        .meta-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            background: #f8fafc;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .meta-table td {
+            padding: 0.6rem 1rem;
+            border: 1px solid #e2e8f0;
+        }
+
+        .meta-table td:first-child {
+            font-weight: 600;
+            width: 25%;
+            color: #334155;
+            background: #f1f5f9;
+        }
+
+        h2 {
+            font-size: 1.45rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-top: 2.5rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.4rem;
+            border-bottom: 1.5px solid #e2e8f0;
+        }
+
+        h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-top: 1.5rem;
+            margin-bottom: 0.6rem;
+        }
+
+        p {
+            margin-bottom: 1rem;
+            color: #334155;
+        }
+
+        ul, ol {
+            margin-bottom: 1.25rem;
+            padding-left: 1.5rem;
+            color: #334155;
+        }
+
+        li {
+            margin-bottom: 0.4rem;
+        }
+
+        pre {
+            background: var(--code-bg);
+            color: var(--code-text);
+            padding: 1.1rem 1.25rem;
+            border-radius: 6px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.88rem;
+            line-height: 1.6;
+            overflow-x: auto;
+            margin: 1rem 0 1.25rem 0;
+            border: 1px solid #1e293b;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 0.9em;
+            background-color: #f1f5f9;
+            color: #0f172a;
+            padding: 0.15rem 0.35rem;
+            border-radius: 4px;
+            border: 1px solid #e2e8f0;
+        }
+
+        pre code {
+            background-color: transparent;
+            color: inherit;
+            padding: 0;
+            border: none;
+        }
+
+        .callout {
+            padding: 1.1rem 1.25rem;
+            border-radius: 6px;
+            margin: 1.25rem 0;
+            font-size: 0.95rem;
+        }
+
+        .callout-info {
+            background-color: var(--callout-info-bg);
+            border-left: 4px solid var(--callout-info-border);
+            color: #1e3a8a;
+        }
+
+        .callout-warn {
+            background-color: var(--callout-warn-bg);
+            border-left: 4px solid var(--callout-warn-border);
+            color: #713f12;
+        }
+
+        .callout-danger {
+            background-color: var(--callout-danger-bg);
+            border-left: 4px solid var(--callout-danger-border);
+            color: #991b1b;
+        }
+
+        .diagram-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1.25rem 0;
+            text-align: left;
+            font-size: 0.92rem;
+        }
+
+        .diagram-table th, .diagram-table td {
+            border: 1px solid #cbd5e1;
+            padding: 0.7rem 0.85rem;
+        }
+
+        .diagram-table th {
+            background-color: #f1f5f9;
+            color: #334155;
+            font-weight: 700;
+        }
+
+        .diagram-table td.code-cell {
+            font-family: 'JetBrains Mono', monospace;
+            font-weight: 600;
+            color: #1e40af;
+        }
+
+        .exercise-box {
+            background: #ffffff;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin: 1.75rem 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+        }
+
+        .exercise-box.guided {
+            border-left: 5px solid var(--primary);
+        }
+
+        .exercise-box.challenge {
+            border-left: 5px solid #f59e0b;
+        }
+
+        .exercise-box h3 {
+            margin-top: 0;
+            color: #0f172a;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 0.5rem;
+        }
+
+        .solution-block {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 1rem 1.25rem;
+            margin-top: 1rem;
+        }
+
+        .solution-title {
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #334155;
+            margin-bottom: 0.4rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        .output-block {
+            background: #090d16;
+            border: 1px solid #1e293b;
+            border-radius: 6px;
+            padding: 0.9rem 1.1rem;
+            margin-top: 0.75rem;
+        }
+
+        .output-title {
+            font-weight: 700;
+            font-size: 0.85rem;
+            color: #94a3b8;
+            margin-bottom: 0.35rem;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
+
+        footer {
+            margin-top: 3.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e2e8f0;
+            text-align: center;
+            font-size: 0.85rem;
+            color: #64748b;
+        }
+
+        @media (max-width: 768px) {
+            .document-wrapper {
+                padding: 2rem 1.25rem;
+            }
+            h1.doc-title {
+                font-size: 1.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="document-wrapper">
+    <header class="doc-header">
+        <div class="doc-meta">Modul Pembelajaran Pemrograman &bull; Struktur Kontrol Alur</div>
+        <h1 class="doc-title">Fondasi Perulangan (For Loop)</h1>
+        <p class="doc-subtitle">Konsep Mekanisme Iterasi, Anatomi 3 Komponen Kontrol, dan Lembar Praktik Terarah</p>
+
+        <table class="meta-table">
+            <tr>
+                <td>Topik Bahasan</td>
+                <td>Struktur Perulangan Terhitung (Definite Loop) menggunakan For</td>
+            </tr>
+            <tr>
+                <td>Target Kompetensi</td>
+                <td>Memahami Anatomi For, Iterasi Maju, Iterasi Mundur, dan Pola Langkah Nilai</td>
+            </tr>
+            <tr>
+                <td>Prasyarat</td>
+                <td>Variabel, Operator Perbandingan (&lt;, &lt;=, &gt;, &gt;=), dan Operator Increment/Decrement</td>
+            </tr>
+        </table>
+    </header>
+
+    <!-- BAGIAN 1: KONSEP DASAR -->
+    <section>
+        <h2>1. Apa Itu Perulangan For?</h2>
+        <p>
+            Komputer unggul dalam mengeksekusi instruksi yang sama berulang kali dengan kecepatan tinggi tanpa melakukan kesalahan hitung. Menulis baris instruksi yang sama secara berulang-ulang secara manual sangat rentan kesalahan (*human error*) dan melanggar prinsip dasar pemrograman efisien.
+        </p>
+        <p>
+            <strong>For Loop</strong> adalah struktur kontrol perulangan terhitung (*definite loop*), yang berarti jumlah putarannya umumnya sudah diketahui atau bisa diprediksi sebelum loop mulai dieksekusi.
+        </p>
+
+        <div class="callout callout-info">
+            <strong>Analogi Putaran Lari di Lapangan</strong>
+            Bayangkan guru olahraga memerintahkan siswa berlari sebanyak 5 putaran:
+            <ul>
+                <li><strong>Mulai:</strong> Siswa menyiapkan catatan di putaran ke-1.</li>
+                <li><strong>Cek Syarat:</strong> Selama putaran belum melebihi 5, siswa terus berlari.</li>
+                <li><strong>Pembaruan:</strong> Setiap selesai melewati garis batas, hitungan putaran bertambah 1.</li>
+                <li><strong>Berhenti:</strong> Begitu hitungan mencapai 6, siswa berhenti.</li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- BAGIAN 2: ANATOMI 3 KOMPONEN -->
+    <section>
+        <h2>2. Tiga Pilar Anatomi For Loop</h2>
+        <p>Perulangan <code>for</code> dikendalikan oleh tiga ekspresi utama yang dipisahkan oleh tanda titik koma (<code>;</code>):</p>
+
+        <pre><code>for (inisialisasi; kondisi_berhenti; perubahan_nilai) {
+    // Blok kode yang akan diulang
+}</code></pre>
+
+        <table class="diagram-table">
+            <thead>
+                <tr>
+                    <th>Komponen</th>
+                    <th>Fungsi Kerja</th>
+                    <th>Kapan Dijalankan?</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="code-cell">1. Inisialisasi<br><code>int i = 0;</code></td>
+                    <td>Membuat variabel penghitung (*loop counter*) dan menentukan nilai awal mulainya.</td>
+                    <td>Hanya dijalankan <strong>satu kali</strong> tepat saat loop pertama kali dimulai.</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">2. Kondisi Berhenti<br><code>i &lt; 5;</code></td>
+                    <td>Ekspresi logika bernilai benar/salah (*true/false*). Loop hanya berputar jika kondisi bernilai <code>true</code>.</td>
+                    <td>Diperiksa <strong>sebelum</strong> blok instruksi di dalam kurung kurawal dijalankan.</td>
+                </tr>
+                <tr>
+                    <td class="code-cell">3. Perubahan Nilai<br><code>i++</code></td>
+                    <td>Mengubah nilai variabel counter (menambah atau mengurangi) agar mendekati kondisi berhenti.</td>
+                    <td>Dijalankan secara otomatis <strong>setiap akhir putaran</strong>.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Tabel Penelusuran Alur Kerja (Trace Table)</h3>
+        <p>Mari kita bedah eksekusi kode: <code>for (int i = 1; i &lt;= 3; i++)</code></p>
+
+        <table class="diagram-table">
+            <thead>
+                <tr>
+                    <th>Putaran</th>
+                    <th>Nilai i Awal</th>
+                    <th>Cek Kondisi (i &lt;= 3)</th>
+                    <th>Aksi yang Dilakukan</th>
+                    <th>Pembaruan (i++)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Ke-1</td>
+                    <td class="code-cell">1</td>
+                    <td>1 &lt;= 3 &rarr; <strong>BENAR</strong></td>
+                    <td>Jalankan isi loop</td>
+                    <td>i berubah jadi 2</td>
+                </tr>
+                <tr>
+                    <td>Ke-2</td>
+                    <td class="code-cell">2</td>
+                    <td>2 &lt;= 3 &rarr; <strong>BENAR</strong></td>
+                    <td>Jalankan isi loop</td>
+                    <td>i berubah jadi 3</td>
+                </tr>
+                <tr>
+                    <td>Ke-3</td>
+                    <td class="code-cell">3</td>
+                    <td>3 &lt;= 3 &rarr; <strong>BENAR</strong></td>
+                    <td>Jalankan isi loop</td>
+                    <td>i berubah jadi 4</td>
+                </tr>
+                <tr>
+                    <td>Ke-4</td>
+                    <td class="code-cell">4</td>
+                    <td>4 &lt;= 3 &rarr; <strong>SALAH</strong></td>
+                    <td><strong>Loop Berhenti (Keluar)</strong></td>
+                    <td>-</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
+
+    <!-- BAGIAN 3: POLA VARIASI LOOP -->
+    <section>
+        <h2>3. Ragam Pola Perulangan For</h2>
+        
+        <h3>Pola 1: Iterasi Maju (Increment)</h3>
+        <p>Bergerak dari nilai kecil ke nilai besar dengan penambahan 1 nilai per putaran.</p>
+        <pre><code>for (int i = 1; i &lt;= 5; i++) {
+    cout &lt;&lt; i &lt;&lt; " "; // Output: 1 2 3 4 5
+}</code></pre>
+
+        <h3>Pola 2: Iterasi Mundur (Decrement)</h3>
+        <p>Bergerak dari nilai besar ke nilai kecil menggunakan pengurangan (<code>i--</code>). Nilai awal harus lebih besar dari batas kondisi.</p>
+        <pre><code>for (int i = 5; i &gt;= 1; i--) {
+    cout &lt;&lt; i &lt;&lt; " "; // Output: 5 4 3 2 1
+}</code></pre>
+
+        <h3>Pola 3: Lompatan Nilai Kustom (Step Increments)</h3>
+        <p>Penghitung tidak harus bertambah 1. Kita bisa mengatur lompatan angka ganjil/genap menggunakan operator penugasan majemuk (<code>i += 2</code>, <code>i += 5</code>).</p>
+        <pre><code>for (int i = 0; i &lt;= 10; i += 2) {
+    cout &lt;&lt; i &lt;&lt; " "; // Output: 0 2 4 6 8 10
+}</code></pre>
+    </section>
+
+    <!-- BAGIAN 4: JEBAKAN UMUM -->
+    <section>
+        <h2>4. Kesalahan Klasik yang Wajib Dihindari</h2>
+
+        <div class="callout callout-danger">
+            <strong>1. Perulangan Tanpa Akhir (Infinite Loop)</strong>
+            Jika pembaruan nilai salah arah sehingga kondisi berhenti tidak pernah tercapai, loop akan berjalan selamanya dan menghabiskan sumber daya sistem komputer:
+            <pre><code>// SALAH: i dimulai dari 10 dan terus membesar, sehingga i &gt;= 1 selalu bernilai BENAR
+for (int i = 10; i &gt;= 1; i++) { 
+    cout &lt;&lt; i; 
+}</code></pre>
+        </div>
+
+        <div class="callout callout-warn">
+            <strong>2. Jebakan Tanda Titik Koma Palsu</strong>
+            Meletakkan titik koma langsung setelah penutup kurung <code>for (...)</code> akan membuat compiler menganggap badan loop kosong. Baris di bawahnya hanya akan dieksekusi satu kali setelah loop selesai.
+            <pre><code>// SALAH: Titik koma mengakhiri loop sebelum kurung kurawal
+for (int i = 0; i &lt; 5; i++); 
+{
+    cout &lt;&lt; "Ini hanya tercetak satu kali saja!" &lt;&lt; endl;
+}</code></pre>
+        </div>
+    </section>
+
+    <!-- BAGIAN 5: LATIHAN TERBIMBING (DENGAN SOLUSI) -->
+    <section>
+        <h2>5. Latihan Terbimbing (Contoh Kasus & Solusi Kode)</h2>
+        <p>Pelajari dua contoh implementasi loop berikut untuk memahami pola penulisan logika yang benar:</p>
+
+        <!-- LATIHAN TERBIMBING 1 -->
+        <div class="exercise-box guided">
+            <h3>Latihan Terbimbing 1: Hitung Mundur Peluncuran Roket</h3>
+            <p><strong>Kasus:</strong> Buat program hitung mundur peluncuran roket dari angka 5 sampai 1, diakhiri dengan cetakan pesan peluncuran.</p>
+            
+            <p><strong>Instruksi:</strong></p>
+            <ol>
+                <li>Gunakan perulangan mundur mulai dari <code>i = 5</code> hingga <code>i &gt;= 1</code>.</li>
+                <li>Gunakan <code>i--</code> untuk mengurangi hitungan per detik.</li>
+                <li>Cetak status hitungan di tiap putaran, lalu cetak pesan sukses di luar blok perulangan.</li>
+            </ol>
+
+            <div class="solution-block">
+                <div class="solution-title">Source Code (C++):</div>
+                <pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    cout &lt;&lt; "--- Persiapan Peluncuran ---" &lt;&lt; endl;
+
+    for (int i = 5; i &gt;= 1; i--) {
+        cout &lt;&lt; "Hitungan ke-" &lt;&lt; i &lt;&lt; " detik..." &lt;&lt; endl;
+    }
+
+    cout &lt;&lt; "Roket Meluncur ke Angkasa!" &lt;&lt; endl;
+
+    return 0;
+}</code></pre>
+                <div class="output-title">Luaran Konsol (Output):</div>
+                <div class="output-block">
+                    <pre style="margin: 0; background: transparent; border: none; padding: 0;"><code>--- Persiapan Peluncuran ---
+Hitungan ke-5 detik...
+Hitungan ke-4 detik...
+Hitungan ke-3 detik...
+Hitungan ke-2 detik...
+Hitungan ke-1 detik...
+Roket Meluncur ke Angkasa!</code></pre>
+                </div>
+            </div>
+        </div>
+
+        <!-- LATIHAN TERBIMBING 2 -->
+        <div class="exercise-box guided">
+            <h3>Latihan Terbimbing 2: Akumulasi Penjumlahan Bilangan Bulat</h3>
+            <p><strong>Kasus:</strong> Hitung total penjumlahan bilangan bulat berurutan dari angka 1 hingga 5 (1 + 2 + 3 + 4 + 5).</p>
+            
+            <div class="solution-block">
+                <div class="solution-title">Source Code (C++):</div>
+                <pre><code>#include &lt;iostream&gt;
+using namespace std;
+
+int main() {
+    int total = 0; // Variabel penampung akumulasi nilai
+
+    for (int i = 1; i &lt;= 5; i++) {
+        total = total + i; // Menambahkan nilai i saat ini ke dalam total
+        cout &lt;&lt; "Menambahkan " &lt;&lt; i &lt;&lt; " &rarr; Total Sementara = " &lt;&lt; total &lt;&lt; endl;
+    }
+
+    cout &lt;&lt; "\nHasil Akhir Penjumlahan: " &lt;&lt; total &lt;&lt; endl;
+
+    return 0;
+}</code></pre>
+                <div class="output-title">Luaran Konsol (Output):</div>
+                <div class="output-block">
+                    <pre style="margin: 0; background: transparent; border: none; padding: 0;"><code>Menambahkan 1 &rarr; Total Sementara = 1
+Menambahkan 2 &rarr; Total Sementara = 3
+Menambahkan 3 &rarr; Total Sementara = 6
+Menambahkan 4 &rarr; Total Sementara = 10
+Menambahkan 5 &rarr; Total Sementara = 15
+
+Hasil Akhir Penjumlahan: 15</code></pre>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- BAGIAN 6: TANTANGAN MANDIRI (TANPA SOLUSI) -->
+    <section>
+        <h2>6. Lembar Praktik Mandiri Siswa (Tantangan)</h2>
+        <p>Tulis program lengkap untuk ketiga tantangan berikut di editor kodemu. Bangun logikanya secara mandiri dan pastikan hasil cetakan di layar konsol persis seperti target output.</p>
+
+        <!-- TANTANGAN 1 -->
+        <div class="exercise-box challenge">
+            <h3>Tantangan 1: Cetak Tabel Kelipatan 7</h3>
+            <p><strong>Skenario Kasus:</strong> Kamu diminta membuat tabel perkalian dasar untuk membantu murid sekolah dasar menghafal perkalian 7 dari pengali 1 sampai 6.</p>
+            
+            <p><strong>Tugas Kamu:</strong></p>
+            <ol>
+                <li>Gunakan perulangan <code>for</code> dengan variabel pengali <code>i</code> bergerak dari <code>1</code> hingga <code>6</code>.</li>
+                <li>Di dalam loop, hitung hasil perkalian <code>7 * i</code>.</li>
+                <li>Cetak format perkalian baris demi baris ke layar konsol.</li>
+            </ol>
+
+            <div class="output-title">Target Luaran Konsol:</div>
+            <div class="output-block">
+                <pre style="margin: 0; background: transparent; border: none; padding: 0;"><code>--- Tabel Perkalian 7 ---
+7 x 1 = 7
+7 x 2 = 14
+7 x 3 = 21
+7 x 4 = 28
+7 x 5 = 35
+7 x 6 = 42</code></pre>
+            </div>
+        </div>
+
+        <!-- TANTANGAN 2 -->
+        <div class="exercise-box challenge">
+            <h3>Tantangan 2: Pengisian Baterai Perangkat (Lompatan Nilai)</h3>
+            <p><strong>Skenario Kasus:</strong> Simulasikan indikator persentase pengisian daya cepat (*fast charging*) dari baterai kosong (0%) hingga penuh (100%), di mana setiap tahap daya bertambah sebesar 20%.</p>
+            
+            <p><strong>Tugas Kamu:</strong></p>
+            <ol>
+                <li>Gunakan variabel persentase <code>persen</code> dimulai dari <code>0</code> dengan batas berhenti <code>&lt;= 100</code>.</li>
+                <li>Gunakan perubahan nilai lompatan kustom sebesar 20 (<code>persen += 20</code>).</li>
+                <li>Cetak status pengisian daya pada setiap kenaikan persentase.</li>
+                <li>Setelah perulangan selesai, cetak teks bahwa baterai telah terisi penuh.</li>
+            </ol>
+
+            <div class="output-title">Target Luaran Konsol:</div>
+            <div class="output-block">
+                <pre style="margin: 0; background: transparent; border: none; padding: 0;"><code>Mengisi Daya: 0%
+Mengisi Daya: 20%
+Mengisi Daya: 40%
+Mengisi Daya: 60%
+Mengisi Daya: 80%
+Mengisi Daya: 100%
+Status: Pengisian Daya Selesai!</code></pre>
+            </div>
+        </div>
+
+        <!-- TANTANGAN 3 -->
+        <div class="exercise-box challenge">
+            <h3>Tantangan 3: Penjumlahan Bilangan Genap</h3>
+            <p><strong>Skenario Kasus:</strong> Buat program untuk menghitung total akumulasi seluruh bilangan genap positif yang berada di antara angka 2 hingga 10 (yaitu: 2 + 4 + 6 + 8 + 10).</p>
+            
+            <p><strong>Tugas Kamu:</strong></p>
+            <ol>
+                <li>Siapkan variabel penampung <code>totalGenap = 0</code> sebelum loop.</li>
+                <li>Gunakan perulangan <code>for</code> yang bergerak dari angka <code>2</code> hingga <code>10</code> dengan pertambahan 2 setiap putaran.</li>
+                <li>Tambahkan nilai perulangan saat ini ke variabel <code>totalGenap</code>.</li>
+                <li>Tampilkan nilai akhir dari hasil penjumlahan tersebut.</li>
+            </ol>
+
+            <div class="output-title">Target Luaran Konsol:</div>
+            <div class="output-block">
+                <pre style="margin: 0; background: transparent; border: none; padding: 0;"><code>Menghitung deret: 2 + 4 + 6 + 8 + 10
+Hasil Akhir Penjumlahan Bilangan Genap: 30</code></pre>
+            </div>
+        </div>
+    </section>
+
+    <!-- BAGIAN 7: RANGKUMAN -->
+    <section>
+        <h2>7. Rangkuman Materi</h2>
+        <ul>
+            <li><strong>Definisi:</strong> Perulangan <code>for</code> ideal digunakan ketika jumlah putaran eksekusi sudah dapat dipastikan sejak awal (*definite iteration*).</li>
+            <li><strong>Struktur 3 Elemen:</strong> <code>for (inisialisasi; kondisi; pembaruan)</code>.</li>
+            <li><strong>Arah Alur:</strong> Bisa berjalan maju (<code>i++</code> atau <code>i += n</code>) maupun mundur (<code>i--</code> atau <code>i -= n</code>).</li>
+            <li><strong>Pencegahan Error:</strong> Pastikan pembaruan nilai variabel counter selalu bergerak mendekati kondisi false agar tidak terjebak dalam *infinite loop*.</li>
+        </ul>
+    </section>
+
+    <footer>
+        <p>&copy; Modul Pembelajaran Pemrograman Dasar &bull; Disusun untuk praktikum laboratorium dan kegiatan belajar mandiri siswa.</p>
+    </footer>
+</div>
+
+</body>
+</html>
